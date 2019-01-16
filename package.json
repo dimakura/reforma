@@ -1,0 +1,16 @@
+{
+  "name": "reforma",
+  "version": "0.1.0",
+  "description": "Remote forms in React",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "forms",
+    "admin",
+    "react"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT"
+}

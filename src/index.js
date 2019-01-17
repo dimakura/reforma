@@ -1,4 +1,4 @@
-export const Config = require('./Config').default
-export const createSchema = require('./Schema').default
-export const createField = require('./Schema/Field').default
-export const createFieldType = require('./Schema/FieldType').default
+export const config = require('./config').default
+export const createSchema = require('./schema').default
+export const createField = require('./schema/Field').default
+export const createFieldType = require('./schema/FieldType').default

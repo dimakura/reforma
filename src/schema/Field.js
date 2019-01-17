@@ -1,5 +1,7 @@
 import { get, startCase } from 'lodash'
 import createFieldType from './FieldType'
+import isPresent from 'reforma/utils/isPresent'
+import notBlank from 'reforma/utils/notBlank'
 
 export default function createField(data) {
   if (data != null) {
@@ -7,7 +9,10 @@ export default function createField(data) {
       return createField({
         name: data
       })
-    } else if (typeof data === 'object' && 'name' in data) {
+    } else if (
+      typeof data === 'object' &&
+      isPresent(data.name)
+    ) {
       return createFieldInternal(data)
     }
   }
@@ -16,9 +21,9 @@ export default function createField(data) {
 // -- PRIVATE
 
 function createFieldInternal(data) {
-  const name = get(data, 'name')
-  const caption = get(data, 'caption', startCase(name))
-  const type = createFieldType(get(data, 'type', 'string'))
+  const name = data.name
+  const caption = notBlank(data.caption, startCase(name))
+  const type = createFieldType(notBlank(data.type, 'string'))
 
   function getValue(model) {
     return get(model, name)

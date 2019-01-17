@@ -4,7 +4,7 @@
   "description": "Remote forms in React",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "forms",
@@ -12,5 +12,22 @@
     "react"
   ],
   "author": "Dimitri Kurashvili <dimakura@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "moment": "^2.23.0",
+    "numeral": "^2.0.6",
+    "url-join": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-do-expressions": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-module-resolver": "^3.1.2",
+    "jest": "^23.6.0"
+  }
 }

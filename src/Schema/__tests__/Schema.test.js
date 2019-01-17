@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import createSchema from '..'
+import { createSchema } from 'reforma'
 
 describe('Schema', () => {
   function createProfile(data) {

@@ -2,19 +2,21 @@ import createApiErrors from '../ApiErrors'
 
 describe('ApiErrors', () => {
   const arrayData = [{
-    field: 'firstName',
+    field: 'first_name',
     message: 'cannot be blank'
   }, {
-    fieldName: 'lastName'
+    fieldName: 'last_name'
   }, 'global error']
 
   const objectData = {
-    firstName: 'cannot be blank'
+    first_name: 'cannot be blank',
+    __global__: 'global error'
   }
 
   test('creation', () => {
     expect(createApiErrors(objectData).errors).toEqual({
-      firstName: 'cannot be blank'
+      firstName: 'cannot be blank',
+      __global__: 'global error'
     })
 
     expect(createApiErrors(arrayData).errors).toEqual({

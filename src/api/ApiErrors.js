@@ -1,6 +1,7 @@
-import { mapValues } from 'lodash'
+import { camelCase } from 'lodash'
 import notBlank from 'reforma/utils/notBlank'
 import isPresent from 'reforma/utils/isPresent'
+import camelizeKeys from 'reforma/utils/camelizeKeys'
 
 /**
  * Wrapper around API-sent errors.
@@ -17,6 +18,8 @@ export default function createApiErrors(data) {
 
 // -- PRIVATE
 
+const notTransformableKeys = ['__global__']
+
 function createApiErrorsFromArray(array) {
   const data = {}
 
@@ -29,8 +32,15 @@ function createApiErrorsFromArray(array) {
     if (typeof error === 'string') {
       data['__global__'] = error
     } else if (typeof error === 'object') {
-      const fieldName = notBlank(error.field, error.fieldName, '__global__')
       const message = error.message
+      const fieldName = do {
+        const name = notBlank(error.field, error.fieldName, '__global__')
+        if (notTransformableKeys.includes(name)) {
+          name
+        } else {
+          camelCase(name)
+        }
+      }
 
       if (isPresent(message)) {
         data[fieldName] = message
@@ -43,6 +53,6 @@ function createApiErrorsFromArray(array) {
 
 function createApiErrorsFromObject(data) {
   return {
-    errors: data
+    errors: camelizeKeys(data, notTransformableKeys)
   }
 }

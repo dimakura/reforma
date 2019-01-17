@@ -1,6 +1,7 @@
 import { get, startCase } from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
+import notBlank from 'reforma/utils/notBlank'
 
 const supportedTypes = [
   'string',
@@ -35,7 +36,10 @@ function createFieldTypeInternal(data) {
     } else if (data.name === 'number') {
       createNumberType(data)
     } else if (data.name === 'integer') {
-      createNumberType({ ...data, decimals: 0 })
+      createNumberType({
+        ...data,
+        decimals: 0
+      })
     }
   }
 }
@@ -55,6 +59,8 @@ function createStringType(data) {
 
 // -- NUMBER
 
+const minDecimals = 0
+const maxDecimals = 4
 const numeralFormats = [
   '0,0',
   '0,0.0',
@@ -64,8 +70,19 @@ const numeralFormats = [
 ]
 
 function createNumberType(data) {
-  const decimals = get(data, 'decimals', 2)
-  const format = numeralFormats[decimals] || numeralFormats[2]
+  const decimals = do {
+    const given = notBlank(data.decimals, 2)
+
+    if (given < minDecimals) {
+      minDecimals
+    } else if (given > maxDecimals) {
+      maxDecimals
+    } else {
+      given
+    }
+  }
+
+  const format = numeralFormats[decimals]
 
   return {
     name: 'number',
@@ -79,7 +96,7 @@ function createNumberType(data) {
 // -- DATE
 
 function createDateType(data) {
-  const format = get(data, 'format', 'DD-MMM-YYYY hh:mm:ss')
+  const format = notBlank(data.format, 'DD-MMM-YYYY hh:mm:ss')
 
   return {
     name: 'date',

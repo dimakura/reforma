@@ -1,11 +1,11 @@
 # Reforma
 
-Reforma will help you to quickly integrate your remote data into React UI.
+Reforma will help you to quickly integrate your remote data with React UI.
 
 ## Config
 
 At this stage Reforma only supports global static configuration.
-You can configure base API url and HTTP headers.
+You can configure baseUrl (for API) and HTTP headers.
 
 ```js
 import { Config } from 'reforma'
@@ -84,19 +84,19 @@ import {
 } from 'reforma'
 
 <Table
-  schema={schema}
+  schema={profileSchema}
   perPage={10}
   withSearchField
   withPagination
 />
 
 <View
-  schema={schema}
+  schema={profileSchema}
   id={1}
 />
 
 <Form
-  schema={schema}
+  schema={profileSchema}
   id={1} // or omit this for a new record
   onEditCompleted={doSomething}
 />

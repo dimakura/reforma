@@ -1,12 +1,20 @@
+import { updateClient as updateHttpClient } from 'reforma/api'
+
 let baseUrl = null
 let httpHeaders = {}
 
 function setBaseUrl(url) {
   baseUrl = url
+
+  sendUpdatesToHttpClient()
 }
 
-function setHttpHeader(name, value) {
+function setHttpHeader(name, value, mute = false) {
   httpHeaders[name] = value
+
+  if (!mute) {
+    sendUpdatesToHttpClient()
+  }
 }
 
 function setHttpHeaders(headers) {
@@ -16,8 +24,17 @@ function setHttpHeaders(headers) {
     const name = props[i]
     const value = headers[name]
 
-    setHttpHeader(name, value)
+    setHttpHeader(name, value, true)
   }
+
+  sendUpdatesToHttpClient()
+}
+
+function sendUpdatesToHttpClient() {
+  updateHttpClient({
+    baseUrl,
+    httpHeaders
+  })
 }
 
 const config = {
@@ -36,6 +53,7 @@ const config = {
   __reset__: function() {
     baseUrl = null
     httpHeaders = {}
+    sendUpdatesToHttpClient()
   }
 }
 

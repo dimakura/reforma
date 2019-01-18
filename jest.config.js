@@ -1,9 +1,10 @@
 module.exports = {
-  rootDir: './src/',
+  rootDir: '.',
   testMatch: [
-    '<rootDir>/**/__tests__/**/*.test.{js,jsx}'
+    '<rootDir>/src/**/__tests__/**/*.test.{js,jsx}'
   ],
   moduleNameMapper: {
-    '^reforma/(.*)': "<rootDir>/$1"
-  }
+    '^reforma/(.*)': "<rootDir>/src/$1"
+  },
+  setupTestFrameworkScriptFile: '<rootDir>/test/jest-setup.js'
 }

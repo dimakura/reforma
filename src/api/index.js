@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { merge } from 'lodash'
 import isPresent from 'reforma/utils/isPresent'
+import camelizeKeys from 'reforma/utils/camelizeKeys'
+import snakeizeKeys from 'reforma/utils/snakeizeKeys'
+import notBlank from 'reforma/utils/notBlank'
+import createApiResponse from './ApiResponse'
 
 const defaultConfig = {
   timeout: 10000
@@ -25,23 +29,58 @@ export function updateClient(appConfig) {
   httpClient = axios.create(merge({}, defaultConfig, config))
 }
 
-export function getAsync(url) {
-  // TODO:
+export async function getAsync(url) {
+  try {
+    const resp = await httpClient.get(url)
+    return prepareResponse(null, resp)
+  } catch(ex) {
+    return prepareResponse(ex)
+  }
 }
 
-export function postAsync(url, data) {
-  // TODO:
+export async function postAsync(url, data) {
+  try {
+    data = snakeizeKeys(data)
+    const resp = await httpClient.post(url, data)
+
+    return prepareResponse(null, resp)
+  } catch(ex) {
+    return prepareResponse(ex)
+  }
 }
 
-export function putAsync(url, data) {
-  // TODO:
+export async function putAsync(url, data) {
+  try {
+    data = snakeizeKeys(data)
+    const resp = await httpClient.put(url, data)
+
+    return prepareResponse(null, resp)
+  } catch(ex) {
+    return prepareResponse(ex)
+  }
 }
 
-export function deleteAsync(url) {
-  // TODO:
+export async function deleteAsync(url) {
+  try {
+    const resp = await httpClient.delete(url)
+    return prepareResponse(null, resp)
+  } catch(ex) {
+    return prepareResponse(ex)
+  }
 }
 
 // @test-only
 export function __httpClient__() {
   return httpClient
+}
+
+// -- PRIVATE
+
+function prepareResponse(ex, resp) {
+  if (ex != null && ex.response == null) {
+    return createApiResponse(ex)
+  } else {
+    resp = notBlank(resp, ex && ex.response)
+    return createApiResponse(resp)
+  }
 }

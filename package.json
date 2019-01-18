@@ -1,9 +1,10 @@
 {
   "name": "reforma",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Remote forms in React",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "build": "node_modules/.bin/babel -s inline -d lib src",
     "test": "jest"
   },
   "keywords": [
@@ -21,6 +22,7 @@
     "url-join": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-do-expressions": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",

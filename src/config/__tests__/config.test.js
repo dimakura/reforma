@@ -1,4 +1,5 @@
 import { config } from 'reforma'
+import { updateClient as updateHttpClient } from 'reforma/api'
 
 describe('config', () => {
   afterEach(config.__reset__)
@@ -12,6 +13,11 @@ describe('config', () => {
     config.setBaseUrl('https://myapi.server/api')
 
     expect(config.baseUrl).toBe('https://myapi.server/api')
+    expect(updateHttpClient).toHaveBeenCalledTimes(1)
+    expect(updateHttpClient).toHaveBeenCalledWith({
+      baseUrl: 'https://myapi.server/api',
+      httpHeaders: {}
+    })
   })
 
   test('setHttpHeader', () => {
@@ -19,6 +25,13 @@ describe('config', () => {
 
     expect(config.httpHeaders).toEqual({
       authorization: 'token'
+    })
+    expect(updateHttpClient).toHaveBeenCalledTimes(1)
+    expect(updateHttpClient).toHaveBeenCalledWith({
+      baseUrl: null,
+      httpHeaders: {
+        authorization: 'token'
+      }
     })
   })
 
@@ -31,6 +44,14 @@ describe('config', () => {
     expect(config.httpHeaders).toEqual({
       authorization: 'token',
       application: 'admin'
+    })
+    expect(updateHttpClient).toHaveBeenCalledTimes(1)
+    expect(updateHttpClient).toHaveBeenCalledWith({
+      baseUrl: null,
+      httpHeaders: {
+        authorization: 'token',
+        application: 'admin'
+      }
     })
   })
 })

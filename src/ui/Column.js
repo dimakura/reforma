@@ -1,26 +1,30 @@
 import { get } from 'lodash'
 
-export default function createUIField(field, data) {
+export default function createColumn(field, data) {
   const caption = get(data, 'caption')
   const renderer = get(data, 'renderer')
 
   return {
+    get _isColumn() {
+      return true
+    },
+
     /**
-     * Base Field object, from which this UIField was derived.
+     * Base Field object, from which this Column was derived.
      */
     get field() {
       return field
     },
 
     /**
-     * UIField's caption might override that of the Field.
+     * Column's caption overrides that of the Field.
      */
     get caption() {
       return caption
     },
 
     /**
-     * UIField renderer might override default Field renderer.
+     * Column's renderer overrides default Field renderer.
      */
     get renderer() {
       return renderer

@@ -28,6 +28,10 @@ export default function createSchema(data) {
 function createSchemaInternal(data) {
   const baseUrl = notBlank(data.url, data.baseUrl)
   const fields = data.fields.map(createField)
+  const fieldsByName = fields.reduce((acc, field) => {
+    acc[field.name] = field
+    return acc
+  }, {})
   const modelGenerator = notBlank(data.modelGenerator, data.generator)
   const isSingleton = do {
     if ('singleton' in data) {
@@ -46,6 +50,10 @@ function createSchemaInternal(data) {
 
     get fields() {
       return fields
+    },
+
+    get fieldsByName() {
+      return fieldsByName
     },
 
     get modelGenerator() {

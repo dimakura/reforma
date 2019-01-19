@@ -69,7 +69,7 @@ import { createSchema } from 'reforma'
 
 const profileSchema = createSchema({
   name: 'Profile',
-  fields: ['firstName', 'lastName', 'age'],
+  fields: ['id', 'firstName', 'lastName', 'age', 'fullName'], // list all fields from your model
   generator: createProfile, // you can omit this, if you don't need models
   url: 'profiles' // by default, schema name will be used as an URL
 })
@@ -83,22 +83,25 @@ Once schema is ready, you can create your UI elements.
 import {
   Table, // to display collection of data
   View, // to display single record
-  Form // to edit/create new records
+  Form // to edit existing or create a new record
 } from 'reforma'
 
 <Table
   schema={profileSchema}
-  perPage={10}
-  withSearchField
+  columns={['fullName', 'age']} // what and in what order should be displayed?
+  perPage={10} // this will display paging at the bottom
+  withSearchField // this will display search field
 />
 
 <View
   schema={profileSchema}
+  columns={['firstName', 'lastName', 'age']}
   id={1}
 />
 
 <Form
   schema={profileSchema}
+  columns={['firstName', 'lastName']}
   id={1} // or omit this for a new record
   onEditCompleted={doSomething}
 />
@@ -106,9 +109,7 @@ import {
 
 Yes, it's that's simple!
 
-## Advanced fields
-
-Reforma supports advanced field options.
+## Advanced field and column options
 
 TODO:
 

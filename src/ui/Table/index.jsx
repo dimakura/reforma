@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import createTableProps from './TableProps'
+import Table from './Table'
 
 class TableRoot extends React.PureComponent {
   render() {
@@ -18,11 +19,7 @@ class TableRoot extends React.PureComponent {
       withSearchBar
     })
 
-    return (
-      <div>
-        This is table!
-      </div>
-    )
+    return <Table tableProps={props} />
   }
 }
 

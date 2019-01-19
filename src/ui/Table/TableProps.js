@@ -51,7 +51,7 @@ function createColumns(schema, data) {
     }
 
     if (field != null) {
-      columns.push(createColumn(field, data))
+      columns.push(createColumn(field, row))
     }
   }
 

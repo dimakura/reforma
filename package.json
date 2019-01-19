@@ -7,6 +7,7 @@
     "/lib"
   ],
   "scripts": {
+    "dev": "node_modules/.bin/babel --watch -s inline -d lib src",
     "build": "node_modules/.bin/babel -s inline -d lib src",
     "test": "jest"
   },

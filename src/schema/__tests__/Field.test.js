@@ -1,4 +1,4 @@
-import { createField } from 'reforma'
+import createField from '../Field'
 
 describe('Field', () => {
   describe('createField', () => {

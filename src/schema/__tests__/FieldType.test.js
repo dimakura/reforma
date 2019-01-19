@@ -7,6 +7,7 @@ describe('FieldType', () => {
 
       expect(type.name).toBe('string')
       expect(type.formatValue('one')).toBe('one')
+      expect(type._isFieldType).toBe(true)
     })
 
     test('number', () => {
@@ -15,6 +16,7 @@ describe('FieldType', () => {
       expect(type.name).toBe('number')
       expect(type.decimals).toBe(2)
       expect(type.formatValue(1000)).toBe('1,000.00')
+      expect(type._isFieldType).toBe(true)
     })
 
     test('integer', () => {
@@ -23,6 +25,7 @@ describe('FieldType', () => {
       expect(type.name).toBe('number')
       expect(type.decimals).toBe(0)
       expect(type.formatValue(1000)).toBe('1,000')
+      expect(type._isFieldType).toBe(true)
     })
 
     test('date', () => {
@@ -31,6 +34,7 @@ describe('FieldType', () => {
       expect(type.name).toBe('date')
       expect(type.format).toBe('DD-MMM-YYYY hh:mm:ss')
       expect(type.formatValue('2019-01-17 03:22:13')).toBe('17-Jan-2019 03:22:13')
+      expect(type._isFieldType).toBe(true)
     })
 
     test('wrong data', () => {

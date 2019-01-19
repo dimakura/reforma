@@ -28,7 +28,7 @@ export default function createFieldType(data) {
 // -- PRIVATE
 
 function createFieldTypeInternal(data) {
-  return do {
+  const type = do {
     if (data.name === 'string') {
       createStringType(data)
     } else if (data.name === 'date') {
@@ -42,6 +42,13 @@ function createFieldTypeInternal(data) {
       })
     }
   }
+
+  Object.defineProperty(type, '_isFieldType', {
+    value: true,
+    writable: false
+  })
+
+  return type
 }
 
 // -- STRING

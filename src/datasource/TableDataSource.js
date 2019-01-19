@@ -34,6 +34,10 @@ export default function createTableDataSource(schema) {
   }
 
   return {
+    get _isTableDataSource() {
+      return true
+    },
+
     get schema() {
       return schema
     },

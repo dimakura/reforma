@@ -35,6 +35,7 @@ describe('TableDataSource', () => {
   test('createTableDataSource', () => {
     const dataSource = createTableDataSource(schema)
 
+    expect(dataSource._isTableDataSource).toBe(true)
     expect(dataSource.schema).toBe(schema)
     expect(dataSource.isInitial).toBe(true)
     expect(dataSource.data).toBeUndefined()

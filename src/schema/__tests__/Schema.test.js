@@ -23,9 +23,10 @@ describe('Schema', () => {
   }
 
   describe('createSchema', () => {
-    test('default case', () => {
+    test('normal schema', () => {
       const schema = createSchema(data)
 
+      expect(schema._isSchema).toBe(true)
       expect(schema.fields).toHaveLength(3)
       expect(schema.fields[0].name).toBe('id')
       expect(schema.fields[1].name).toBe('firstName')
@@ -33,6 +34,7 @@ describe('Schema', () => {
       expect(schema.modelGenerator).toBeUndefined()
       expect(schema.baseUrl).toBe('/profiles')
       expect(schema.isSingleton).toBe(false)
+      expect(schema.dataSource._isDataSource).toBe(true)
     })
 
     test('singleton schema', () => {
@@ -42,6 +44,8 @@ describe('Schema', () => {
       })
 
       expect(schema.isSingleton).toBe(true)
+      expect(schema.getUrl()).toBe('/profiles')
+      expect(schema.getModelUrl(1)).toBe('/profiles')
     })
   })
 

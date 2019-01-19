@@ -8,13 +8,16 @@ At this stage Reforma only supports global static configuration.
 You can configure baseUrl (for API) and HTTP headers.
 
 ```js
-import { Config } from 'reforma'
+import { config } from 'reforma'
 
-Config.setBaseUrl('https://myapi.server/api/')
-Config.setRequestHeader('authorization', myToken)
+config.setBaseUrl('https://myapi.server/api/')
+config.setRequestHeader('authorization', myToken)
+// or
+config.setRequestHeaders({
+  authorization: myToken,
+  application: 'admin'
+})
 ```
-
-There's also `reforma.config.setRequestHeaders()` method which accepts multiple headers.
 
 ## Model
 
@@ -107,5 +110,9 @@ Yes, it's that's simple!
 ## Advanced fields
 
 Reforma supports advanced field options.
+
+TODO:
+
+## Backend format
 
 TODO:

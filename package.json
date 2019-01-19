@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "description": "Remote forms in React",
   "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "build": "node_modules/.bin/babel -s inline -d lib src",
     "test": "jest"

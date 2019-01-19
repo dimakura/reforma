@@ -18,43 +18,43 @@ describe('Schema', () => {
   }
 
   const data = {
-    name: 'Profile',
-    fields: ['firstName', 'lastName']
+    baseUrl: '/profiles',
+    fields: ['id', 'firstName', 'lastName']
   }
 
-  test('createSchema', () => {
-    const schema = createSchema(data)
-
-    expect(schema.name).toBe('Profile')
-    expect(schema.fields).toHaveLength(2)
-    expect(schema.fields[0].name).toBe('firstName')
-    expect(schema.fields[1].name).toBe('lastName')
-    expect(schema.modelGenerator).toBeUndefined()
-    expect(schema.baseUrl).toBe('profile')
-  })
-
-  describe('#getUrl', () => {
-    test('without baseUrl', () => {
+  describe('createSchema', () => {
+    test('default case', () => {
       const schema = createSchema(data)
 
-      expect(schema.getUrl()).toBe('profile')
+      expect(schema.fields).toHaveLength(3)
+      expect(schema.fields[0].name).toBe('id')
+      expect(schema.fields[1].name).toBe('firstName')
+      expect(schema.fields[2].name).toBe('lastName')
+      expect(schema.modelGenerator).toBeUndefined()
+      expect(schema.baseUrl).toBe('/profiles')
+      expect(schema.isSingleton).toBe(false)
     })
 
-    test('with baseUrl', () => {
+    test('singleton schema', () => {
       const schema = createSchema({
         ...data,
-        baseUrl: '/profiles'
+        singleton: true
       })
 
-      expect(schema.getUrl()).toBe('/profiles')
+      expect(schema.isSingleton).toBe(true)
     })
+  })
+
+  test('#getUrl', () => {
+    const schema = createSchema(data)
+    expect(schema.getUrl()).toBe('/profiles')
   })
 
   test('#getModelUrl', () => {
     const schema = createSchema(data)
 
-    expect(schema.getModelUrl(1)).toBe('profile/1')
-    expect(schema.getModelUrl({ id: 1 })).toBe('profile/1')
+    expect(schema.getModelUrl(1)).toBe('/profiles/1')
+    expect(schema.getModelUrl({ id: 1 })).toBe('/profiles/1')
   })
 
   describe('#resolve', () => {

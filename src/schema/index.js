@@ -1,13 +1,14 @@
 import { camelCase } from 'lodash'
 import urlJoin from 'url-join'
+import notBlank from 'reforma/utils/notBlank'
 import createField from './Field'
 
 export default function createSchema(data) {
   if (data != null) {
     if (
       typeof data === 'object' &&
-      'name' in data &&
-      'fields' in data
+      'fields' in data &&
+      ('baseUrl' in data || 'url' in data)
     ) {
       return createSchemaInternal(data)
     }
@@ -17,16 +18,24 @@ export default function createSchema(data) {
 // -- PRIVATE
 
 function createSchemaInternal(data) {
-  const name = data.name
+  const baseUrl = notBlank(data.url, data.baseUrl)
   const fields = data.fields.map(createField)
-  const modelGenerator = data.modelGenerator || data.generator
-  const baseUrl = data.baseUrl || data.url || camelCase(name)
+  const modelGenerator = notBlank(data.modelGenerator, data.generator)
+  const isSingleton = do {
+    if ('singleton' in data) {
+      !!data.singleton
+    } else if ('isSingleton' in data) {
+      !!data.isSingleton
+    } else {
+      false
+    }
+  }
 
   return {
-    name,
     fields,
     modelGenerator,
     baseUrl,
+    isSingleton,
 
     resolve: function (data) {
       const model = do {

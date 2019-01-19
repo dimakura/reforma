@@ -74,7 +74,7 @@ describe('TableDataSource', () => {
 
       promise.then(() => {
         expect(statusListener).toHaveBeenCalledWith('success', 'in-progress')
-        expect(dataSource.status).toBe('success')
+        expect(dataSource.isSuccess).toBe(true)
         expect(dataSource.data[0].fullName).toBe('Dimitri Kurashvili')
         expect(dataSource.total).toBe(100)
 
@@ -96,14 +96,14 @@ describe('TableDataSource', () => {
 
       const promise = dataSource.fetch(params)
 
-      expect(dataSource.status).toBe('in-progress')
+      expect(dataSource.isInProgress).toBe(true)
       expect(getAsync).toHaveBeenCalledWith(expectedUrl)
       expect(statusListener).toHaveBeenCalledWith('in-progress', 'initial')
       expect(paramsListener).toHaveBeenCalledWith(params, undefined)
 
       promise.then(() => {
         expect(statusListener).toHaveBeenCalledWith('error', 'in-progress')
-        expect(dataSource.status).toBe('error')
+        expect(dataSource.isError).toBe(true)
         expect(dataSource.errors).toBe('Something failed')
 
         done()

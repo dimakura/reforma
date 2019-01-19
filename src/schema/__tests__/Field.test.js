@@ -5,6 +5,7 @@ describe('Field', () => {
     test('only name', () => {
       const field = createField('firstName')
 
+      expect(field._isField).toBe(true)
       expect(field.name).toBe('firstName')
       expect(field.type.name).toBe('string')
     })

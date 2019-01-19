@@ -1,6 +1,7 @@
 import { camelCase } from 'lodash'
 import urlJoin from 'url-join'
 import notBlank from 'reforma/utils/notBlank'
+import createDataSource from 'reforma/datasource'
 import createField from './Field'
 
 export default function createSchema(data) {
@@ -10,7 +11,14 @@ export default function createSchema(data) {
       'fields' in data &&
       ('baseUrl' in data || 'url' in data)
     ) {
-      return createSchemaInternal(data)
+      const schema = createSchemaInternal(data)
+      const dataSource = createDataSource(schema)
+      Object.defineProperty(schema, 'dataSource', {
+        value: dataSource,
+        writable: false
+      })
+
+      return schema
     }
   }
 }
@@ -32,10 +40,25 @@ function createSchemaInternal(data) {
   }
 
   return {
-    fields,
-    modelGenerator,
-    baseUrl,
-    isSingleton,
+    get _isSchema() {
+      return true
+    },
+
+    get fields() {
+      return fields
+    },
+
+    get modelGenerator() {
+      return modelGenerator
+    },
+
+    get baseUrl() {
+      return baseUrl
+    },
+
+    get isSingleton() {
+      return isSingleton
+    },
 
     resolve: function (data) {
       const model = do {
@@ -61,7 +84,9 @@ function createSchemaInternal(data) {
 
     getModelUrl: function (modelOrId) {
       return do {
-        if (typeof modelOrId === 'object') {
+        if (isSingleton) {
+          baseUrl
+        } else if (typeof modelOrId === 'object') {
           urlJoin(baseUrl, modelOrId.id.toString())
         } else {
           urlJoin(baseUrl, modelOrId.toString())

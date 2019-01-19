@@ -38,10 +38,6 @@ function sendUpdatesToHttpClient() {
 }
 
 const config = {
-  setBaseUrl,
-  setHttpHeader,
-  setHttpHeaders,
-
   get baseUrl() {
     return baseUrl
   },
@@ -50,7 +46,11 @@ const config = {
     return httpHeaders
   },
 
-  __reset__: function() {
+  setBaseUrl,
+  setHttpHeader,
+  setHttpHeaders,
+
+  reset: function() {
     baseUrl = null
     httpHeaders = {}
     sendUpdatesToHttpClient()

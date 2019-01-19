@@ -30,9 +30,21 @@ function createFieldInternal(data) {
   }
 
   return {
-    name,
-    caption,
-    type,
+    get _isField() {
+      return true
+    },
+
+    get name() {
+      return name
+    },
+    get caption() {
+      return caption
+    },
+
+    get type() {
+      return type
+    },
+
     getValue,
 
     getFormattedValue: function (model) {

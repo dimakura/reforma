@@ -2,7 +2,7 @@ import { config } from 'reforma'
 import { updateClient as updateHttpClient } from 'reforma/api'
 
 describe('config', () => {
-  afterEach(config.__reset__)
+  afterEach(config.reset)
 
   test('default props', () => {
     expect(config.baseUrl).toBeNull()

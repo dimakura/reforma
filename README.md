@@ -90,7 +90,6 @@ import {
   schema={profileSchema}
   perPage={10}
   withSearchField
-  withPagination
 />
 
 <View

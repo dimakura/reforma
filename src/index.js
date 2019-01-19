@@ -1,2 +1,7 @@
-export const config = require('./config').default
-export const createSchema = require('./schema').default
+import config from './config'
+import createSchema from './schema'
+
+export {
+  config,
+  createSchema
+}

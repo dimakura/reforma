@@ -1,4 +1,4 @@
-import { createFieldType } from 'reforma'
+import createFieldType from '../FieldType'
 
 describe('FieldType', () => {
   describe('createFieldType', () => {

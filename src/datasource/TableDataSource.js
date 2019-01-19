@@ -23,14 +23,14 @@ export default function createTableDataSource(schema) {
     const oldParams = params
     params = newParams
 
-    emitter.emit(EVENT_PARAMS_CHANGED, params, oldParams)
+    emitter.emit(EVENT_PARAMS_CHANGED, newParams, oldParams)
   }
 
   function changeStatus(newStatus) {
     const oldStatus = status
     status = newStatus
 
-    emitter.emit(EVENT_STATUS_CHANGED, status, oldStatus)
+    emitter.emit(EVENT_STATUS_CHANGED, newStatus, oldStatus)
   }
 
   return {
@@ -75,10 +75,10 @@ export default function createTableDataSource(schema) {
       changeStatus(STATUS_IN_PROGRESS)
       const url = biuldUrl(schema.baseUrl, params)
 
-      getAsync(url).then(response => {
+      return getAsync(url).then(response => {
         if (response.isSuccess) {
           data = response.data.map(schema.resolve)
-          total = parseInteger(response.total, 10)
+          total = parseInt(response.total, 10)
           changeStatus(STATUS_SUCCESS)
         } else {
           errors = response.errors

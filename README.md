@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/dimakura/reforma.svg?branch=master)](https://travis-ci.com/dimakura/reforma)
+
 # Reforma
 
 Reforma will help you to quickly integrate your remote data with React UI.

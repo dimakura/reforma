@@ -89,13 +89,14 @@ import {
   schema={profileSchema}
   columns={['fullName', 'age']} // what and in what order should be displayed?
   perPage={10} // this will display paging at the bottom
-  withSearchField // this will display search field
+  toolbar={['refresh', '|', 'search']}
 />
 
 <View
   schema={profileSchema}
-  columns={['firstName', 'lastName', 'age']}
   id={1}
+  columns={['firstName', 'lastName', 'age']}
+  toolbar={['refresh', 'delete']}
 />
 
 <Form

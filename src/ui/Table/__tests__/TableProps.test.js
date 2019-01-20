@@ -11,7 +11,6 @@ describe('TableProps', () => {
         name: 'firstName',
         caption: 'Name'
       }, 'fullName'],
-      withSearchBar: true,
       perPage: 10
     })
 
@@ -20,7 +19,6 @@ describe('TableProps', () => {
     expect(props.columns).toHaveLength(1) // no fullName!
     expect(props.columns[0].field.name).toBe('firstName')
     expect(props.columns[0].caption).toBe('Name')
-    expect(props.withSearchBar).toBe(true)
     expect(props.perPage).toBe(10)
   })
 })

@@ -44,8 +44,8 @@ class Table extends React.PureComponent {
               <Pagination
                 perPage={perPage}
                 tableDataSource={tableDataSource}
-                status={status}
                 onChange={this.onChangePage.bind(this)}
+                status={status}
               />
             }
           }

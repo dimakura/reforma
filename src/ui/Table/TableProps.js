@@ -4,7 +4,6 @@ export default function createTableProps(data) {
   const schema = data.schema
   const tableDataSource = schema.dataSource.tableDataSource
   const columns = createColumns(schema, data.columns)
-  const withSearchBar = data.withSearchBar
   const perPage = data.perPage
 
   return {
@@ -22,10 +21,6 @@ export default function createTableProps(data) {
 
     get columns() {
       return columns
-    },
-
-    get withSearchBar() {
-      return withSearchBar
     },
 
     get perPage() {

@@ -83,7 +83,6 @@ export default function createTableDataSource(schema) {
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
-          // console.log(response)
           data = response.data.map(schema.resolve)
           total = parseInt(response.total, 10)
           changeStatus(STATUS_SUCCESS)

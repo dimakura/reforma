@@ -47,7 +47,6 @@ For the previous example, the wrapper might look like below:
 ```js
 import { get } from 'lodash'
 
-// Note, that Reforma can pass `null` into `data` attribute!!
 function createProfile(data) {
   const id = get(data, 'id')
   const firstName = get(data, 'firstName')

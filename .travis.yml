@@ -1,7 +1,11 @@
+dist: trusty
+
 language: node_js
 
-before_install:
-  - npm update
+node_js:
+  - "10"
+
+cache: npm
 
 install:
   - npm install

@@ -4,6 +4,7 @@ import { default as MUITable} from '@material-ui/core/Table'
 import { EVENT_PARAMS_CHANGED, EVENT_STATUS_CHANGED } from 'reforma/datasource/TableDataSource'
 import TableHeader from './TableHeader'
 import TableData from './TableData'
+import Pagination from './Pagination'
 
 class Table extends React.PureComponent {
   constructor(props) {
@@ -24,19 +25,31 @@ class Table extends React.PureComponent {
   }
 
   render() {
-    const { columns, tableDataSource } = this.props
+    const { columns, perPage, tableDataSource } = this.props
     const status = tableDataSource.status
 
     return (
       <div>
         <MUITable>
-          <TableHeader columns={columns} />{/* header is static */}
+          <TableHeader columns={columns} />
           <TableData
             tableDataSource={tableDataSource}
             columns={columns}
             status={status}
-          />{/* TableData update is triggered with status */}
+          />
         </MUITable>
+        {
+          do {
+            if (perPage != null) {
+              <Pagination
+                perPage={perPage}
+                tableDataSource={tableDataSource}
+                status={status}
+                onChange={this.onChangePage.bind(this)}
+              />
+            }
+          }
+        }
       </div>
     )
   }
@@ -60,14 +73,13 @@ class Table extends React.PureComponent {
 
   initialLoad() {
     const {
-      hasPaging,
       perPage,
       tableDataSource
     } = this.props
 
     if (tableDataSource.isInitial) {
       const initialParams = do {
-        if (hasPaging) {
+        if (perPage != null) {
           ({ page: 1, perPage })
         } else {
           ({})
@@ -82,6 +94,16 @@ class Table extends React.PureComponent {
 
   fetchData(params) {
     this.props.tableDataSource.fetch(params)
+  }
+
+  onChangePage(newPage) {
+    const { tableDataSource } = this.props
+    const params = tableDataSource.params
+
+    this.fetchData({
+      ...params,
+      page: newPage
+    })
   }
 }
 

@@ -1,9 +1,10 @@
 import { createSchema } from 'reforma'
 import createTableProps from '../TableProps'
-import { schema } from './helpers'
+import { getSchema } from './helpers'
 
 describe('TableProps', () => {
   test('createTableProps', () => {
+    const schema = getSchema()
     const props = createTableProps({
       schema,
       columns: [{
@@ -21,6 +22,5 @@ describe('TableProps', () => {
     expect(props.columns[0].caption).toBe('Name')
     expect(props.withSearchBar).toBe(true)
     expect(props.perPage).toBe(10)
-    expect(props.hasPaging).toBe(true)
   })
 })

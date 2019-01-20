@@ -30,8 +30,10 @@ describe('ApiResponse', () => {
       isSuccess: true,
       status: 200,
       data: {
-        firstName: 'Dimitri',
-        lastName: 'Kurashvili'
+        data: {
+          firstName: 'Dimitri',
+          lastName: 'Kurashvili'
+        }
       }
     })
   })

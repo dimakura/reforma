@@ -22,7 +22,7 @@ describe('Api', () => {
 
   function assertSuccessfulResponse(resp) {
     expect(resp.isSuccess).toBe(true)
-    expect(resp.data).toEqual({
+    expect(resp.data.data).toEqual({
       id: 1,
       firstName: 'Dimitri',
       lastName: 'Kurashvili'

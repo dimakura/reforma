@@ -6,7 +6,6 @@ export default function createTableProps(data) {
   const columns = createColumns(schema, data.columns)
   const withSearchBar = data.withSearchBar
   const perPage = data.perPage
-  const hasPaging = perPage != null
 
   return {
     get _isTableProps() {
@@ -31,10 +30,6 @@ export default function createTableProps(data) {
 
     get perPage() {
       return perPage
-    },
-
-    get hasPaging() {
-      return hasPaging
     }
   }
 }

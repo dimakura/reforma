@@ -1,3 +1,5 @@
+// TODO: move to factory!
+
 import { createSchema } from 'reforma'
 import createTableProps from '../../TableProps'
 

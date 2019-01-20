@@ -73,7 +73,7 @@ function createSchemaInternal(data) {
         if (typeof modelGenerator === 'function') {
           modelGenerator(data)
         } else {
-          defaultGenerator(this, data)
+          defaultGenerator(fields, data)
         }
       }
 
@@ -104,11 +104,11 @@ function createSchemaInternal(data) {
   }
 }
 
-function defaultGenerator(schema, data) {
+function defaultGenerator(fields, data) {
   const result = {}
 
-  for (let i = 0; i < schema.fields.length; i++) {
-    const field = schema.fields[i]
+  for (let i = 0; i < fields.length; i++) {
+    const field = fields[i]
     result[field.name] = field.getValue(data)
   }
 

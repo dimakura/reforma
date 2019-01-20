@@ -38,6 +38,7 @@ describe('TableDataSource', () => {
     expect(dataSource._isTableDataSource).toBe(true)
     expect(dataSource.schema).toBe(schema)
     expect(dataSource.isInitial).toBe(true)
+    expect(dataSource.params).toBeUndefined()
     expect(dataSource.data).toBeUndefined()
     expect(dataSource.errors).toBeUndefined()
   })
@@ -52,12 +53,14 @@ describe('TableDataSource', () => {
     test('success', (done) => {
       getAsync.mockResolvedValue({
         isSuccess: true,
-        data: [{
-          id: 1,
-          firstName: 'Dimitri',
-          lastName: 'Kurashvili'
-        }],
-        total: 100
+        data: {
+          data: [{
+            id: 1,
+            firstName: 'Dimitri',
+            lastName: 'Kurashvili'
+          }],
+          total: 100
+        }
       })
 
       const paramsListener = jest.fn()
@@ -69,6 +72,7 @@ describe('TableDataSource', () => {
       const promise = dataSource.fetch(params)
 
       expect(dataSource.isInProgress).toBe(true)
+      expect(dataSource.params).toEqual({ page: 1, perPage: 10 })
       expect(getAsync).toHaveBeenCalledWith(expectedUrl)
       expect(statusListener).toHaveBeenCalledWith('in-progress', 'initial')
       expect(paramsListener).toHaveBeenCalledWith(params, undefined)

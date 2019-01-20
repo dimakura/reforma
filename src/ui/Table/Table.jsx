@@ -24,14 +24,20 @@ class Table extends React.PureComponent {
   }
 
   render() {
-    const { tableDataSource } = this.props
+    const { columns, tableDataSource } = this.props
     const status = tableDataSource.status
 
     return (
-      <MUITable>
-        <TableHeader {...this.props} />{/* header is static */}
-        <TableData {...this.props} status={status} />{/* table data is updated with status */}
-      </MUITable>
+      <div>
+        <MUITable>
+          <TableHeader columns={columns} />{/* header is static */}
+          <TableData
+            tableDataSource={tableDataSource}
+            columns={columns}
+            status={status}
+          />{/* TableData update is triggered with status */}
+        </MUITable>
+      </div>
     )
   }
 

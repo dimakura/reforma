@@ -19,6 +19,8 @@
   "author": "Dimitri Kurashvili <dimakura@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",

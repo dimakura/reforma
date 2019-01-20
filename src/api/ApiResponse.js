@@ -46,7 +46,7 @@ function createApiResponseFromAxiosResponse(axiosResponse) {
       ({
         isSuccess: false,
         status,
-        errors: createApiErrors(data)
+        errors: createApiErrors(data.data)
       })
     }
   }

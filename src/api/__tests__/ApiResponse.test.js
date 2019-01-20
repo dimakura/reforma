@@ -3,17 +3,21 @@ import createApiResponse from '../ApiResponse'
 describe('ApiResponse', () => {
   const axiosSuccess = {
     data: {
-      first_name: 'Dimitri',
-      last_name: 'Kurashvili'
+      data: {
+        first_name: 'Dimitri',
+        last_name: 'Kurashvili'
+      }
     },
     status: 200
   }
 
   const axiosBadRequest = {
-    data: [{
-      field: 'first_name',
-      message: 'cannot be blank'
-    }],
+    data: {
+      data: [{
+        field: 'first_name',
+        message: 'cannot be blank'
+      }]
+    },
     status: 400
   }
 
@@ -26,8 +30,10 @@ describe('ApiResponse', () => {
       isSuccess: true,
       status: 200,
       data: {
-        firstName: 'Dimitri',
-        lastName: 'Kurashvili'
+        data: {
+          firstName: 'Dimitri',
+          lastName: 'Kurashvili'
+        }
       }
     })
   })

@@ -31,6 +31,11 @@ describe('Schema', () => {
       expect(schema.fields[0].name).toBe('id')
       expect(schema.fields[1].name).toBe('firstName')
       expect(schema.fields[2].name).toBe('lastName')
+      expect(schema.fieldsByName).toEqual({
+        id: expect.objectContaining({ _isField: true, name: 'id' }),
+        firstName: expect.objectContaining({ _isField: true, name: 'firstName' }),
+        lastName: expect.objectContaining({ _isField: true, name: 'lastName' })
+      })
       expect(schema.modelGenerator).toBeUndefined()
       expect(schema.baseUrl).toBe('/profiles')
       expect(schema.isSingleton).toBe(false)

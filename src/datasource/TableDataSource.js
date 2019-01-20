@@ -46,6 +46,10 @@ export default function createTableDataSource(schema) {
       return status
     },
 
+    get params() {
+      return params
+    },
+
     get data() {
       return data
     },
@@ -75,14 +79,16 @@ export default function createTableDataSource(schema) {
     },
 
     fetch(params) {
+      // TODO: cancel previous handler!
+
       changeParams(params)
       changeStatus(STATUS_IN_PROGRESS)
       const url = biuldUrl(schema.baseUrl, params)
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
-          data = response.data.map(schema.resolve)
-          total = parseInt(response.total, 10)
+          data = response.data.data.map(schema.resolve)
+          total = parseInt(response.data.total, 10)
           changeStatus(STATUS_SUCCESS)
         } else {
           errors = response.errors

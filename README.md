@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/dimakura/reforma.svg?branch=master)](https://travis-ci.com/dimakura/reforma)
+
 # Reforma
 
 Reforma will help you to quickly integrate your remote data with React UI.
@@ -47,7 +49,6 @@ For the previous example, the wrapper might look like below:
 ```js
 import { get } from 'lodash'
 
-// Note, that Reforma can pass `null` into `data` attribute!!
 function createProfile(data) {
   const id = get(data, 'id')
   const firstName = get(data, 'firstName')
@@ -69,7 +70,7 @@ import { createSchema } from 'reforma'
 
 const profileSchema = createSchema({
   name: 'Profile',
-  fields: ['firstName', 'lastName', 'age'],
+  fields: ['id', 'firstName', 'lastName', 'age', 'fullName'], // list all fields from your model
   generator: createProfile, // you can omit this, if you don't need models
   url: 'profiles' // by default, schema name will be used as an URL
 })
@@ -83,23 +84,26 @@ Once schema is ready, you can create your UI elements.
 import {
   Table, // to display collection of data
   View, // to display single record
-  Form // to edit/create new records
+  Form // to edit existing or create a new record
 } from 'reforma'
 
 <Table
   schema={profileSchema}
-  perPage={10}
-  withSearchField
-  withPagination
+  columns={['fullName', 'age']} // what and in what order should be displayed?
+  perPage={10} // this will display paging at the bottom
+  toolbar={['refresh', '|', 'search']}
 />
 
 <View
   schema={profileSchema}
   id={1}
+  columns={['firstName', 'lastName', 'age']}
+  toolbar={['refresh', 'delete']}
 />
 
 <Form
   schema={profileSchema}
+  columns={['firstName', 'lastName']}
   id={1} // or omit this for a new record
   onEditCompleted={doSomething}
 />
@@ -107,9 +111,7 @@ import {
 
 Yes, it's that's simple!
 
-## Advanced fields
-
-Reforma supports advanced field options.
+## Advanced field and column options
 
 TODO:
 

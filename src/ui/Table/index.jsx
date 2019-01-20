@@ -12,14 +12,14 @@ class TableRoot extends React.PureComponent {
       withSearchBar
     } = this.props
 
-    const props = createTableProps({
+    const tableProps = createTableProps({
       schema,
       columns,
       perPage,
       withSearchBar
     })
 
-    return <Table tableProps={props} />
+    return <Table {...tableProps} />
   }
 }
 

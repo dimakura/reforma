@@ -33,7 +33,7 @@ function isError(data) {
 function createApiResponseFromAxiosResponse(axiosResponse) {
   const status = axiosResponse.status
   const isSuccess = status < 400
-  const data = axiosResponse.data
+  const data = axiosResponse.data.data
 
   return do {
     if (isSuccess) {

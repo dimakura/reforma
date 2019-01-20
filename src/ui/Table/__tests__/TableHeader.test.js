@@ -9,7 +9,7 @@ describe('<TableHeader />', () => {
   test('rendering', () => {
     const header = mount(
       <MUITable>
-        <TableHeader tableProps={tableProps} />
+        <TableHeader columns={tableProps.columns} />
       </MUITable>
     )
 

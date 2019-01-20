@@ -75,12 +75,15 @@ export default function createTableDataSource(schema) {
     },
 
     fetch(params) {
+      // TODO: cancel previous handler!
+
       changeParams(params)
       changeStatus(STATUS_IN_PROGRESS)
       const url = biuldUrl(schema.baseUrl, params)
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
+          // console.log(response)
           data = response.data.map(schema.resolve)
           total = parseInt(response.total, 10)
           changeStatus(STATUS_SUCCESS)

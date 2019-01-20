@@ -7,16 +7,16 @@ import notBlank from 'reforma/utils/notBlank'
 
 class TableHeader extends React.PureComponent {
   render() {
-    const tableProps = this.props.tableProps
+    const columns = this.props.columns
 
     return (
       <TableHead>
         <TableRow>
           {
-            tableProps.columns.map(col => {
+            columns.map(col => {
               return (
                 <TableCell key={col.field.name}>
-                  { notBlank(col.caption, col.field.caption) }
+                  {col.getCaption()}
                 </TableCell>
               )
             })
@@ -28,7 +28,7 @@ class TableHeader extends React.PureComponent {
 }
 
 TableHeader.propTypes = {
-  tableProps: PropTypes.object.isRequired
+  columns: PropTypes.array.isRequired
 }
 
 export default TableHeader

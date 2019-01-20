@@ -58,7 +58,9 @@ describe('Api', () => {
       request = moxios.requests.mostRecent()
       request.respondWith({
         status: 200,
-        response: responseData
+        response: {
+          data: responseData
+        }
       })
     })
 
@@ -76,7 +78,9 @@ describe('Api', () => {
       request = moxios.requests.mostRecent()
       request.respondWith({
         status: 200,
-        response: responseData
+        response: {
+          data: responseData
+        }
       })
     })
 
@@ -98,7 +102,9 @@ describe('Api', () => {
       request = moxios.requests.mostRecent()
       request.respondWith({
         status: 200,
-        response: responseData
+        response: {
+          data: responseData
+        }
       })
     })
 
@@ -121,7 +127,9 @@ describe('Api', () => {
       request.respondWith({
         status: 200,
         response: {
-          ok: true
+          data: {
+            ok: true
+          }
         }
       })
     })

@@ -2,6 +2,7 @@ import createColumn from '../Column'
 
 export default function createTableProps(data) {
   const schema = data.schema
+  const tableDataSource = schema.dataSource.tableDataSource
   const columns = createColumns(schema, data.columns)
   const withSearchBar = data.withSearchBar
   const perPage = data.perPage
@@ -14,6 +15,10 @@ export default function createTableProps(data) {
 
     get schema() {
       return schema
+    },
+
+    get tableDataSource() {
+      return tableDataSource
     },
 
     get columns() {

@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+import notBlank from 'reforma/utils/notBlank'
 
 export default function createColumn(field, data) {
   const caption = get(data, 'caption')
@@ -28,6 +29,20 @@ export default function createColumn(field, data) {
      */
     get renderer() {
       return renderer
+    },
+
+    getCaption: function() {
+      return notBlank(caption, field.caption)
+    },
+
+    getFormattedValue: function(model) {
+      return do {
+        if (typeof renderer === 'function') {
+          renderer(model)
+        } else {
+          field.getFormattedValue(model)
+        }
+      }
     }
   }
 }

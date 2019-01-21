@@ -3,12 +3,11 @@ import { createSchema } from 'reforma'
 import isPresent from 'reforma/utils/isPresent'
 import { getAsync } from 'reforma/api'
 import {
-  default as createTableDataSource,
-  EVENT_PARAMS_CHANGED,
+  default as createRecordDataSource,
   EVENT_STATUS_CHANGED
-} from '../TableDataSource'
+} from '../RecordDataSource'
 
-describe('TableDataSource', () => {
+describe('RecordDataSource', () => {
   function modelFunction(data) {
     const id = get(data, 'id')
     const firstName = get(data, 'firstName')
@@ -32,57 +31,48 @@ describe('TableDataSource', () => {
     fields: ['firstName', 'lastName', 'fullName']
   })
 
-  test('createTableDataSource', () => {
-    const dataSource = createTableDataSource(schema)
+  test('createRecordDataSource', () => {
+    const dataSource = createRecordDataSource(schema, 1)
 
-    expect(dataSource._isTableDataSource).toBe(true)
+    expect(dataSource._isRecordDataSource).toBe(true)
     expect(dataSource.schema).toBe(schema)
+    expect(dataSource.status).toBe('initial')
     expect(dataSource.isInitial).toBe(true)
-    expect(dataSource.params).toBeUndefined()
-    expect(dataSource.data).toBeUndefined()
+    expect(dataSource.modelId).toBe(1)
+    expect(dataSource.model).toBeUndefined()
     expect(dataSource.errors).toBeUndefined()
   })
 
   describe('#fetch', () => {
-    const expectedUrl = '/profiles?page=1&per_page=10'
-    const params = {
-      page: 1,
-      perPage: 10
-    }
+    const expectedUrl = '/profiles/1'
 
     test('success', async () => {
       getAsync.mockResolvedValue({
         isSuccess: true,
         data: {
-          data: [{
+          data: {
             id: 1,
             firstName: 'Dimitri',
             lastName: 'Kurashvili'
-          }],
-          total: 100
+          }
         }
       })
 
-      const paramsListener = jest.fn()
       const statusListener = jest.fn()
-      const dataSource = createTableDataSource(schema)
-      dataSource.subscribe(EVENT_PARAMS_CHANGED, paramsListener)
+      const dataSource = createRecordDataSource(schema, 1)
       dataSource.subscribe(EVENT_STATUS_CHANGED, statusListener)
 
-      const promise = dataSource.fetch(params)
+      const promise = dataSource.fetch()
 
       expect(dataSource.isInProgress).toBe(true)
-      expect(dataSource.params).toEqual({ page: 1, perPage: 10 })
       expect(getAsync).toHaveBeenCalledWith(expectedUrl)
       expect(statusListener).toHaveBeenCalledWith('in-progress', 'initial')
-      expect(paramsListener).toHaveBeenCalledWith(params, undefined)
 
       await promise
 
       expect(statusListener).toHaveBeenCalledWith('success', 'in-progress')
       expect(dataSource.isSuccess).toBe(true)
-      expect(dataSource.data[0].fullName).toBe('Dimitri Kurashvili')
-      expect(dataSource.total).toBe(100)
+      expect(dataSource.model.fullName).toBe('Dimitri Kurashvili')
     })
 
     test('failure', async () => {
@@ -91,18 +81,15 @@ describe('TableDataSource', () => {
         errors: 'Something failed'
       })
 
-      const paramsListener = jest.fn()
       const statusListener = jest.fn()
-      const dataSource = createTableDataSource(schema)
-      dataSource.subscribe(EVENT_PARAMS_CHANGED, paramsListener)
+      const dataSource = createRecordDataSource(schema, 1)
       dataSource.subscribe(EVENT_STATUS_CHANGED, statusListener)
 
-      const promise = dataSource.fetch(params)
+      const promise = dataSource.fetch()
 
       expect(dataSource.isInProgress).toBe(true)
       expect(getAsync).toHaveBeenCalledWith(expectedUrl)
       expect(statusListener).toHaveBeenCalledWith('in-progress', 'initial')
-      expect(paramsListener).toHaveBeenCalledWith(params, undefined)
 
       await promise
 

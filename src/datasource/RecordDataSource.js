@@ -1,34 +1,24 @@
 import EventEmitter from 'events'
 import { getAsync } from 'reforma/api'
-import buildUrl from 'reforma/utils/buildUrl'
+import urljoin from 'url-join'
 
 export const STATUS_INITIAL = 'initial'
 export const STATUS_IN_PROGRESS = 'in-progress'
 export const STATUS_SUCCESS = 'success'
 export const STATUS_ERROR = 'error'
-export const EVENT_PARAMS_CHANGED = 'params-changed'
 export const EVENT_STATUS_CHANGED = 'status-changed'
 
-class TableDataSourceEvents extends EventEmitter {}
-const emitter = new TableDataSourceEvents()
+class RecordDataSourceEvents extends EventEmitter {}
+const emitter = new RecordDataSourceEvents()
 
-export default function createTableDataSource(schema) {
+export default function createRecordDataSource(schema, modelOrId) {
+  const modelId = extractId(modelOrId)
   let status = STATUS_INITIAL
-  let params
-  let data
-  let total = 0
+  let model
   let errors
 
-  function changeParams(newParams) {
-    const event = eventName(EVENT_PARAMS_CHANGED, schema)
-    const oldParams = params
-    params = newParams
-
-    emitter.emit(event, newParams, oldParams)
-  }
-
   function changeStatus(newStatus) {
-    const event = eventName(EVENT_STATUS_CHANGED, schema)
+    const event = eventName(EVENT_STATUS_CHANGED, schema, modelId)
     const oldStatus = status
     status = newStatus
 
@@ -36,7 +26,7 @@ export default function createTableDataSource(schema) {
   }
 
   return {
-    get _isTableDataSource() {
+    get _isRecordDataSource() {
       return true
     },
 
@@ -48,16 +38,12 @@ export default function createTableDataSource(schema) {
       return status
     },
 
-    get params() {
-      return params
+    get modelId() {
+      return modelId
     },
 
-    get data() {
-      return data
-    },
-
-    get total() {
-      return total
+    get model() {
+      return model
     },
 
     get errors() {
@@ -80,17 +66,13 @@ export default function createTableDataSource(schema) {
       return status === STATUS_ERROR
     },
 
-    fetch(params) {
-      // TODO: cancel previous handler!
-
-      changeParams(params)
+    fetch() {
       changeStatus(STATUS_IN_PROGRESS)
-      const url = buildUrl(schema.baseUrl, params)
+      const url = urljoin(schema.baseUrl, modelId.toString())
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
-          data = response.data.data.map(schema.resolve)
-          total = parseInt(response.data.total, 10)
+          model = schema.resolve(response.data.data)
           changeStatus(STATUS_SUCCESS)
         } else {
           errors = response.errors
@@ -100,7 +82,7 @@ export default function createTableDataSource(schema) {
     },
 
     subscribe(event, handler) {
-      event = eventName(event, schema)
+      event = eventName(event, schema, modelId)
       emitter.on(event, handler)
 
       return (() => {
@@ -112,7 +94,19 @@ export default function createTableDataSource(schema) {
 
 // -- PRIVATE
 
-// different schemas produce different events!
-function eventName(baseName, schema) {
-  return `${schema.name}:${baseName}`
+function extractId(modelOrId) {
+  return do {
+    if (typeof modelOrId === 'number') {
+      modelOrId
+    } else if (typeof modelOrId === 'string') {
+      modelOrId
+    } else {
+      modelOrId.id
+    }
+  }
+}
+
+// different schemas and records produce different events!
+function eventName(baseName, schema, modelId) {
+  return `${schema.name}:${modelId}:${baseName}`
 }

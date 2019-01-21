@@ -11,8 +11,7 @@ export const EVENT_STATUS_CHANGED = 'status-changed'
 class RecordDataSourceEvents extends EventEmitter {}
 const emitter = new RecordDataSourceEvents()
 
-export default function createRecordDataSource(schema, modelOrId) {
-  const modelId = extractId(modelOrId)
+export default function createRecordDataSource(schema, modelId) {
   let status = STATUS_INITIAL
   let model
   let errors
@@ -68,7 +67,14 @@ export default function createRecordDataSource(schema, modelOrId) {
 
     fetch() {
       changeStatus(STATUS_IN_PROGRESS)
-      const url = urljoin(schema.baseUrl, modelId.toString())
+      const url = do {
+        if (schema.isSingleton) {
+          // for singleton schema we don't need /:id ending
+          schema.baseUrl
+        } else {
+          urljoin(schema.baseUrl, modelId.toString())
+        }
+      }
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
@@ -93,18 +99,6 @@ export default function createRecordDataSource(schema, modelOrId) {
 }
 
 // -- PRIVATE
-
-function extractId(modelOrId) {
-  return do {
-    if (typeof modelOrId === 'number') {
-      modelOrId
-    } else if (typeof modelOrId === 'string') {
-      modelOrId
-    } else {
-      modelOrId.id
-    }
-  }
-}
 
 // different schemas and records produce different events!
 function eventName(baseName, schema, modelId) {

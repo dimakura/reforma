@@ -5,6 +5,7 @@ import createTableProps from '../TableProps'
 
 export function getSchema() {
   return createSchema({
+    name: 'profiles',
     url: '/profiles',
     fields: ['id', 'firstName', 'lastName']
   })

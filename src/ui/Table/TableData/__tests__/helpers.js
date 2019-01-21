@@ -4,6 +4,7 @@ import { createSchema } from 'reforma'
 import createTableProps from '../../TableProps'
 
 export const schema = createSchema({
+  name: 'profiles',
   url: '/profiles',
   fields: ['id', 'firstName', 'lastName']
 })

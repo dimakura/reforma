@@ -1,5 +1,5 @@
 import { createSchema } from 'reforma'
-import createDataSource from '..'
+import createDataSource from 'reforma/datasource'
 
 describe('DataSource', () => {
   describe('creation', () => {
@@ -9,7 +9,6 @@ describe('DataSource', () => {
         url: '/profiles',
         fields: ['id', 'firstName', 'lastName']
       })
-
       const dataSource = createDataSource(schema)
 
       expect(dataSource.schema).toBe(schema)

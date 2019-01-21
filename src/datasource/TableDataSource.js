@@ -20,17 +20,19 @@ export default function createTableDataSource(schema) {
   let errors
 
   function changeParams(newParams) {
+    const event = eventName(EVENT_PARAMS_CHANGED, schema)
     const oldParams = params
     params = newParams
 
-    emitter.emit(EVENT_PARAMS_CHANGED, newParams, oldParams)
+    emitter.emit(event, newParams, oldParams)
   }
 
   function changeStatus(newStatus) {
+    const event = eventName(EVENT_STATUS_CHANGED, schema)
     const oldStatus = status
     status = newStatus
 
-    emitter.emit(EVENT_STATUS_CHANGED, newStatus, oldStatus)
+    emitter.emit(event, newStatus, oldStatus)
   }
 
   return {
@@ -98,6 +100,7 @@ export default function createTableDataSource(schema) {
     },
 
     subscribe(event, handler) {
+      event = eventName(event, schema)
       emitter.on(event, handler)
 
       return (() => {
@@ -105,4 +108,11 @@ export default function createTableDataSource(schema) {
       })
     }
   }
+}
+
+// -- PRIVATE
+
+// different schemas produce different events!
+function eventName(baseName, schema) {
+  return `${schema.name}:${baseName}`
 }

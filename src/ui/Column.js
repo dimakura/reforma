@@ -1,7 +1,29 @@
 import { get } from 'lodash'
 import notBlank from 'reforma/utils/notBlank'
 
-export default function createColumn(field, data) {
+export function createColumns(schema, data) {
+  const columns = []
+
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i]
+
+    const field = do {
+      if (typeof row === 'string') {
+        schema.fieldsByName[row]
+      } else if (typeof row === 'object' && 'name' in row) {
+        schema.fieldsByName[row.name]
+      }
+    }
+
+    if (field != null) {
+      columns.push(createColumn(field, row))
+    }
+  }
+
+  return columns
+}
+
+export function createColumn(field, data) {
   const caption = get(data, 'caption')
   const renderer = get(data, 'renderer')
 

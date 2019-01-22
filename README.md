@@ -99,6 +99,7 @@ import {
 <View
   schema={profileSchema}
   id={1}
+  // or record={modelInstance}
   columns={['firstName', 'lastName', 'age']}
   toolbar={['refresh', 'delete']}
 />
@@ -107,6 +108,7 @@ import {
   schema={profileSchema}
   columns={['firstName', 'lastName']}
   id={1} // or omit this for a new record
+  // or record={modelInstance}
   onEditCompleted={doSomething}
 />
 ```

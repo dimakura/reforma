@@ -1,5 +1,5 @@
 import createField from 'reforma/schema/Field'
-import createColumn from '../Column'
+import { createColumn } from '../Column'
 
 describe('Column', () => {
   const model = { firstName: 'Dimitri' }

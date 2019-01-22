@@ -111,7 +111,6 @@ Table.propTypes = {
   schema: PropTypes.object.isRequired,
   tableDataSource: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
-  withSearchBar: PropTypes.bool,
   perPage: PropTypes.number,
   hasPaging: PropTypes.bool
 }

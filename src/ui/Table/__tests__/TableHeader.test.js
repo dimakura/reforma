@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { default as MUITable} from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
-import { getTableProps } from './helpers'
+import { getTableProps } from 'Test/factories'
 import TableHeader from '../TableHeader'
 
 describe('<TableHeader />', () => {
@@ -16,6 +16,6 @@ describe('<TableHeader />', () => {
 
     expect(header.find(TableCell).children()).toHaveLength(2)
     expect(header).toIncludeText('First Name')
-    expect(header).toIncludeText('@Last-Name@')
+    expect(header).toIncludeText('Last Name')
   })
 })

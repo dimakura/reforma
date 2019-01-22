@@ -1,12 +1,13 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { default as MUITable} from '@material-ui/core/Table'
-import { tableProps } from './helpers'
 import TableCell from '@material-ui/core/TableCell'
+import { getTableProps } from 'Test/factories'
 import NoData from '../NoData'
 
 describe('<NoData />', () => {
   test('rendering', () => {
+    const tableProps = getTableProps()
     const nodata = mount(
       <MUITable>
         <NoData columns={tableProps.columns} />

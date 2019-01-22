@@ -8,15 +8,13 @@ class TableRoot extends React.PureComponent {
     const {
       schema,
       columns,
-      perPage,
-      withSearchBar
+      perPage
     } = this.props
 
     const tableProps = createTableProps({
       schema,
       columns,
-      perPage,
-      withSearchBar
+      perPage
     })
 
     return <Table {...tableProps} />
@@ -26,8 +24,7 @@ class TableRoot extends React.PureComponent {
 TableRoot.propTypes = {
   schema: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
-  perPage: PropTypes.number,
-  withSearchBar: PropTypes.bool
+  perPage: PropTypes.number
 }
 
 export default TableRoot

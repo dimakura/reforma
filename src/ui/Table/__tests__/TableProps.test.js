@@ -1,6 +1,6 @@
 import { createSchema } from 'reforma'
+import { getSchema } from 'Test/factories'
 import createTableProps from '../TableProps'
-import { getSchema } from './helpers'
 
 describe('TableProps', () => {
   test('createTableProps', () => {
@@ -10,13 +10,13 @@ describe('TableProps', () => {
       columns: [{
         name: 'firstName',
         caption: 'Name'
-      }, 'fullName'],
+      }, 'age'],
       perPage: 10
     })
 
     expect(props.schema).toBe(schema)
     expect(props._isTableProps).toBe(true)
-    expect(props.columns).toHaveLength(1) // no fullName!
+    expect(props.columns).toHaveLength(1) // no age!
     expect(props.columns[0].field.name).toBe('firstName')
     expect(props.columns[0].caption).toBe('Name')
     expect(props.perPage).toBe(10)

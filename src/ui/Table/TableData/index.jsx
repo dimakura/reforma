@@ -10,14 +10,16 @@ class TableData extends React.PureComponent {
     const { tableDataSource, columns } = this.props
     const { data, errors } = tableDataSource
 
-    if (tableDataSource.isInitial) {
-      return null
-    } else if (tableDataSource.isInProgress && data == null) {
-      return <Loading columns={columns} />
-    } else if (isBlank(data)) {
-      return <NoData columns={columns} />
-    } else {
-      return <Data data={data} columns={columns} />
+    return do {
+      if (tableDataSource.isInitial) {
+        null
+      } else if (tableDataSource.isInProgress && data == null) {
+        <Loading columns={columns} />
+      } else if (isBlank(data)) {
+        <NoData columns={columns} />
+      } else {
+        <Data data={data} columns={columns} />
+      }
     }
   }
 }

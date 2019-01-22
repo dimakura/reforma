@@ -18,6 +18,7 @@ describe('Schema', () => {
   }
 
   const data = {
+    name: 'profiles',
     baseUrl: '/profiles',
     fields: ['id', 'firstName', 'lastName']
   }
@@ -27,6 +28,7 @@ describe('Schema', () => {
       const schema = createSchema(data)
 
       expect(schema._isSchema).toBe(true)
+      expect(schema.name).toBe('profiles')
       expect(schema.fields).toHaveLength(3)
       expect(schema.fields[0].name).toBe('id')
       expect(schema.fields[1].name).toBe('firstName')
@@ -51,6 +53,17 @@ describe('Schema', () => {
       expect(schema.isSingleton).toBe(true)
       expect(schema.getUrl()).toBe('/profiles')
       expect(schema.getModelUrl(1)).toBe('/profiles')
+    })
+
+    test('wrong schemas', () => {
+      expect(() => createSchema({ ...data, name: null })).toThrow('Empty schema name')
+      expect(() => createSchema({ ...data, baseUrl: null })).toThrow('Specify schema url')
+      expect(() => createSchema({ ...data, fields: [] })).toThrow('Wrong schema fields: ')
+    })
+
+    test('duplicate schema name', () => {
+      createSchema(data)
+      expect(() => createSchema(data)).toThrow('Schema name cannot be used twice: profiles')
     })
   })
 

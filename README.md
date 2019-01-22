@@ -69,12 +69,14 @@ Continuing with our example:
 import { createSchema } from 'reforma'
 
 const profileSchema = createSchema({
-  name: 'Profile',
+  name: 'profiles', // some unique name
   fields: ['id', 'firstName', 'lastName', 'age', 'fullName'], // list all fields from your model
-  generator: createProfile, // you can omit this, if you don't need models
-  url: 'profiles' // by default, schema name will be used as an URL
+  generator: createProfile, // you can omit this, if you don't use models
+  url: '/profiles'
 })
 ```
+
+Note, that schema name should be unique for the whole project. This gives you flexibility to reuse the same model (and url) in different places of your app with different configurations.
 
 ## UI
 

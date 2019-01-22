@@ -1,6 +1,7 @@
 import 'jest-enzyme'
 import Enzyme from 'enzyme'
 import React16Adapter from 'enzyme-adapter-react-16'
+import { __reset__ as resetSchemas } from 'reforma/schema'
 
 // -- ENZYME
 
@@ -11,4 +12,7 @@ Enzyme.configure({
 // -- MOCKS
 
 jest.mock('reforma/api')
-afterEach(jest.resetAllMocks)
+afterEach(() => {
+  jest.resetAllMocks()
+  resetSchemas()
+})

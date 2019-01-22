@@ -1,31 +1,64 @@
-import { camelCase } from 'lodash'
+import { get, camelCase } from 'lodash'
 import urlJoin from 'url-join'
 import notBlank from 'reforma/utils/notBlank'
+import isBlank from 'reforma/utils/isBlank'
 import createDataSource from 'reforma/datasource'
 import createField from './Field'
 
-export default function createSchema(data) {
-  if (data != null) {
-    if (
-      typeof data === 'object' &&
-      'fields' in data &&
-      ('baseUrl' in data || 'url' in data)
-    ) {
-      const schema = createSchemaInternal(data)
-      const dataSource = createDataSource(schema)
-      Object.defineProperty(schema, 'dataSource', {
-        value: dataSource,
-        writable: false
-      })
+const schemaNames = new Set()
 
-      return schema
-    }
-  }
+export default function createSchema(data) {
+  validateSchema(data)
+
+  const schema = createSchemaInternal(data)
+  const dataSource = createDataSource(schema)
+  Object.defineProperty(schema, 'dataSource', {
+    value: dataSource,
+    writable: false
+  })
+
+  return schema
 }
+
+// @test-only
+export function __reset__() {
+  schemaNames.clear()
+}
+
 
 // -- PRIVATE
 
+function schemaName(rawName) {
+  if (typeof rawName === 'string') {
+    return camelCase(rawName)
+  }
+}
+
+function validateSchema(data) {
+  const name = schemaName(get(data, 'name'))
+  const fields = get(data, 'fields')
+  const url = get(data, 'url', get(data, 'baseUrl'))
+
+  if (isBlank(name)) {
+    throw new Error(`Empty schema name`)
+  }
+
+  if (schemaNames.has(name)) {
+    throw new Error(`Schema name cannot be used twice: ${name}`)
+  }
+
+  if (isBlank(fields) || !Array.isArray(fields)) {
+    throw new Error(`Wrong schema fields: ${fields}`)
+  }
+
+  if (isBlank(url)) {
+    throw new Error('Specify schema url')
+  }
+}
+
 function createSchemaInternal(data) {
+  const name = schemaName(data.name)
+  schemaNames.add(name)
   const baseUrl = notBlank(data.url, data.baseUrl)
   const fields = data.fields.map(createField)
   const fieldsByName = fields.reduce((acc, field) => {
@@ -46,6 +79,10 @@ function createSchemaInternal(data) {
   return {
     get _isSchema() {
       return true
+    },
+
+    get name() {
+      return name
     },
 
     get fields() {

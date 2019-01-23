@@ -13,6 +13,7 @@ const emitter = new RecordDataSourceEvents()
 
 export default function createRecordDataSource(schema, modelId) {
   let status = STATUS_INITIAL
+  let modelData // used to support cloning models
   let model
   let errors
 
@@ -67,6 +68,7 @@ export default function createRecordDataSource(schema, modelId) {
 
     fetch() {
       changeStatus(STATUS_IN_PROGRESS)
+
       const url = do {
         if (schema.isSingleton) {
           // for singleton schema we don't need /:id ending
@@ -78,13 +80,18 @@ export default function createRecordDataSource(schema, modelId) {
 
       return getAsync(url).then(response => {
         if (response.isSuccess) {
-          model = schema.resolve(response.data.data)
+          modelData = response.data.data
+          model = schema.resolve(modelData)
           changeStatus(STATUS_SUCCESS)
         } else {
           errors = response.errors
           changeStatus(STATUS_ERROR)
         }
       })
+    },
+
+    getClonedModel() {
+      return schema.resolve(modelData)
     },
 
     subscribe(event, handler) {

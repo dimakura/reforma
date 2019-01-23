@@ -31,6 +31,19 @@ describe('RecordDataSource', () => {
     fields: ['firstName', 'lastName', 'fullName']
   })
 
+  function mockSucccessApi() {
+    getAsync.mockResolvedValue({
+      isSuccess: true,
+      data: {
+        data: {
+          id: 1,
+          firstName: 'Dimitri',
+          lastName: 'Kurashvili'
+        }
+      }
+    })
+  }
+
   test('createRecordDataSource', () => {
     const dataSource = createRecordDataSource(schema, 1)
 
@@ -47,16 +60,7 @@ describe('RecordDataSource', () => {
     const expectedUrl = '/profiles/1'
 
     test('success', async () => {
-      getAsync.mockResolvedValue({
-        isSuccess: true,
-        data: {
-          data: {
-            id: 1,
-            firstName: 'Dimitri',
-            lastName: 'Kurashvili'
-          }
-        }
-      })
+      mockSucccessApi()
 
       const statusListener = jest.fn()
       const dataSource = createRecordDataSource(schema, 1)
@@ -97,5 +101,28 @@ describe('RecordDataSource', () => {
       expect(dataSource.isError).toBe(true)
       expect(dataSource.errors).toBe('Something failed')
     })
+  })
+
+  test('#getClonedModel', async () => {
+    mockSucccessApi()
+
+    const dataSource = createRecordDataSource(schema, 1)
+    const promise = dataSource.fetch()
+
+    const model1 = dataSource.getClonedModel()
+
+    await promise
+
+    const model2 = dataSource.getClonedModel()
+
+    expect(model1.id).toBeUndefined()
+    expect(model1.firstName).toBeUndefined()
+    expect(model1.lastName).toBeUndefined()
+    expect(model1.fullName).toBe('')
+
+    expect(model2.id).toBe(1)
+    expect(model2.firstName).toBe('Dimitri')
+    expect(model2.lastName).toBe('Kurashvili')
+    expect(model2.fullName).toBe('Dimitri Kurashvili')
   })
 })

@@ -1,3 +1,4 @@
+import React from 'react'
 import { get, startCase } from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
@@ -7,7 +8,8 @@ const supportedTypes = [
   'string',
   'date',
   'number',
-  'integer'
+  'integer',
+  'image'
 ]
 
 export default function createFieldType(data) {
@@ -40,6 +42,8 @@ function createFieldTypeInternal(data) {
         ...data,
         decimals: 0
       })
+    } else if (data.name === 'image') {
+      createImageType(data)
     }
   }
 
@@ -110,6 +114,24 @@ function createDateType(data) {
     format,
     formatValue: function (val) {
       return moment(val).format(format)
+    }
+  }
+}
+
+// -- IMAGE
+
+function createImageType(data) {
+  return {
+    name: 'image',
+    formatValue: function(val) {
+      return (
+        <a href={val} target="_blank" rel="noopener noreferrer"> 
+          <img
+            src={val}
+            style={{ maxHeight: 200, maxWidth: 200 }}
+          />
+        </a>
+      )
     }
   }
 }

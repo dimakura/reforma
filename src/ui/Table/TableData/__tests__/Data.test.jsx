@@ -1,12 +1,14 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { default as MUITable} from '@material-ui/core/Table'
-import { tableProps } from './helpers'
+import { default as MUITable } from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
+import { getTableProps } from 'Test/factories'
 import Data from '../Data'
 
 describe('<Data />', () => {
   test('rendering', () => {
+    const tableProps = getTableProps()
+
     const data = [{
       id: 1,
       firstName: 'Dimitri',

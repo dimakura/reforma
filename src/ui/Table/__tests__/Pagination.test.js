@@ -3,7 +3,7 @@ import { mount } from 'enzyme'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import { getAsync } from 'reforma/api'
-import { getTableProps } from './helpers'
+import { getTableProps } from 'Test/factories'
 import Pagination from '../Pagination'
 
 describe('<Pagination />', () => {

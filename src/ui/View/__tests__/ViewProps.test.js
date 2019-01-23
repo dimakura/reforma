@@ -1,23 +1,23 @@
 import { getSchema } from 'Test/factories'
-import createTableProps from '../TableProps'
+import createViewProps from '../ViewProps'
 
-describe('TableProps', () => {
-  test('createTableProps', () => {
+describe('ViewProps', () => {
+  test('createViewProps', () => {
     const schema = getSchema()
-    const props = createTableProps({
+    const props = createViewProps({
       schema,
       columns: [{
         name: 'firstName',
         caption: 'Name'
       }, 'age'],
-      perPage: 10
+      id: 1
     })
 
     expect(props.schema).toBe(schema)
-    expect(props._isTableProps).toBe(true)
-    expect(props.columns).toHaveLength(1) // no age!
+    expect(props._isViewProps).toBe(true)
+    expect(props.columns).toHaveLength(1)
     expect(props.columns[0].field.name).toBe('firstName')
     expect(props.columns[0].caption).toBe('Name')
-    expect(props.perPage).toBe(10)
+    expect(props.recordDataSource.modelId).toBe('1')
   })
 })

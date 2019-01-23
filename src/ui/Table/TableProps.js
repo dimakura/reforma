@@ -1,4 +1,4 @@
-import createColumn from '../Column'
+import { createColumns } from '../Column'
 
 export default function createTableProps(data) {
   const schema = data.schema
@@ -27,28 +27,4 @@ export default function createTableProps(data) {
       return perPage
     }
   }
-}
-
-// -- PRIVATE
-
-function createColumns(schema, data) {
-  const columns = []
-
-  for (let i = 0; i < data.length; i++) {
-    const row = data[i]
-
-    const field = do {
-      if (typeof row === 'string') {
-        schema.fieldsByName[row]
-      } else if (typeof row === 'object' && 'name' in row) {
-        schema.fieldsByName[row.name]
-      }
-    }
-
-    if (field != null) {
-      columns.push(createColumn(field, row))
-    }
-  }
-
-  return columns
 }

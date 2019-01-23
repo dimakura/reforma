@@ -10,6 +10,7 @@ class Table extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    // this is a dummy counter to shake the tree
     this.state = {
       counter: 1
     }
@@ -111,9 +112,7 @@ Table.propTypes = {
   schema: PropTypes.object.isRequired,
   tableDataSource: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
-  withSearchBar: PropTypes.bool,
-  perPage: PropTypes.number,
-  hasPaging: PropTypes.bool
+  perPage: PropTypes.number
 }
 
 export default Table

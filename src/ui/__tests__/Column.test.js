@@ -1,5 +1,6 @@
 import createField from 'reforma/schema/Field'
-import { createColumn } from '../Column'
+import { getSchema } from 'Test/factories'
+import { createColumns, createColumn } from '../Column'
 
 describe('Column', () => {
   const model = { firstName: 'Dimitri' }
@@ -8,6 +9,14 @@ describe('Column', () => {
   const complexColumn = createColumn(field, {
     caption: 'Name & Salutation',
     renderer: (model) => `Mr. ${model.firstName}`
+  })
+
+  test('.createColumns', () => {
+    const columns = createColumns(getSchema(), ['firstName', 'lastName', 'profession'])
+
+    expect(columns).toHaveLength(2)
+    expect(columns[0].field.name).toBe('firstName')
+    expect(columns[1].field.name).toBe('lastName')
   })
 
   describe('.createColumn', () => {

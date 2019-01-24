@@ -1,5 +1,5 @@
 import { getSchema } from 'Test/factories'
-import { getAsync } from 'reforma/api'
+import { getAsync, postAsync, putAsync } from 'reforma/api'
 import {
   default as createEditRecordDataSource,
   EVENT_STATUS_CHANGED
@@ -7,6 +7,14 @@ import {
 
 describe('EditRecordDataSource', () => {
   const schema = getSchema()
+
+  const data = {
+    data: {
+      id: 1,
+      firstName: 'Dimitri',
+      lastName: 'Kurashvili'
+    }
+  }
 
   describe('createEditRecordDataSource', () => {
     test('new model', () => {
@@ -52,13 +60,7 @@ describe('EditRecordDataSource', () => {
     test('existing model', async () => {
       getAsync.mockResolvedValue({
         isSuccess: true,
-        data: {
-          data: {
-            id: 1,
-            firstName: 'Dimitri',
-            lastName: 'Kurashvili'
-          }
-        }
+        data
       })
 
       const statusListener = jest.fn()
@@ -100,6 +102,88 @@ describe('EditRecordDataSource', () => {
   })
 
   describe('#save', () => {
-    // TODO!
+    test('new model', async () => {
+      postAsync.mockResolvedValue({
+        isSuccess: true,
+        data
+      })
+
+      const statusListener = jest.fn()
+      const dataSource = createEditRecordDataSource(schema)
+      dataSource.subscribe(EVENT_STATUS_CHANGED, statusListener)
+
+      const promise = dataSource.save({
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      expect(dataSource.isSaving)
+      expect(postAsync).toHaveBeenCalledWith('/profiles', {
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      await promise
+
+      expect(dataSource.isSuccess).toBe(true)
+      expect(dataSource.model).toMatchObject(data.data)
+      expect(statusListener).toHaveBeenCalledWith('success', 'saving')
+    })
+
+    test('existing model', async () => {
+      putAsync.mockResolvedValue({
+        isSuccess: true,
+        data
+      })
+
+      const statusListener = jest.fn()
+      const dataSource = createEditRecordDataSource(schema, 1)
+      dataSource.subscribe(EVENT_STATUS_CHANGED, statusListener)
+
+      const promise = dataSource.save({
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      expect(dataSource.isSaving)
+      expect(putAsync).toHaveBeenCalledWith('/profiles/1', {
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      await promise
+
+      expect(dataSource.isSuccess).toBe(true)
+      expect(dataSource.model).toMatchObject(data.data)
+      expect(statusListener).toHaveBeenCalledWith('success', 'saving')
+    })
+
+    test('failure', async () => {
+      putAsync.mockResolvedValue({
+        isSuccess: false,
+        errors: 'Something failed'
+      })
+
+      const statusListener = jest.fn()
+      const dataSource = createEditRecordDataSource(schema, 1)
+      dataSource.subscribe(EVENT_STATUS_CHANGED, statusListener)
+
+      const promise = dataSource.save({
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      expect(dataSource.isSaving)
+      expect(putAsync).toHaveBeenCalledWith('/profiles/1', {
+        firstName: 'Dimitri',
+        lastName: 'Kurashvili'
+      })
+
+      await promise
+
+      expect(dataSource.isError).toBe(true)
+      expect(dataSource.errors).toBe('Something failed')
+      expect(statusListener).toHaveBeenCalledWith('error', 'saving')
+    })
   })
 })

@@ -86,6 +86,10 @@ export default function createEditRecordDataSource(schema, modelId) {
       return model
     },
 
+    get errors() {
+      return errors
+    },
+
     fetchRecord () {
       changeStatus(STATUS_FETCHING)
 
@@ -113,7 +117,7 @@ export default function createEditRecordDataSource(schema, modelId) {
         if (isNew || schema.isSingleton) {
           schema.baseUrl
         } else {
-          urljoin(schema.baseUrl, dataSource.modelId.toString())
+          urljoin(schema.baseUrl, recordDataSource.modelId.toString())
         }
       }
 

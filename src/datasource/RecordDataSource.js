@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
-import { getAsync } from 'reforma/api'
 import urljoin from 'url-join'
+import { getAsync } from 'reforma/api'
 
 export const STATUS_INITIAL = 'initial'
 export const STATUS_IN_PROGRESS = 'in-progress'
@@ -9,19 +9,18 @@ export const STATUS_ERROR = 'error'
 export const EVENT_STATUS_CHANGED = 'status-changed'
 
 class RecordDataSourceEvents extends EventEmitter {}
-const emitter = new RecordDataSourceEvents()
 
 export default function createRecordDataSource(schema, modelId) {
+  const emitter = new RecordDataSourceEvents()
   let status = STATUS_INITIAL
   let model
   let errors
 
   function changeStatus(newStatus) {
-    const event = eventName(EVENT_STATUS_CHANGED, schema, modelId)
     const oldStatus = status
     status = newStatus
 
-    emitter.emit(event, newStatus, oldStatus)
+    emitter.emit(EVENT_STATUS_CHANGED, newStatus, oldStatus)
   }
 
   return {
@@ -88,7 +87,6 @@ export default function createRecordDataSource(schema, modelId) {
     },
 
     subscribe(event, handler) {
-      event = eventName(event, schema, modelId)
       emitter.on(event, handler)
 
       return (() => {
@@ -96,11 +94,4 @@ export default function createRecordDataSource(schema, modelId) {
       })
     }
   }
-}
-
-// -- PRIVATE
-
-// different schemas and records produce different events!
-function eventName(baseName, schema, modelId) {
-  return `${schema.name}:${modelId}:${baseName}`
 }

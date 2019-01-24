@@ -16,7 +16,7 @@ class EditRecordDataSourceEvents extends EventEmitter {}
 
 export default function createEditRecordDataSource(schema, modelId) {
   const emitter = new EditRecordDataSourceEvents()
-  const isNew = isBla(modelId)
+  const isNew = isBlank(modelId)
   let status = STATUS_INITIAL
   let errors
   let model
@@ -80,7 +80,7 @@ export default function createEditRecordDataSource(schema, modelId) {
         recordDataSource.fetch().then(() => {
           if (recordDataSource.isSuccess) {
             model = recordDataSource.model
-            changeStatus(STATUS_READY)
+            changeStatus(STATUS_SUCCESS)
           } else {
             changeStatus(STATUS_FETCH_ERROR)
           }

@@ -26,7 +26,7 @@ export default function createEditRecordDataSource(schema, modelId) {
     }
   }
 
-  function changeStatus() {
+  function changeStatus(newStatus) {
     const oldStatus = status
     status = newStatus
 
@@ -38,8 +38,20 @@ export default function createEditRecordDataSource(schema, modelId) {
       return true
     },
 
+    get schema() {
+      return schema
+    },
+
+    get recordDataSource() {
+      return recordDataSource
+    },
+
     get isNew() {
       return isNew
+    },
+
+    get status() {
+      return status
     },
 
     get isInitial() {
@@ -70,17 +82,23 @@ export default function createEditRecordDataSource(schema, modelId) {
       return status === STATUS_ERROR
     },
 
+    get model() {
+      return model
+    },
+
     fetchRecord () {
       changeStatus(STATUS_FETCHING)
 
-      if (!isNew) {
-        model = schema.modelGenerator()
+      if (isNew) {
+        model = schema.resolve()
         changeStatus(STATUS_READY)
+
+        return
       } else {
-        recordDataSource.fetch().then(() => {
+        return recordDataSource.fetch().then(() => {
           if (recordDataSource.isSuccess) {
             model = recordDataSource.model
-            changeStatus(STATUS_SUCCESS)
+            changeStatus(STATUS_READY)
           } else {
             changeStatus(STATUS_FETCH_ERROR)
           }

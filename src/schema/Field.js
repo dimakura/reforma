@@ -37,6 +37,7 @@ function createFieldInternal(data) {
     get name() {
       return name
     },
+
     get caption() {
       return caption
     },

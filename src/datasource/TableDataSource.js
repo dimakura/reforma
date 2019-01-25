@@ -10,9 +10,9 @@ export const EVENT_PARAMS_CHANGED = 'params-changed'
 export const EVENT_STATUS_CHANGED = 'status-changed'
 
 class TableDataSourceEvents extends EventEmitter {}
-const emitter = new TableDataSourceEvents()
 
 export default function createTableDataSource(schema) {
+  const emitter = new TableDataSourceEvents()
   let status = STATUS_INITIAL
   let params
   let data
@@ -20,19 +20,17 @@ export default function createTableDataSource(schema) {
   let errors
 
   function changeParams(newParams) {
-    const event = eventName(EVENT_PARAMS_CHANGED, schema)
     const oldParams = params
     params = newParams
 
-    emitter.emit(event, newParams, oldParams)
+    emitter.emit(EVENT_PARAMS_CHANGED, newParams, oldParams)
   }
 
   function changeStatus(newStatus) {
-    const event = eventName(EVENT_STATUS_CHANGED, schema)
     const oldStatus = status
     status = newStatus
 
-    emitter.emit(event, newStatus, oldStatus)
+    emitter.emit(EVENT_STATUS_CHANGED, newStatus, oldStatus)
   }
 
   return {
@@ -81,8 +79,6 @@ export default function createTableDataSource(schema) {
     },
 
     fetch(params) {
-      // TODO: cancel previous handler!
-
       changeParams(params)
       changeStatus(STATUS_IN_PROGRESS)
       const url = buildUrl(schema.baseUrl, params)
@@ -100,7 +96,6 @@ export default function createTableDataSource(schema) {
     },
 
     subscribe(event, handler) {
-      event = eventName(event, schema)
       emitter.on(event, handler)
 
       return (() => {
@@ -108,11 +103,4 @@ export default function createTableDataSource(schema) {
       })
     }
   }
-}
-
-// -- PRIVATE
-
-// different schemas produce different events!
-function eventName(baseName, schema) {
-  return `${schema.name}:${baseName}`
 }

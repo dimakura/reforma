@@ -96,8 +96,6 @@ export default function createEditRecordDataSource(schema, modelId) {
       if (isNew) {
         model = schema.resolve()
         changeStatus(STATUS_READY)
-
-        return
       } else {
         return recordDataSource.fetch().then(() => {
           if (recordDataSource.isSuccess) {

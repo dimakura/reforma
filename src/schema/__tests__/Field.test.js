@@ -32,4 +32,14 @@ describe('Field', () => {
     expect(field.getValue(model)).toBe('Dimitri')
     expect(field.getFormattedValue(model)).toBe('Dimitri')
   })
+
+  test('#setValue', () => {
+    const model = {}
+    const field = createField('firstName')
+    field.setValue(model, 'Dimitri')
+
+    expect(model).toEqual({
+      firstName: 'Dimitri'
+    })
+  })
 })

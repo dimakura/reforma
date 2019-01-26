@@ -12,12 +12,10 @@ describe('ApiResponse', () => {
   }
 
   const axiosBadRequest = {
-    data: {
-      data: [{
-        field: 'first_name',
-        message: 'cannot be blank'
-      }]
-    },
+    data: [{
+      field: 'first_name',
+      message: 'cannot be blank'
+    }],
     status: 400
   }
 

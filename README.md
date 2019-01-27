@@ -108,8 +108,9 @@ import {
   schema={profileSchema}
   columns={['firstName', 'lastName']}
   id={1} // or omit this for a new record
-  // or record={modelInstance}
-  onEditCompleted={doSomething}
+  onSuccess={doSomething}
+  onCancel={doSomething}
+  saveText="Save Profile"
 />
 ```
 

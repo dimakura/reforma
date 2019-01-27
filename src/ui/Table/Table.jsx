@@ -89,7 +89,7 @@ class Table extends React.PureComponent {
 
       this.fetchData(initialParams)
     } else if (!tableDataSource.isInProgress) {
-      // TODO: try to reload with the same params
+      this.fetchData(tableDataSource.params)
     }
   }
 

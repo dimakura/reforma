@@ -131,9 +131,6 @@ export default function createEditRecordDataSource(schema, modelId) {
         if (response.isSuccess) {
           model = schema.resolve(response.data.data)
           changeStatus(STATUS_SUCCESS)
-
-          // TODO: invalidate (set to INITIAL)
-          // table & record data sources
         } else {
           errors = response.errors
           changeStatus(STATUS_ERROR)

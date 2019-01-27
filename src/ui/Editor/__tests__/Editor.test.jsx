@@ -16,7 +16,6 @@ describe('<Editor />', () => {
     />)
 
     const textEditor = editor.find(TextEditor)
-    console.log(textEditor.length)
     expect(textEditor).toHaveLength(1)
   })
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Fetching from './Fetching'
+import Success from './Success'
 import Data from './Data'
 
 class FormData extends React.PureComponent {
@@ -18,7 +19,10 @@ class FormData extends React.PureComponent {
         editRecordDataSource.isError
       ) {
         <Data {...this.props} />
+      } else if (editRecordDataSource.isSuccess) {
+        <Success />
       } else {
+        // TODO: STATUS_FETCH_ERROR
         `NOT IMPLEMENTED: ${editRecordDataSource.status}`
       }
     }

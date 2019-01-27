@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 
-class Loading extends React.PureComponent {
+class Fetching extends React.PureComponent {
   render() {
     return (
       <Typography>
@@ -11,4 +11,4 @@ class Loading extends React.PureComponent {
   }
 }
 
-export default Loading
+export default Fetching

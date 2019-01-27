@@ -1,4 +1,4 @@
-import { get, startCase } from 'lodash'
+import { get, set, startCase } from 'lodash'
 import createFieldType from './FieldType'
 import isPresent from 'reforma/utils/isPresent'
 import notBlank from 'reforma/utils/notBlank'
@@ -29,6 +29,10 @@ function createFieldInternal(data) {
     return get(model, name)
   }
 
+  function setValue(model, value) {
+    return set(model, name, value)
+  }
+
   return {
     get _isField() {
       return true
@@ -37,6 +41,7 @@ function createFieldInternal(data) {
     get name() {
       return name
     },
+
     get caption() {
       return caption
     },
@@ -46,6 +51,8 @@ function createFieldInternal(data) {
     },
 
     getValue,
+
+    setValue,
 
     getFormattedValue: function (model) {
       const value = getValue(model)

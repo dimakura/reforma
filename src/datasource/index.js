@@ -1,5 +1,7 @@
+import isPresent from 'reforma/utils/isPresent'
 import createTableDataSource from './TableDataSource'
 import createRecordDataSource from './RecordDataSource'
+import createEditRecordDataSource from './EditRecordDataSource'
 
 export default function createDataSource(schema) {
   const tableDataSource = do {
@@ -35,6 +37,16 @@ export default function createDataSource(schema) {
       }
 
       return recordDataSources[modelId]
+    },
+
+    getEditRecordDataSource(modelOrId) {
+      const modelId = do {
+        if (!schema.isSingleton && isPresent(modelOrId)) {
+          getRecordId(modelOrId).toString()
+        }
+      }
+
+      return createEditRecordDataSource(schema, modelId)
     }
   }
 }
@@ -47,7 +59,7 @@ function getRecordId(modelOrId) {
       modelOrId
     } else if (typeof modelOrId === 'string') {
       modelOrId
-    } else if (modelOrId != null){
+    } else if (modelOrId != null && typeof modelOrId === 'object'){
       modelOrId.id
     }
   }

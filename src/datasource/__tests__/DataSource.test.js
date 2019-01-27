@@ -11,10 +11,12 @@ describe('DataSource', () => {
       })
       const dataSource = createDataSource(schema)
       const recordDataSource = dataSource.getRecordDataSource(1)
+      const editRecordDataSource = dataSource.getRecordDataSource(1)
 
       expect(dataSource.schema).toBe(schema)
       expect(dataSource.tableDataSource).toBeDefined()
       expect(recordDataSource.modelId).toBe('1')
+      expect(editRecordDataSource.modelId).toBe('1')
     })
 
     test('with singleton schema', () => {
@@ -26,11 +28,12 @@ describe('DataSource', () => {
       })
       const dataSource = createDataSource(schema)
       const recordDataSource = dataSource.getRecordDataSource(1)
+      const editRecordDataSource = dataSource.getRecordDataSource(1)
 
       expect(dataSource.schema).toBe(schema)
       expect(dataSource.tableDataSource).toBeUndefined()
       expect(recordDataSource.modelId).toBeUndefined()
-
+      expect(recordDataSource.modelId).toBeUndefined()
     })
   })
 })

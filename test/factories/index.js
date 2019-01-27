@@ -1,3 +1,5 @@
+export * from './column'
+export * from './field'
 export * from './schema'
 export * from './tableProps'
 export * from './viewProps'

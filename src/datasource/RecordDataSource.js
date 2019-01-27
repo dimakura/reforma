@@ -66,6 +66,7 @@ export default function createRecordDataSource(schema, modelId) {
 
     fetch() {
       changeStatus(STATUS_IN_PROGRESS)
+
       const url = do {
         if (schema.isSingleton) {
           // for singleton schema we don't need /:id ending

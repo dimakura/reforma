@@ -1,7 +1,7 @@
 {
   "name": "reforma",
-  "version": "0.1.1",
-  "description": "Remote forms in React",
+  "version": "0.1.2",
+  "description": "Easy forms in React",
   "main": "lib/index.js",
   "files": [
     "/lib"

@@ -60,7 +60,7 @@ class Form extends React.PureComponent {
         newStatus === 'success' &&
         typeof onSuccess === 'function'
       ) {
-        onSuccess()
+        onSuccess(editRecordDataSource.model)
       }
 
       this.shakeView()

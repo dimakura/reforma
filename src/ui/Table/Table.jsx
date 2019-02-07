@@ -4,7 +4,9 @@ import { default as MUITable} from '@material-ui/core/Table'
 import { EVENT_PARAMS_CHANGED, EVENT_STATUS_CHANGED } from 'reforma/datasource/TableDataSource'
 import TableHeader from './TableHeader'
 import TableData from './TableData'
+import Toolbar from './Toolbar'
 import Pagination from './Pagination'
+import Total from './Total'
 
 class Table extends React.PureComponent {
   constructor(props) {
@@ -39,18 +41,22 @@ class Table extends React.PureComponent {
             status={status}
           />
         </MUITable>
-        {
-          do {
-            if (perPage != null) {
-              <Pagination
-                perPage={perPage}
-                tableDataSource={tableDataSource}
-                onChange={this.onChangePage.bind(this)}
-                status={status}
-              />
+        <Toolbar>
+          <Total total={tableDataSource.total} />
+
+          {
+            do {
+              if (perPage != null) {
+                <Pagination
+                  perPage={perPage}
+                  tableDataSource={tableDataSource}
+                  onChange={this.onChangePage.bind(this)}
+                  status={status}
+                />
+              }
             }
           }
-        }
+        </Toolbar>
       </div>
     )
   }

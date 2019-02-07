@@ -77,8 +77,7 @@ Pagination.propTypes = {
 const styles = (theme) => ({
   root: {
     display: 'flex',
-    alignItems: 'center',
-    margin: theme.spacing.unit
+    alignItems: 'center'
   },
 
   pages: {

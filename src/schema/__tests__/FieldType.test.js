@@ -1,7 +1,19 @@
+import { getSchema } from 'Test/factories'
 import createFieldType from '../FieldType'
 
 describe('FieldType', () => {
   describe('createFieldType', () => {
+    test('Schema', () => {
+      const schema = getSchema()
+      const type = createFieldType(schema)
+
+      expect(type.name).toBe('Schema')
+      expect(type.formatValue({
+        id: 1
+      })).toBe('[object Object]')
+      expect(type._isFieldType).toBe(true)
+    })
+
     test('string', () => {
       const type = createFieldType('string')
 

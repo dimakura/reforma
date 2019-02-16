@@ -11,6 +11,7 @@ describe('FieldType', () => {
       expect(type.formatValue({
         id: 1
       })).toBe('[object Object]')
+      expect(type.schema).toBe(schema)
       expect(type._isFieldType).toBe(true)
     })
 

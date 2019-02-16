@@ -47,6 +47,12 @@ export default function createDataSource(schema) {
       }
 
       return createEditRecordDataSource(schema, modelId)
+    },
+
+    getSelectorDataSource() {
+      if (!schema.isSingleton) {
+        return createTableDataSource(schema)
+      }
     }
   }
 }

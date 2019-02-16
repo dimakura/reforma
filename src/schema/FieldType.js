@@ -70,6 +70,7 @@ function createFieldTypeInternal(data) {
 function createSchemaType(data) {
   return {
     name: 'Schema',
+    schema: data.schema,
     formatValue: function(val) {
       return val.toString()
     }

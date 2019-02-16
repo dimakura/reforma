@@ -1,6 +1,7 @@
 import React from 'react'
 import editorProps from './editorProps'
 import TextEditor from './TextEditor'
+import Selector from './Selector'
 
 class Editor extends React.PureComponent {
   render() {
@@ -11,6 +12,8 @@ class Editor extends React.PureComponent {
     return do {
       if (fieldTypeName === 'string') {
         <TextEditor {...this.props} />
+      } else if (fieldTypeName === 'Schema') {
+        <Selector {...this.props} />
       } else {
         <div style={{ color: 'red' }}>
           Editor not implemented: <strong>{fieldTypeName}</strong>

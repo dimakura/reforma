@@ -8,16 +8,23 @@ describe('Field', () => {
       expect(field._isField).toBe(true)
       expect(field.name).toBe('firstName')
       expect(field.type.name).toBe('string')
+      expect(field.editorProps).toBeUndefined()
     })
 
     test('as object', () => {
       const field = createField({
         name: 'salary',
-        type: 'number'
+        type: 'number',
+        editorProps: {
+          setting: true
+        }
       })
 
       expect(field.name).toBe('salary')
       expect(field.type.name).toBe('number')
+      expect(field.editorProps).toEqual({
+        setting: true
+      })
     })
 
     test('is not created on wrong data', () => {

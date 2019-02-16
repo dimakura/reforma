@@ -24,6 +24,7 @@ function createFieldInternal(data) {
   const name = data.name
   const caption = notBlank(data.caption, startCase(name))
   const type = createFieldType(notBlank(data.type, 'string'))
+  const editorProps = data.editorProps
 
   function getValue(model) {
     return get(model, name)
@@ -48,6 +49,10 @@ function createFieldInternal(data) {
 
     get type() {
       return type
+    },
+
+    get editorProps() {
+      return editorProps
     },
 
     getValue,

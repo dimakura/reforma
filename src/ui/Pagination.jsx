@@ -5,6 +5,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import FirstPage from '@material-ui/icons/FirstPage'
+import LastPage from '@material-ui/icons/LastPage'
 import { withStyles } from '@material-ui/core/styles'
 
 class Pagination extends React.PureComponent {
@@ -28,11 +30,21 @@ class Pagination extends React.PureComponent {
       return null
     }
 
+    const preventNext = page > maxPages - 1
+    const preventPrev = page < 2
+
     return (
       <div className={classes.root}>
         <IconButton
+          onClick={this.onFirstPage.bind(this)}
+          disabled={preventPrev}
+        >
+          <FirstPage />
+        </IconButton>
+
+        <IconButton
           onClick={this.onPrevPage.bind(this)}
-          disabled={page < 2}
+          disabled={preventPrev}
           aria-label="Previous Page"
         >
           <KeyboardArrowLeft />
@@ -44,10 +56,16 @@ class Pagination extends React.PureComponent {
 
         <IconButton
           onClick={this.onNextPage.bind(this)}
-          disabled={page > maxPages - 1}
+          disabled={preventNext}
           aria-label="Next Page"
         >
           <KeyboardArrowRight />
+        </IconButton>
+        <IconButton
+          onClick={this.onLastPage.bind(this)}
+          disabled={preventNext}
+        >
+          <LastPage />
         </IconButton>
       </div>
     )
@@ -65,6 +83,18 @@ class Pagination extends React.PureComponent {
     const page = get(tableDataSource, 'params.page')
 
     onChange(page + 1)
+  }
+
+  onFirstPage() {
+    this.props.onChange(1)
+  }
+
+  onLastPage() {
+    const { tableDataSource, perPage } = this.props
+    const total = tableDataSource.total
+    const maxPages = Math.ceil(total / perPage)
+
+    this.props.onChange(maxPages)
   }
 }
 

@@ -5,7 +5,7 @@ import { EVENT_PARAMS_CHANGED, EVENT_STATUS_CHANGED } from 'reforma/datasource/T
 import TableHeader from './TableHeader'
 import TableData from './TableData'
 import Toolbar from './Toolbar'
-import Pagination from './Pagination'
+import Pagination from '../Pagination'
 import Total from './Total'
 
 class Table extends React.PureComponent {

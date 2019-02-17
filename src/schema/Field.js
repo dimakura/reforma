@@ -43,6 +43,14 @@ function createFieldInternal(data) {
       return name
     },
 
+    get submitName() {
+      if (type.name === 'Schema') {
+        return `${name}Id`
+      }
+
+      return name
+    },
+
     get caption() {
       return caption
     },
@@ -59,12 +67,22 @@ function createFieldInternal(data) {
 
     setValue,
 
-    getFormattedValue: function (model) {
+    getFormattedValue(model) {
       const value = getValue(model)
 
       if (value != null) {
         return type.formatValue(value)
       }
+    },
+
+    getSubmitValue(model) {
+      const value = getValue(model)
+
+      if (type.name === 'Schema') {
+        return value.id
+      }
+
+      return value
     }
   }
 }

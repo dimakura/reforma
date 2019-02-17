@@ -44,7 +44,8 @@ class SelectorComponent extends React.PureComponent {
         <SelectorDialog
           {...selectorProps}
           open={this.state.dialogOpen}
-          onClose={this.closeDialog.bind(this)}
+          closeDialog={this.closeDialog.bind(this)}
+          onChange={this.onChange.bind(this)}
         />
       </div>
     )
@@ -60,6 +61,11 @@ class SelectorComponent extends React.PureComponent {
     this.setState({
       dialogOpen: false
     })
+  }
+
+  onChange(model) {
+    const { onChange, column } = this.props
+    onChange(column.field, model)
   }
 }
 

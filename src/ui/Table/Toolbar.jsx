@@ -6,8 +6,13 @@ class Toolbar extends React.PureComponent {
   render() {
     const {
       classes,
-      children
+      children,
+      show
     } = this.props
+
+    if (!show) {
+      return null
+    }
 
     return (
       <div className={classes.root}>

@@ -95,7 +95,7 @@ class Form extends React.PureComponent {
 
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i]
-      data[column.field.name] = column.field.getValue(model)
+      data[column.field.submitName] = column.field.getSubmitValue(model)
     }
 
     editRecordDataSource.save(data)

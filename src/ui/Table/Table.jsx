@@ -5,7 +5,7 @@ import { EVENT_PARAMS_CHANGED, EVENT_STATUS_CHANGED } from 'reforma/datasource/T
 import TableHeader from './TableHeader'
 import TableData from './TableData'
 import Toolbar from './Toolbar'
-import Pagination from '../Pagination'
+import Pagination from './Pagination'
 import Total from './Total'
 
 class Table extends React.PureComponent {
@@ -28,20 +28,33 @@ class Table extends React.PureComponent {
   }
 
   render() {
-    const { columns, perPage, tableDataSource } = this.props
+    const {
+      columns,
+      perPage,
+      tableDataSource,
+      showHeader,
+      showFooter
+    } = this.props
     const status = tableDataSource.status
 
     return (
       <div>
         <MUITable>
-          <TableHeader columns={columns} />
+          {
+            do {
+              if (showHeader) {
+                <TableHeader columns={columns} />
+              }
+            }
+          }
+
           <TableData
             tableDataSource={tableDataSource}
             columns={columns}
             status={status}
           />
         </MUITable>
-        <Toolbar>
+        <Toolbar show={showFooter}>
           <Total total={tableDataSource.total} />
 
           {
@@ -115,7 +128,6 @@ class Table extends React.PureComponent {
 }
 
 Table.propTypes = {
-  schema: PropTypes.object.isRequired,
   tableDataSource: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
   perPage: PropTypes.number

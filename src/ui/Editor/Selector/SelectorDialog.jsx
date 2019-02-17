@@ -12,10 +12,32 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
+import { Table } from 'reforma'
 
 class SelectorDialog extends React.PureComponent {
   render() {
-    const { open, classes, onClose, modalTitle } = this.props
+    const {
+      open,
+      closeDialog,
+      modalTitle,
+      classes,
+      dataSource,
+      formatValue
+    } = this.props
+
+    const columns = [{
+      name: 'id',
+      renderer: (model) => {
+        return (
+          <a
+            href="#"
+            onClick={this.onSelect.bind(this, model)}
+          >
+            {formatValue(model)}
+          </a>
+        )
+      }
+    }]
 
     return (
       <Dialog open={open} >
@@ -26,19 +48,29 @@ class SelectorDialog extends React.PureComponent {
           <Typography variant="h6">{modalTitle}</Typography>
           <IconButton
             className={classes.closeButton}
-            onClick={onClose}
+            onClick={closeDialog}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent>
-          <Typography>
-            TEST
-          </Typography>
+        <DialogContent className={classes.content}>
+          <Table
+            showHeader={false}
+            tableDataSource={dataSource}
+            columns={columns}
+            perPage={5}
+          />
         </DialogContent>
       </Dialog>
     )
+  }
+
+  onSelect(model, evt) {
+    evt.preventDefault()
+
+    this.props.onChange(model)
+    this.props.closeDialog()
   }
 }
 
@@ -54,6 +86,11 @@ const styles = theme => ({
     right: theme.spacing.unit,
     top: theme.spacing.unit,
     color: theme.palette.grey[500],
+  },
+
+  content: {
+    padding: 0,
+    width: 500
   }
 })
 

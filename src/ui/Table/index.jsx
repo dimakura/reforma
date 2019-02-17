@@ -8,8 +8,11 @@ class TableRoot extends React.PureComponent {
   render() {
     const data = pick(this.props, [
       'schema',
+      'tableDataSource',
       'columns',
-      'perPage'
+      'perPage',
+      'showHeader',
+      'showFooter'
     ])
 
     const tableProps = createTableProps(data)
@@ -19,7 +22,8 @@ class TableRoot extends React.PureComponent {
 }
 
 TableRoot.propTypes = {
-  schema: PropTypes.object.isRequired,
+  schema: PropTypes.object,
+  tableDataSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
   perPage: PropTypes.number
 }

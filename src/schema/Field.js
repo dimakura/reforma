@@ -79,7 +79,7 @@ function createFieldInternal(data) {
       const value = getValue(model)
 
       if (type.name === 'Schema') {
-        return value.id
+        return get(value, 'id')
       }
 
       return value

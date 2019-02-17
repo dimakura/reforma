@@ -23,6 +23,14 @@ export default function createFieldType(data) {
       supportedTypes.includes(data.name)
     ) {
       return createFieldTypeInternal(data)
+    } else if (
+      data != null &
+      data._isSchema
+    ) {
+      return createFieldTypeInternal({
+        name: 'Schema',
+        schema: data
+      })
     }
   }
 }
@@ -31,7 +39,9 @@ export default function createFieldType(data) {
 
 function createFieldTypeInternal(data) {
   const type = do {
-    if (data.name === 'string') {
+    if (data.name === 'Schema') {
+      createSchemaType(data)
+    } else if (data.name === 'string') {
       createStringType(data)
     } else if (data.name === 'date') {
       createDateType(data)
@@ -53,6 +63,18 @@ function createFieldTypeInternal(data) {
   })
 
   return type
+}
+
+// -- SCHEMA
+
+function createSchemaType(data) {
+  return {
+    name: 'Schema',
+    schema: data.schema,
+    formatValue: function(val) {
+      return val.toString()
+    }
+  }
 }
 
 // -- STRING
@@ -125,7 +147,7 @@ function createImageType(data) {
     name: 'image',
     formatValue: function(val) {
       return (
-        <a href={val} target="_blank" rel="noopener noreferrer"> 
+        <a href={val} target="_blank" rel="noopener noreferrer">
           <img
             src={val}
             style={{ maxHeight: 200, maxWidth: 200 }}

@@ -8,7 +8,10 @@ describe('Column', () => {
   const simpleColumn = createColumn(field)
   const complexColumn = createColumn(field, {
     caption: 'Name & Salutation',
-    renderer: (model) => `Mr. ${model.firstName}`
+    renderer: (model) => `Mr. ${model.firstName}`,
+    editorProps: {
+      setting: true
+    }
   })
 
   test('.createColumns', () => {
@@ -25,7 +28,7 @@ describe('Column', () => {
       expect(simpleColumn.field).toBe(field)
       expect(simpleColumn.caption).toBeUndefined()
       expect(simpleColumn.renderer).toBeUndefined()
-      expect(simpleColumn.getFormattedValue)
+      expect(simpleColumn.editorProps).toBeUndefined()
     })
 
     test('column with overrided properties', () => {
@@ -33,6 +36,9 @@ describe('Column', () => {
       expect(complexColumn.field).toBe(field)
       expect(complexColumn.caption).toBe('Name & Salutation')
       expect(complexColumn.renderer(model, field)).toBe('Mr. Dimitri')
+      expect(complexColumn.editorProps).toEqual({
+        setting: true
+      })
     })
   })
 

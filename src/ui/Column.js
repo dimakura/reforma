@@ -26,6 +26,7 @@ export function createColumns(schema, data) {
 export function createColumn(field, data) {
   const caption = get(data, 'caption')
   const renderer = get(data, 'renderer')
+  const editorProps = get(data, 'editorProps')
 
   return {
     get _isColumn() {
@@ -53,11 +54,15 @@ export function createColumn(field, data) {
       return renderer
     },
 
-    getCaption: function() {
+    get editorProps() {
+      return editorProps
+    },
+
+    getCaption() {
       return notBlank(caption, field.caption)
     },
 
-    getFormattedValue: function(model) {
+    getFormattedValue(model) {
       return do {
         if (typeof renderer === 'function') {
           renderer(model)
@@ -65,6 +70,10 @@ export function createColumn(field, data) {
           field.getFormattedValue(model)
         }
       }
+    },
+
+    getEditorProps() {
+      return notBlank(editorProps, field.editorProps)
     }
   }
 }

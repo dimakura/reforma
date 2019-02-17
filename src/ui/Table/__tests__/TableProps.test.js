@@ -19,5 +19,7 @@ describe('TableProps', () => {
     expect(props.columns[0].field.name).toBe('firstName')
     expect(props.columns[0].caption).toBe('Name')
     expect(props.perPage).toBe(10)
+    expect(props.showHeader).toBe(true)
+    expect(props.showFooter).toBe(true)
   })
 })

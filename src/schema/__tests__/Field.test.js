@@ -1,4 +1,5 @@
 import createField from '../Field'
+import { getSchema } from 'Test/factories'
 
 describe('Field', () => {
   describe('createField', () => {
@@ -7,21 +8,41 @@ describe('Field', () => {
 
       expect(field._isField).toBe(true)
       expect(field.name).toBe('firstName')
+      expect(field.submitName).toBe('firstName')
       expect(field.type.name).toBe('string')
+      expect(field.editorProps).toBeUndefined()
     })
 
     test('as object', () => {
       const field = createField({
         name: 'salary',
-        type: 'number'
+        type: 'number',
+        editorProps: {
+          setting: true
+        }
       })
 
       expect(field.name).toBe('salary')
+      expect(field.submitName).toBe('salary')
       expect(field.type.name).toBe('number')
+      expect(field.editorProps).toEqual({
+        setting: true
+      })
     })
 
     test('is not created on wrong data', () => {
       expect(createField(null)).toBeUndefined()
+    })
+
+    test('schema field', () => {
+      const schema = getSchema()
+      const field = createField({
+        name: 'profile',
+        type: schema
+      })
+
+      expect(field.name).toBe('profile')
+      expect(field.submitName).toBe('profileId')
     })
   })
 
@@ -31,6 +52,7 @@ describe('Field', () => {
 
     expect(field.getValue(model)).toBe('Dimitri')
     expect(field.getFormattedValue(model)).toBe('Dimitri')
+    expect(field.getSubmitValue(model)).toBe('Dimitri')
   })
 
   test('#setValue', () => {
@@ -41,5 +63,21 @@ describe('Field', () => {
     expect(model).toEqual({
       firstName: 'Dimitri'
     })
+  })
+
+  test('#getSubmitValue', () => {
+    const model = {
+      profile: {
+        id: 1,
+        firstName: 'Dimitri'
+      }
+    }
+    const schema = getSchema()
+    const field = createField({
+      name: 'profile',
+      type: schema
+    })
+
+    expect(field.getSubmitValue(model)).toBe(1)
   })
 })

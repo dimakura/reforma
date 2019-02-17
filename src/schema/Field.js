@@ -24,6 +24,7 @@ function createFieldInternal(data) {
   const name = data.name
   const caption = notBlank(data.caption, startCase(name))
   const type = createFieldType(notBlank(data.type, 'string'))
+  const editorProps = data.editorProps
 
   function getValue(model) {
     return get(model, name)
@@ -42,6 +43,14 @@ function createFieldInternal(data) {
       return name
     },
 
+    get submitName() {
+      if (type.name === 'Schema') {
+        return `${name}Id`
+      }
+
+      return name
+    },
+
     get caption() {
       return caption
     },
@@ -50,16 +59,30 @@ function createFieldInternal(data) {
       return type
     },
 
+    get editorProps() {
+      return editorProps
+    },
+
     getValue,
 
     setValue,
 
-    getFormattedValue: function (model) {
+    getFormattedValue(model) {
       const value = getValue(model)
 
       if (value != null) {
         return type.formatValue(value)
       }
+    },
+
+    getSubmitValue(model) {
+      const value = getValue(model)
+
+      if (type.name === 'Schema') {
+        return value.id
+      }
+
+      return value
     }
   }
 }

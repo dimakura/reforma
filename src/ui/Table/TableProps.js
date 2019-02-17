@@ -1,10 +1,20 @@
+import { get } from 'lodash'
 import { createColumns } from '../Column'
 
 export default function createTableProps(data) {
-  const schema = data.schema
-  const tableDataSource = schema.dataSource.tableDataSource
+  const tableDataSource = do {
+    if ('schema' in data) {
+      data.schema.dataSource.tableDataSource
+    } else {
+      data.tableDataSource
+    }
+  }
+
+  const schema = tableDataSource.schema
   const columns = createColumns(schema, data.columns)
   const perPage = data.perPage
+  const showHeader = get(data, 'showHeader', true)
+  const showFooter = get(data, 'showFooter', true)
 
   return {
     get _isTableProps() {
@@ -25,6 +35,14 @@ export default function createTableProps(data) {
 
     get perPage() {
       return perPage
+    },
+
+    get showHeader() {
+      return showHeader
+    },
+
+    get showFooter() {
+      return showFooter
     }
   }
 }

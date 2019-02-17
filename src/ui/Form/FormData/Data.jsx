@@ -36,7 +36,7 @@ class FormData extends React.PureComponent {
         {columns.map(colum => {
           const field = colum.field
           const value = field.getValue(model)
-          const error = get(errors, field.name)
+          const error = get(errors, field.name, get(errors, field.submitName))
 
           return (
             <Editor

@@ -1,5 +1,5 @@
 import { get, set, startCase } from 'lodash'
-import createFieldType from './FieldType'
+import createFieldType from './FieldType/index'
 import isPresent from 'reforma/utils/isPresent'
 import notBlank from 'reforma/utils/notBlank'
 

@@ -1,5 +1,5 @@
 import { getSchema } from 'Test/factories'
-import createFieldType from '../FieldType'
+import createFieldType from '../index'
 
 describe('FieldType', () => {
   describe('createFieldType', () => {

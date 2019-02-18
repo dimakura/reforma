@@ -8,7 +8,9 @@ describe('TextEditor',  () => {
   const column = getColumn()
   const onChange = jest.fn()
 
-  test('rendering value', () => {
+  afterEach(onChange.mockClear)
+
+  test('renders value', () => {
     const editor = mount(<TextEditor
       column={column}
       value="Dimitri"
@@ -24,7 +26,7 @@ describe('TextEditor',  () => {
     expect(props.helperText).toBeUndefined()
   })
 
-  test('rendering error', () => {
+  test('renders error', () => {
     const editor = mount(<TextEditor
       column={column}
       value="Dimitri"
@@ -41,7 +43,7 @@ describe('TextEditor',  () => {
     expect(props.helperText).toBe('name required')
   })
 
-  test('chaning value', () => {
+  test('changes value', () => {
     const editor = mount(<TextEditor
       column={column}
       value="Dimitri"

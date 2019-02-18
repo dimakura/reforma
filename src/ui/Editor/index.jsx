@@ -2,6 +2,7 @@ import React from 'react'
 import editorProps from './editorProps'
 import TextEditor from './TextEditor'
 import Selector from './Selector'
+import BoolEditor from './BoolEditor'
 
 class Editor extends React.PureComponent {
   render() {
@@ -14,6 +15,8 @@ class Editor extends React.PureComponent {
         <TextEditor {...this.props} />
       } else if (fieldTypeName === 'Schema') {
         <Selector {...this.props} />
+      } else if (fieldTypeName === 'bool') {
+        <BoolEditor {...this.props} />
       } else {
         <div style={{ color: 'red' }}>
           Editor not implemented: <strong>{fieldTypeName}</strong>

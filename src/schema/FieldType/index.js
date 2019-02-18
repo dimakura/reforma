@@ -4,12 +4,15 @@ import numeral from 'numeral'
 import moment from 'moment'
 import notBlank from 'reforma/utils/notBlank'
 
+import formatBool from './bool'
+
 const supportedTypes = [
   'string',
   'date',
   'number',
   'integer',
-  'image'
+  'image',
+  'bool'
 ]
 
 export default function createFieldType(data) {
@@ -54,6 +57,8 @@ function createFieldTypeInternal(data) {
       })
     } else if (data.name === 'image') {
       createImageType(data)
+    } else if (data.name === 'bool') {
+      createBoolType(data)
     }
   }
 
@@ -82,7 +87,7 @@ function createSchemaType(data) {
 function createStringType(data) {
   return {
     name: 'string',
-    formatValue: function (val) {
+    formatValue(val) {
       if (val != null) {
         return val.toString()
       }
@@ -120,7 +125,7 @@ function createNumberType(data) {
   return {
     name: 'number',
     decimals,
-    formatValue: function (val) {
+    formatValue(val) {
       return numeral(val).format(format)
     }
   }
@@ -134,7 +139,7 @@ function createDateType(data) {
   return {
     name: 'date',
     format,
-    formatValue: function (val) {
+    formatValue(val) {
       return moment(val).format(format)
     }
   }
@@ -145,7 +150,7 @@ function createDateType(data) {
 function createImageType(data) {
   return {
     name: 'image',
-    formatValue: function(val) {
+    formatValue(val) {
       return (
         <a href={val} target="_blank" rel="noopener noreferrer">
           <img
@@ -154,6 +159,18 @@ function createImageType(data) {
           />
         </a>
       )
+    }
+  }
+}
+
+// -- BOOL
+
+function createBoolType(data) {
+  return {
+    name: 'bool',
+
+    formatValue(val) {
+      return formatBool(val)
     }
   }
 }

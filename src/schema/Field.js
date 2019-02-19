@@ -25,6 +25,8 @@ function createFieldInternal(data) {
   const caption = notBlank(data.caption, startCase(name))
   const type = createFieldType(notBlank(data.type, 'string'))
   const editorProps = data.editorProps
+  const suffix = data.suffix
+  const prefix = data.prefix
 
   function getValue(model) {
     return get(model, name)
@@ -63,6 +65,14 @@ function createFieldInternal(data) {
       return editorProps
     },
 
+    get suffix() {
+      return suffix
+    },
+
+    get prefix() {
+      return prefix
+    },
+
     getValue,
 
     setValue,
@@ -78,8 +88,19 @@ function createFieldInternal(data) {
     getSubmitValue(model) {
       const value = getValue(model)
 
+      // XXX: move this into type
       if (type.name === 'Schema') {
         return get(value, 'id')
+      } else if (type.name === 'number') {
+        const num = Number(value)
+
+        return do {
+          if (isNaN(num)) {
+            null
+          } else {
+            num
+          }
+        }
       }
 
       return value

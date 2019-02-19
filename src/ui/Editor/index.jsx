@@ -3,6 +3,7 @@ import editorProps from './editorProps'
 import TextEditor from './TextEditor'
 import Selector from './Selector'
 import BoolEditor from './BoolEditor'
+import NumberEditor from './NumberEditor'
 
 class Editor extends React.PureComponent {
   render() {
@@ -17,6 +18,8 @@ class Editor extends React.PureComponent {
         <Selector {...this.props} />
       } else if (fieldTypeName === 'bool') {
         <BoolEditor {...this.props} />
+      } else if (fieldTypeName === 'number') {
+        <NumberEditor {...this.props} />
       } else {
         <div style={{ color: 'red' }}>
           Editor not implemented: <strong>{fieldTypeName}</strong>

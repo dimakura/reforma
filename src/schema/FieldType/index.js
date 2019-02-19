@@ -3,8 +3,8 @@ import { get, startCase } from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
 import notBlank from 'reforma/utils/notBlank'
-
 import formatBool from './bool'
+import formatMarkdown from './markdown'
 
 const supportedTypes = [
   'string',
@@ -12,7 +12,8 @@ const supportedTypes = [
   'number',
   'integer',
   'image',
-  'bool'
+  'bool',
+  'markdown'
 ]
 
 export default function createFieldType(data) {
@@ -59,6 +60,8 @@ function createFieldTypeInternal(data) {
       createImageType(data)
     } else if (data.name === 'bool') {
       createBoolType(data)
+    } else if (data.name === 'markdown') {
+      createMarkdownType(data)
     }
   }
 
@@ -171,6 +174,18 @@ function createBoolType(data) {
 
     formatValue(val) {
       return formatBool(val)
+    }
+  }
+}
+
+// -- MARKDOWN
+
+function createMarkdownType(data) {
+  return {
+    name: 'markdown',
+
+    formatValue(val) {
+      return formatMarkdown(val)
     }
   }
 }

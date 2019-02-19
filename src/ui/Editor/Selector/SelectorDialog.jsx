@@ -85,7 +85,7 @@ const styles = theme => ({
     position: 'absolute',
     right: theme.spacing.unit,
     top: theme.spacing.unit,
-    color: theme.palette.grey[500],
+    color: theme.palette.grey[500]
   },
 
   content: {

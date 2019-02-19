@@ -11,6 +11,8 @@ describe('Field', () => {
       expect(field.submitName).toBe('firstName')
       expect(field.type.name).toBe('string')
       expect(field.editorProps).toBeUndefined()
+      expect(field.suffix).toBeUndefined()
+      expect(field.prefix).toBeUndefined()
     })
 
     test('as object', () => {
@@ -19,7 +21,9 @@ describe('Field', () => {
         type: 'number',
         editorProps: {
           setting: true
-        }
+        },
+        suffix: 'GEL',
+        prefix: 'Anual'
       })
 
       expect(field.name).toBe('salary')
@@ -28,6 +32,8 @@ describe('Field', () => {
       expect(field.editorProps).toEqual({
         setting: true
       })
+      expect(field.suffix).toBe('GEL')
+      expect(field.prefix).toBe('Anual')
     })
 
     test('is not created on wrong data', () => {

@@ -3,10 +3,12 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+import isPresent from 'reforma/utils/isPresent'
+import { withStyles } from '@material-ui/core/styles'
 
 class Data extends React.PureComponent {
   render() {
-    const { columns, model } = this.props
+    const { columns, model, classes } = this.props
 
     return (
       <Table>
@@ -18,7 +20,21 @@ class Data extends React.PureComponent {
                   {col.getCaption()}
                 </TableCell>
                 <TableCell>
+                  {
+                    do {
+                      if (isPresent(col.field.prefix)) {
+                        (<span className={classes.prefix}>{col.field.prefix}</span>)
+                      }
+                    }
+                  }
                   {col.getFormattedValue(model)}
+                  {
+                    do {
+                      if (isPresent(col.field.suffix)) {
+                        (<span className={classes.suffix}>{col.field.suffix}</span>)
+                      }
+                    }
+                  }
                 </TableCell>
               </TableRow>
             )
@@ -29,4 +45,18 @@ class Data extends React.PureComponent {
   }
 }
 
-export default Data
+const styles = (theme) => ({
+  prefix: {
+    display: 'inline-block',
+    marginRight: theme.spacing.unit,
+    color: theme.palette.grey[500]
+  },
+
+  suffix: {
+    display: 'inline-block',
+    marginLeft: theme.spacing.unit,
+    color: theme.palette.grey[500]
+  }
+})
+
+export default withStyles(styles)(Data)

@@ -4,6 +4,7 @@ import TextEditor from './TextEditor'
 import Selector from './Selector'
 import BoolEditor from './BoolEditor'
 import NumberEditor from './NumberEditor'
+import TextArea from './TextArea'
 
 class Editor extends React.PureComponent {
   render() {
@@ -20,6 +21,8 @@ class Editor extends React.PureComponent {
         <BoolEditor {...this.props} />
       } else if (fieldTypeName === 'number') {
         <NumberEditor {...this.props} />
+      } else if (fieldTypeName === 'markdown') {
+        <TextArea {...this.props} />
       } else {
         <div style={{ color: 'red' }}>
           Editor not implemented: <strong>{fieldTypeName}</strong>

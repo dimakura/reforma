@@ -6,9 +6,9 @@ export default function formatBool(value) {
     if (value === true) {
       <Checkbox disabled checked />
     } else if (value === false) {
-      <Checkbox disabled />
+      <Checkbox disabled checked={false} />
     } else {
-      <Checkbox disabled indeterminate />
+      <Checkbox disabled checked={false} indeterminate />
     }
   }
 }

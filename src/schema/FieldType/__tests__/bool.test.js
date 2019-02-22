@@ -19,12 +19,12 @@ describe('formatBool', () => {
 
   test('false', () => {
     const props = render(false)
-    expect(props.checked).toBeUndefined()
+    expect(props.checked).toBe(false)
   })
 
   test('indeterminate', () => {
     const props = render('xxx')
     expect(props.indeterminate).toBe(true)
-    expect(props.checked).toBeUndefined()
+    expect(props.checked).toBe(false)
   })
 })

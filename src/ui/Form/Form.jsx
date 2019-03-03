@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { snakeCase, forEach } from 'lodash'
 import { EVENT_STATUS_CHANGED } from 'reforma/datasource/EditRecordDataSource'
-import FormData from './FormData'
+import FormFields from './FormData'
 
 class Form extends React.PureComponent {
   constructor(props) {
@@ -27,7 +28,7 @@ class Form extends React.PureComponent {
 
     return (
       <div>
-        <FormData
+        <FormFields
           model={model}
           onChange={this.onChange.bind(this)}
           onSubmit={this.onSubmit.bind(this)}
@@ -88,17 +89,23 @@ class Form extends React.PureComponent {
   }
 
   onSubmit() {
-    const { columns, editRecordDataSource } = this.props
+    const { data, columns, editRecordDataSource } = this.props
     const { model } = this.state
+    const formData = new FormData()
 
-    const data = {}
+    forEach(data, (value, key) => {
+      key = snakeCase(key)
+      formData.append(key, value)
+    })
 
     for (let i = 0; i < columns.length; i++) {
-      const column = columns[i]
-      data[column.field.submitName] = column.field.getSubmitValue(model)
+      const field = columns[i].field
+      const fieldName = snakeCase(field.submitName)
+      const fieldValue = field.getSubmitValue(model)
+      formData.append(fieldName, fieldValue)
     }
 
-    editRecordDataSource.save(data)
+    editRecordDataSource.save(formData)
     // onSuccess handler will be called in status listener
   }
 }
@@ -109,6 +116,7 @@ Form.propTypes = {
   columns: PropTypes.array.isRequired,
   saveText: PropTypes.string.isRequired,
   cancelText: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
   onSuccess: PropTypes.func,
   onCancl: PropTypes.func
 }

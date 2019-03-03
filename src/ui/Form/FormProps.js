@@ -10,6 +10,7 @@ export default function createFormProps(data) {
   const cancelText = data.cancelText
   const onCancel = data.onCancel
   const onSuccess = data.onSuccess
+  const formData = data.data || {}
 
   return {
     get _isFormProps() {
@@ -42,6 +43,10 @@ export default function createFormProps(data) {
 
     get onCancel() {
       return onCancel
+    },
+
+    get data() {
+      return formData
     }
   }
 }

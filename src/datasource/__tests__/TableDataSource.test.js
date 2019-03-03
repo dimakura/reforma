@@ -111,4 +111,31 @@ describe('TableDataSource', () => {
       expect(dataSource.errors).toBe('Something failed')
     })
   })
+
+  test('#resetData', async () => {
+    getAsync.mockResolvedValue({
+      isSuccess: true,
+      data: {
+        data: [{
+          id: 1,
+          firstName: 'Dimitri',
+          lastName: 'Kurashvili'
+        }],
+        total: 100
+      }
+    })
+
+    const dataSource = createTableDataSource(schema)
+    await dataSource.fetch({})
+
+    expect(dataSource.isSuccess).toBe(true)
+    expect(dataSource.data).toHaveLength(1)
+    expect(dataSource.total).toBe(100)
+
+    dataSource.resetData()
+
+    expect(dataSource.isInitial).toBe(true)
+    expect(dataSource.data).toBeNull()
+    expect(dataSource.total).toBe(0)
+  })
 })

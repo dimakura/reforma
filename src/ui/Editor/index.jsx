@@ -5,6 +5,7 @@ import Selector from './Selector'
 import BoolEditor from './BoolEditor'
 import NumberEditor from './NumberEditor'
 import TextArea from './TextArea'
+import ImageEditor from './ImageEditor'
 
 class Editor extends React.PureComponent {
   render() {
@@ -23,6 +24,8 @@ class Editor extends React.PureComponent {
         <NumberEditor {...this.props} />
       } else if (fieldTypeName === 'markdown') {
         <TextArea {...this.props} />
+      } else if (fieldTypeName === 'image') {
+        <ImageEditor {...this.props} />
       } else {
         <div style={{ color: 'red' }}>
           Editor not implemented: <strong>{fieldTypeName}</strong>

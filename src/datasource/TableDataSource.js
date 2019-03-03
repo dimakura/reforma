@@ -101,6 +101,12 @@ export default function createTableDataSource(schema) {
       return (() => {
         emitter.removeListener(event, handler)
       })
+    },
+
+    resetData() {
+      data = null
+      total = 0
+      status = STATUS_INITIAL
     }
   }
 }

@@ -40,7 +40,7 @@ export async function getAsync(url) {
 
 export async function postAsync(url, data) {
   try {
-    data = snakeizeKeys(data)
+    data = prepareRequest(data)
     const resp = await httpClient.post(url, data)
 
     return prepareResponse(null, resp)
@@ -51,7 +51,7 @@ export async function postAsync(url, data) {
 
 export async function putAsync(url, data) {
   try {
-    data = snakeizeKeys(data)
+    data = prepareRequest(data)
     const resp = await httpClient.put(url, data)
 
     return prepareResponse(null, resp)
@@ -75,6 +75,16 @@ export function __httpClient__() {
 }
 
 // -- PRIVATE
+
+function prepareRequest(data) {
+  return do {
+    if (data instanceof FormData) {
+      data
+    } else {
+      snakeizeKeys(data)
+    }
+  }
+}
 
 function prepareResponse(ex, resp) {
   if (ex != null && ex.response == null) {

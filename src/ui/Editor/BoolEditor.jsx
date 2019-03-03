@@ -7,8 +7,7 @@ class BoolEditor extends React.PureComponent {
   render() {
     const {
       value,
-      column,
-      classes
+      column
     } = this.props
 
     return (

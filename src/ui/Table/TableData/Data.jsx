@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 class Data extends React.PureComponent {
   render() {
-    const { columns, data, classes } = this.props
+    const { columns, data, classes, tableDataSource } = this.props
 
     return (
       <MUITableBody>
@@ -24,7 +24,7 @@ class Data extends React.PureComponent {
                         }
                       }
                     }
-                    {col.getFormattedValue(model)}
+                    {col.getFormattedValue(model, tableDataSource)}
                     {
                       do {
                         if (isPresent(col.field.suffix)) {

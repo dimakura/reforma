@@ -18,7 +18,7 @@ class TableData extends React.PureComponent {
       } else if (isBlank(data)) {
         <NoData columns={columns} />
       } else {
-        <Data data={data} columns={columns} />
+        <Data data={data} columns={columns} tableDataSource={tableDataSource} />
       }
     }
   }

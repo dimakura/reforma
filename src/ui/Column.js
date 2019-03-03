@@ -62,10 +62,10 @@ export function createColumn(field, data) {
       return notBlank(caption, field.caption)
     },
 
-    getFormattedValue(model) {
+    getFormattedValue(model, ds) {
       return do {
         if (typeof renderer === 'function') {
-          renderer(model)
+          renderer(model, ds)
         } else {
           field.getFormattedValue(model)
         }

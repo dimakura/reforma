@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 class Data extends React.PureComponent {
   render() {
-    const { columns, model, classes } = this.props
+    const { columns, model, classes, recordDataSource } = this.props
 
     return (
       <Table>
@@ -27,7 +27,7 @@ class Data extends React.PureComponent {
                       }
                     }
                   }
-                  {col.getFormattedValue(model)}
+                  {col.getFormattedValue(model, recordDataSource)}
                   {
                     do {
                       if (isPresent(col.field.suffix)) {

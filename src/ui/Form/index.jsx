@@ -14,7 +14,8 @@ class FormRoot extends React.PureComponent {
       'saveText',
       'cancelText',
       'onSuccess',
-      'onCancel'
+      'onCancel',
+      'data'
     ])
 
     const formProps = createFormProps(data)
@@ -29,7 +30,8 @@ FormRoot.propTypes = {
   saveText: PropTypes.string.isRequired,
   cancelText: PropTypes.string.isRequired,
   onSuccess: PropTypes.func,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  data: PropTypes.object
 }
 
 FormRoot.defaultProps = {

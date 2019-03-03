@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { snakeCase, forEach } from 'lodash'
 import { EVENT_STATUS_CHANGED } from 'reforma/datasource/EditRecordDataSource'
-import FormComponents from './FormData'
+import FormFields from './FormData'
 
 class Form extends React.PureComponent {
   constructor(props) {
@@ -28,7 +28,7 @@ class Form extends React.PureComponent {
 
     return (
       <div>
-        <FormComponents
+        <FormFields
           model={model}
           onChange={this.onChange.bind(this)}
           onSubmit={this.onSubmit.bind(this)}

@@ -14,7 +14,11 @@ class ViewData extends React.PureComponent {
       } else if (recordDataSource.isInProgress && model == null) {
         <Loading />
       } else {
-        <Data model={model} columns={columns} recordDataSource={recordDataSource} />
+        <Data
+          model={model}
+          columns={columns}
+          recordDataSource={recordDataSource}
+        />
       }
     }
   }

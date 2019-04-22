@@ -1,20 +1,20 @@
-# FieldDescriptor
+# Property
 
-`FieldDescriptor` describes `Field` properties.
+`Property` belongs to `Model`.
 
-Use `createFieldDescriptor(props)` factory function to create an instance of `FieldDescriptor`:
+Use `createProperty(props)` factory function to create an instance of `Property`:
 
 ```js
-import { createFieldDescriptor } from 'reforma'
+import { createProperty } from 'reforma'
 
-const descriptor = createFieldDescriptor({
+const property = createProperty({
   name: 'firstName',
   type: 'string'
 })
 
 // or
 
-const theSameDescriptor = createFieldDescriptor('firstName')
+const theSameProperty = createProperty('firstName')
 ```
 
 ## Properties
@@ -25,4 +25,4 @@ const theSameDescriptor = createFieldDescriptor('firstName')
 | `caption` | `String` | Caption of the field. Defaults to humanized name. |
 | `tooltip` | `String` | Help text (tooltip) of the field. |
 | `type` | `String` or `Object` | Type of the field. Defaults to `"string"`. Also see [Type](./type.md) on type properties. |
-| `__isFieldDescriptor__` | `Boolean` | Always returns `true`. |
+| `__isProperty__` | `Boolean` | Always returns `true`. |

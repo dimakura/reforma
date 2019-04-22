@@ -1,7 +1,7 @@
 import { forEach } from 'lodash'
-import { createFieldDescriptor } from 'reforma'
+import { createProperty } from 'reforma'
 
-describe('FieldDescriptor', () => {
+describe('Property', () => {
   test('wrong ways', () => {
     const data = {
       'null': null,
@@ -10,22 +10,22 @@ describe('FieldDescriptor', () => {
     }
 
     forEach(data, (props, error) => {
-      const errorMessage = `FieldDescriptor: ${error}`
-      expect(() => createFieldDescriptor(props)).toThrow(errorMessage)
+      const errorMessage = `Property: ${error}`
+      expect(() => createProperty(props)).toThrow(errorMessage)
     })
   })
 
   test('default descriptor', () => {
     function testDefaultDescriptor(descriptor) {
-      expect(descriptor.__isFieldDescriptor__).toBe(true)
+      expect(descriptor.__isProperty__).toBe(true)
       expect(descriptor.name).toBe('firstName')
       expect(descriptor.type.name).toBe('string')
       expect(descriptor.caption).toBe('First Name')
       expect(descriptor.tooltip).toBeUndefined()
     }
 
-    const descriptor = createFieldDescriptor('firstName')
-    const descriptor2 = createFieldDescriptor({
+    const descriptor = createProperty('firstName')
+    const descriptor2 = createProperty({
       name: 'firstName',
       type: 'string'
     })
@@ -35,7 +35,7 @@ describe('FieldDescriptor', () => {
   })
 
   test('custom descriptor', () => {
-    const descriptor = createFieldDescriptor({
+    const descriptor = createProperty({
       name: 'salary',
       type: {
         name: 'float',
@@ -45,7 +45,7 @@ describe('FieldDescriptor', () => {
       tooltip: 'Salary after taxes'
     })
 
-    expect(descriptor.__isFieldDescriptor__).toBe(true)
+    expect(descriptor.__isProperty__).toBe(true)
     expect(descriptor.name).toBe('salary')
     expect(descriptor.type.name).toBe('float')
     expect(descriptor.type.decimals).toBe(2)

@@ -2,31 +2,31 @@ import { get, startCase } from 'lodash'
 import { createType } from 'reforma/Type'
 import isBlank from 'reforma/utils/isBlank'
 
-export function createFieldDescriptor(props) {
+export function createProperty(props) {
   if (props == null) {
-    throw new Error('FieldDescriptor: null')
+    throw new Error('Property: null')
   }
 
   if (typeof props === 'string') {
-    return createFieldDescriptor({
+    return createProperty({
       name: props
     })
   }
 
   if (typeof props !== 'object') {
-    throw new Error('FieldDescriptor: wrong props')
+    throw new Error('Property: wrong props')
   }
 
   if (isBlank(props.name)) {
-    throw new Error('FieldDescriptor: name required')
+    throw new Error('Property: name required')
   }
 
-  return createFieldDescriptorInternal(props)
+  return createPropertyInternal(props)
 }
 
 // -- PRIVATE
 
-function createFieldDescriptorInternal(props) {
+function createPropertyInternal(props) {
   const name = props.name
   const type = createTypeInternal(props.type)
   const tooltip = props.tooltip
@@ -40,7 +40,7 @@ function createFieldDescriptorInternal(props) {
   }
 
   return {
-    get __isFieldDescriptor__() {
+    get __isProperty__() {
       return true
     },
 

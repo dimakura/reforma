@@ -1,4 +1,4 @@
-import { createFieldDescriptor } from './FieldDescriptor'
+import { createProperty } from './Property'
 import { createType } from './Type'
 
 // v0.1: to be refactored
@@ -10,7 +10,7 @@ import View from './ui/View'
 import Form from './ui/Form'
 
 export {
-  createFieldDescriptor,
+  createProperty,
   createType,
 
   // v0.1: to be refactored

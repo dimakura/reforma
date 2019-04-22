@@ -1,6 +1,6 @@
 # Type
 
-`Type` defines data type of a `FieldDescriptor`.
+`Type` defines data type of a `Property`.
 
 Use `createType(name, props)` factory function to create an instance of `Type`.
 

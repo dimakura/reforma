@@ -26,27 +26,12 @@ Concrete types may define additional properties.
 
 Primitive types are self-sufficient, and their definition doesn't require other types. ReformaJS supports the following primitive types:
 
-- `string`
-- `integer`
-- `float`
 - `bool`
 - `date`
+- `float`
 - `image`
-
-#### String
-
-No additional props.
-
-#### Integer
-
-No additional props.
-
-#### Float
-
-| Property | Type | Default |
-|----------|------|---------|
-| `decimals` | `Number` | `2` |
-| `format` | `String` | `"0,0.00"` |
+- `integer`
+- `string`
 
 #### Boolean
 
@@ -58,7 +43,21 @@ No additional props.
 |----------|------|---------|
 | `format` | `String` | `"DD-MMM-YYYY hh:mm:ss"` |
 
+#### Float
+
+| Property | Type | Default |
+|----------|------|---------|
+| `decimals` | `Number` | `2` |
+
 #### Image
+
+No additional props.
+
+#### Integer
+
+No additional props.
+
+#### String
 
 No additional props.
 

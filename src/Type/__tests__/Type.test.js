@@ -1,4 +1,4 @@
-import { createType } from '../index'
+import { createType } from 'reforma'
 
 const primitiveTypes = [
   'bool',

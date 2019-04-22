@@ -11,6 +11,10 @@ const descriptor = createFieldDescriptor({
   name: 'firstName',
   type: 'string'
 })
+
+// or
+
+const theSameDescriptor = createFieldDescriptor('firstName')
 ```
 
 ## Properties
@@ -18,7 +22,7 @@ const descriptor = createFieldDescriptor({
 | Property | Type | Description |
 |----------|------|-------------|
 | `name`   | `String` | **Required** Name of the field. |
-| `caption` | `String` | Caption of the field. |
+| `caption` | `String` | Caption of the field. Defaults to humanized name. |
 | `tooltip` | `String` | Help text (tooltip) of the field. |
 | `type` | `String` or `Object` | Type of the field. Defaults to `"string"`. Also see [Type](./type.md) on type properties. |
 | `__isFieldDescriptor__` | `Boolean` | Always returns `true`. |

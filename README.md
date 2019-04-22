@@ -13,7 +13,7 @@ TODO:
 ## Reference
 
 - [Type](./docs/type.md)
-- FieldDescriptor
+- [FieldDescriptor](./docs/field_descriptor.md)
 - Field
 - Model (Schema in v0.1)
 - etc.

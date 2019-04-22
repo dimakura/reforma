@@ -1,18 +1,22 @@
 # Type
 
-`Type` is an interface, used by the `FieldDescriptor` to determine data type served by the field. You don't usually create an instance of `Type` directly.
+`Type` defines data type of a `FieldDescriptor`.
 
-Internally we use `createType(name, props)` function to create `Type`:
+Use `createType(name, props)` factory function to create an instance of `Type`.
 
 ```js
-import { createType } from 'reforma/Type'
+import { createType } from 'reforma'
 
 const numericType = createType('float', {
   decimals: 2
 })
 ```
 
+ReformaJS recognizes primitive, composite and user-defined types.
+
 ### Properties
+
+All types share the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -65,6 +69,6 @@ No additional props.
 
 TODO:
 
-## User created types
+## User-defined types
 
 TODO:

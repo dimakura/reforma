@@ -1,46 +1,71 @@
 # Type
 
-`Type` is an interface with the following basic properties:
+`Type` is an interface, used by the `FieldDescriptor` to determine data type served by the field. You don't usually create an instance of `Type` directly.
 
-| Property | Description |
-|----------|-------------|
-| `__isType__`  | This should always be `true`. |
-| `isPrimitive` | Should be `true` for primitive types. |
-| `name`        | Name of the type.
-
-Concrete types may have additional properties.
-
-To create a new `Type` use `createType` generator:
+Internally we use `createType(name, props)` function to create `Type`:
 
 ```js
-import { createType } from 'reforma'
+import { createType } from 'reforma/Type'
 
-const priceType = createType('float', {
+const numericType = createType('float', {
   decimals: 2
 })
 ```
 
-### Primitive types
+### Properties
 
-Primitive types are self-sufficient and their definition doesn't require other types.
+| Property | Type | Description |
+|----------|------|-------------|
+| `name`        | `String` | Name of the type. |
+| `isPrimitive` | `Boolean` | Returns `true` for primitive types. |
+| `__isType__`  | `Boolean` | Always returns `true`. |
+
+Concrete types may define additional properties.
+
+## Primitive types
+
+Primitive types are self-sufficient, and their definition doesn't require other types. Reforma supports the following primitive types:
+
+- `string`
+- `integer`
+- `float`
+- `bool`
+- `date`
+- `image`
 
 #### String
 
-| Property | Description |
-|----------|-------------|
-| ``
-
-
-#### Text
-
-#### Boolean
-
-#### Date
-
-#### Float
+No additional props.
 
 #### Integer
 
+No additional props.
+
+#### Float
+
+| Property | Type | Default |
+|----------|------|---------|
+| `decimals` | `Number` | `2` |
+| `format` | `String` | `"0,0.00"` |
+
+#### Boolean
+
+No additional props.
+
+#### Date
+
+| Property | Type | Default |
+|----------|------|---------|
+| `format` | `String` | `"DD-MMM-YYYY hh:mm:ss"` |
+
 #### Image
 
-### Complex types
+No additional props.
+
+## Composite types
+
+TODO:
+
+## User created types
+
+TODO:

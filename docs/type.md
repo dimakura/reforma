@@ -20,7 +20,7 @@ const numericType = createType('float', {
 | `isPrimitive` | `Boolean` | Returns `true` for primitive types. |
 | `__isType__`  | `Boolean` | Always returns `true`. |
 
-Concrete types may define additional properties.
+Concrete types can define additional properties.
 
 ## Primitive types
 

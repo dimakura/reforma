@@ -1,7 +1,14 @@
 {
   "name": "reforma",
-  "version": "0.1.6",
-  "description": "Easy forms in React",
+  "version": "0.2.0-dev",
+  "description": "React based widget framework for building data extensive applications",
+  "keywords": [
+    "reforma",
+    "react",
+    "widget framework"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT",
   "main": "lib/index.js",
   "files": [
     "/lib"
@@ -11,13 +18,6 @@
     "build": "node_modules/.bin/babel -s inline -d lib src",
     "test": "jest"
   },
-  "keywords": [
-    "forms",
-    "admin",
-    "react"
-  ],
-  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": "^3.0.2",

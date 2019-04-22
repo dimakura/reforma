@@ -24,7 +24,7 @@ Concrete types may define additional properties.
 
 ## Primitive types
 
-Primitive types are self-sufficient, and their definition doesn't require other types. Reforma supports the following primitive types:
+Primitive types are self-sufficient, and their definition doesn't require other types. ReformaJS supports the following primitive types:
 
 - `string`
 - `integer`

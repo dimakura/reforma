@@ -1,3 +1,4 @@
+import { createModel } from './Model'
 import { createProperty } from './Property'
 import { createType } from './Type'
 

@@ -1,9 +1,9 @@
-import createBool from './bool'
-import createDate from './date'
-import createImage from './image'
-import createInteger from './integer'
-import createFloat from './float'
-import createString from './string'
+import createBool from './internal/types/bool'
+import createDate from './internal/types/date'
+import createImage from './internal/types/image'
+import createInteger from './internal/types/integer'
+import createFloat from './internal/types/float'
+import createString from './internal/types/string'
 
 export function createType(name, props) {
   const factory = factories[name]

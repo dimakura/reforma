@@ -1,6 +1,6 @@
+import { isBlank } from '@tomatosoft/gimlet'
 import { get, startCase } from 'lodash'
 import { createType } from 'reforma/Type'
-import isBlank from 'reforma/utils/isBlank'
 
 export function createProperty(props) {
   if (props == null) {

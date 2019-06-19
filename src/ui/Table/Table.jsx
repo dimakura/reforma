@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { merge } from 'lodash'
 import { default as MUITable} from '@material-ui/core/Table'
 import { EVENT_PARAMS_CHANGED, EVENT_STATUS_CHANGED } from 'reforma/datasource/TableDataSource'
 import TableHeader from './TableHeader'
@@ -113,6 +114,7 @@ class Table extends React.PureComponent {
   }
 
   fetchData(params) {
+    params = merge({}, params, this.props.fetchParams)
     this.props.tableDataSource.fetch(params)
   }
 
@@ -130,7 +132,10 @@ class Table extends React.PureComponent {
 Table.propTypes = {
   tableDataSource: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
-  perPage: PropTypes.number
+  perPage: PropTypes.number,
+  showFooter: PropTypes.bool,
+  showHeader: PropTypes.bool,
+  fetchParams: PropTypes.object
 }
 
 export default Table

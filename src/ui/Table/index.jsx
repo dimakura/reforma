@@ -12,7 +12,8 @@ class TableRoot extends React.PureComponent {
       'columns',
       'perPage',
       'showHeader',
-      'showFooter'
+      'showFooter',
+      'fetchParams'
     ])
 
     const tableProps = createTableProps(data)
@@ -25,7 +26,10 @@ TableRoot.propTypes = {
   schema: PropTypes.object,
   tableDataSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
-  perPage: PropTypes.number
+  perPage: PropTypes.number,
+  showFooter: PropTypes.bool,
+  showHeader: PropTypes.bool,
+  fetchParams: PropTypes.object
 }
 
 export default TableRoot

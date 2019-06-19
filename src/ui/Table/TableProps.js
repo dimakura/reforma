@@ -15,6 +15,7 @@ export default function createTableProps(data) {
   const perPage = data.perPage
   const showHeader = get(data, 'showHeader', true)
   const showFooter = get(data, 'showFooter', true)
+  const fetchParams = get(data, 'fetchParams', {})
 
   return {
     get _isTableProps() {
@@ -43,6 +44,10 @@ export default function createTableProps(data) {
 
     get showFooter() {
       return showFooter
+    },
+
+    get fetchParams() {
+      return fetchParams
     }
   }
 }

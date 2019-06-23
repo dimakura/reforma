@@ -1,28 +1,60 @@
 [![Build Status](https://travis-ci.com/dimakura/reforma.svg?branch=master)](https://travis-ci.com/dimakura/reforma)
 
-**NOTE**: This is a development branch!
+**NOTE**: This is a development branch for v0.2!
 
-# ReformaJS
+# Reforma
 
-ReformaJS is a [React](https://reactjs.org/)-based widget framework for developing admin panels and data-driven applications.
+Reforma is a framework for developing data-driven applications.
+The central thing in Reforma is the notion of type and serialization.
+Initially Reforma is going to support only JSON serialization (as frankly its easiest to implement).
 
-## How to start?
+Another important notion in Reforma is Procedure.
+Procedure allows us to do some actions on data.
+Procedures are essentially functions which operate with types defined by the user.
 
-TODO:
+You can apply Reforma to many different use cases. As [ReformaUI](https://github.com/dimakura/reforma-ui) uses it to render visual elements and associated actions.
 
-## Reference
+# Type
 
-- [Type](./docs/type.md)
-- [Property](./docs/property.md)
-- Model
-- Field
-- DataSource
-- Table
-- View
-- PropertyView
-- ModelView
-- Editor
-- PropertyEditor
-- ModelEditor
-- Theme
-- Config
+Type is the central notion in Reforma.
+
+Reforma supports primitive, user-defined and collection types.
+Types are responsible for serialization/deserialization of data.
+
+Serialization and deserialization of data can be done through `Type` interface:
+
+```js
+import { Type } from 'reforma'
+
+Type.serialize(myType, usableData)
+Type.deserialize(myType, rawData)
+```
+
+## Primitive types
+
+There are four primitive types supported:
+
+- `int`
+- `float`
+- `bool`
+- `string`
+
+## User defined types
+
+You can further extend types with user defined types:
+
+```js
+const userType = Type.createType('User', {
+  id: 'int',
+  firstName: 'string',
+  lastName: 'string'
+})
+```
+
+# Procedure
+
+TODO: function calls
+
+# Transports
+
+TODO: JSON/HTTP

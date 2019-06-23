@@ -1,11 +1,10 @@
 {
   "name": "reforma",
   "version": "0.2.0-dev",
-  "description": "React-based widget framework",
+  "description": "Reforma - a data manipulation  framework",
   "keywords": [
     "reforma",
-    "react",
-    "widget framework"
+    "data framework"
   ],
   "author": "Dimitri Kurashvili <dimakura@gmail.com>",
   "license": "MIT",

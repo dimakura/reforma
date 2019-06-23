@@ -1,5 +1,5 @@
 import { Type } from 'reforma'
-import intType from '../integer'
+import intType from '../int'
 
 describe('integer type', () => {
   test('raw type', () => {

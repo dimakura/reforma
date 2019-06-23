@@ -1,5 +1,6 @@
 import { deserialize } from 'reforma'
 import { Map } from 'immutable'
+import * as Registry from '../registry'
 
 describe('deserialize', () => {
   const abstractType = Map({isType: true})
@@ -8,8 +9,18 @@ describe('deserialize', () => {
 
   test('normal scenario', () => {
     deserializeFunction.mockReturnValue('deserialized')
+
     expect(deserialize(deserializableType, 1)).toBe('deserialized')
     expect(deserializeFunction).toHaveBeenCalledWith(1)
+  })
+
+  test('type lookup using registry', () => {
+    Registry.getType = jest.fn(() => deserializableType)
+    deserializeFunction.mockReturnValue('deserialized')
+
+    expect(deserialize('myType', 1)).toBe('deserialized')
+    expect(deserializeFunction).toHaveBeenCalledWith(1)
+    expect(Registry.getType).toHaveBeenCalledWith('myType')
   })
 
   test('non-deserializable type', () => {

@@ -1,4 +1,4 @@
-import primitiveType from './primitive'
+import primitiveType from '../primitiveType'
 import { registerType } from '../registry'
 
 const boolType = primitiveType.merge({

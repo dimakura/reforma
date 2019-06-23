@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { isType } from './utils'
+import isType from './isType'
 
 // type registry
 let registry = Map()

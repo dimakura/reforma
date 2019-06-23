@@ -1,4 +1,4 @@
-import baseType from '../base'
+import baseType from './baseType'
 
 /**
  * Primitive type.

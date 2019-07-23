@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import config from './config'
 import createSchema from './schema'
 import Table from './ui/Table'

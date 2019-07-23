@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import 'jest-enzyme'
 import Enzyme from 'enzyme'
 import React16Adapter from 'enzyme-adapter-react-16'

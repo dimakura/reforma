@@ -3,15 +3,12 @@ dist: trusty
 language: node_js
 
 node_js:
-  - "10"
+  - '10'
 
 cache: npm
 
-install:
-  - cd core/
-  - npm install
-
 script:
   - cd core/
+  - npm install
   - npm run lint
   - npm test

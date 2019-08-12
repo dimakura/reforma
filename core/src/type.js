@@ -1,4 +1,5 @@
 export const primitiveTypes = ['integer', 'float', 'string', 'bool', 'datetime']
+export const buildInTypes = primitiveTypes.concat(['array', 'map'])
 
 export function createPrimitiveType(name) {
   const type = {}
@@ -11,10 +12,25 @@ export function createPrimitiveType(name) {
   return type
 }
 
+export function createArrayType(baseType) {
+  if (baseType.__isType__ !== true) {
+    throw new Error(`Array's base type is not a valid Reforma type: ${baseType}`)
+  }
+
+  const type = {}
+  defineTypeName(type, 'array')
+  defineBuiltInType(type)
+  defineCalcAssignment(type)
+  defineValidateAssinment(type)
+  defineValueType(type, baseType)
+
+  return type
+}
+
 // -- PRIVATE
 
 function defineTypeName(type, name) {
-  if (primitiveTypes.indexOf(name) === -1) {
+  if (buildInTypes.indexOf(name) === -1) {
     throw new Error(`Not a primitive type: ${name}`)
   }
 
@@ -74,4 +90,8 @@ function defineValidateAssinment(type) {
   Object.defineProperty(type, 'validate', {
     value: assignmentFn.bind(type)
   })
+}
+
+function defineValueType(type, baseType) {
+  Object.defineProperty(type, '__valueType__', { value: baseType })
 }

@@ -1,6 +1,6 @@
 {
   "name": "@reforma/core",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Reforma helps you to create rich UI forms.",
   "main": "src/index.js",
   "scripts": {

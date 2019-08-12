@@ -9,20 +9,20 @@ const Reforma = {}
 
 primitiveTypes.forEach((primitiveTypeName) => {
   Object.defineProperty(Reforma, primitiveTypeName, {
-    get: function() {
+    get: function () {
       return createPrimitiveType(primitiveTypeName)
     }
   })
 })
 
 Object.defineProperty(Reforma, 'arrayOf', {
-  value: function(valueType) {
+  value: function (valueType) {
     return createArrayType(valueType)
   }
 })
 
 Object.defineProperty(Reforma, 'mapOf', {
-  value: function(keyType, valueType) {
+  value: function (keyType, valueType) {
     return createMapType(keyType, valueType)
   }
 })

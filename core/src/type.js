@@ -12,9 +12,9 @@ export function createPrimitiveType(name) {
   return type
 }
 
-export function createArrayType(baseType) {
-  if (baseType.__isType__ !== true) {
-    throw new Error(`Array's base type is not a valid Reforma type: ${baseType}`)
+export function createArrayType(valueType) {
+  if (valueType.__isType__ !== true) {
+    throw new Error(`Array's value type is not a valid Reforma type: ${valueType}`)
   }
 
   const type = {}
@@ -22,7 +22,27 @@ export function createArrayType(baseType) {
   defineBuiltInType(type)
   defineCalcAssignment(type)
   defineValidateAssinment(type)
-  defineValueType(type, baseType)
+  defineValueType(type, valueType)
+
+  return type
+}
+
+export function createMapType(keyType, valueType) {
+  if (keyType.__isType__ !== true) {
+    throw new Error(`Map's key type is not a valid Reforma type: ${keyType}`)
+  }
+
+  if (valueType.__isType__ !== true) {
+    throw new Error(`Map's value type is not a valid Reforma type: ${valueType}`)
+  }
+
+  const type = {}
+  defineTypeName(type, 'map')
+  defineBuiltInType(type)
+  defineCalcAssignment(type)
+  defineValidateAssinment(type)
+  defineKeyType(type, keyType)
+  defineValueType(type, valueType)
 
   return type
 }
@@ -94,4 +114,8 @@ function defineValidateAssinment(type) {
 
 function defineValueType(type, baseType) {
   Object.defineProperty(type, '__valueType__', { value: baseType })
+}
+
+function defineKeyType(type, keyType) {
+  Object.defineProperty(type, '__keyType__', { value: keyType })
 }

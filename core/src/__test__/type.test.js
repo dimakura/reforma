@@ -4,6 +4,7 @@ describe('Built-in types', () => {
   ['integer', 'float', 'string', 'bool', 'datetime'].forEach((typeName) => {
     test(typeName, () => {
       const type = Reforma[typeName]
+
       isBuiltInType(type, typeName)
       hasIdGetter(type)
       isCalculable(type)
@@ -13,14 +14,34 @@ describe('Built-in types', () => {
 
   test('arrayOf', () => {
     const type = Reforma.arrayOf(Reforma.integer)
+
     isBuiltInType(type, 'array')
     hasNoIdGetter(type)
+    hasValueType(type, Reforma.integer)
     isCalculable(type)
     isValidable(type)
 
     expect(
       () => Reforma.arrayOf('something')
-    ).toThrow('Array\'s base type is not a valid Reforma type: something')
+    ).toThrow('Array\'s value type is not a valid Reforma type: something')
+  })
+
+  test('mapOf', () => {
+    const type = Reforma.mapOf(Reforma.string, Reforma.integer)
+
+    isBuiltInType(type, 'map')
+    hasNoIdGetter(type)
+    hasKeyType(type, Reforma.string)
+    hasValueType(type, Reforma.integer)
+    isCalculable(type)
+    isValidable(type)
+
+    expect(
+      () => Reforma.mapOf('something', Reforma.integer)
+    ).toThrow('Map\'s key type is not a valid Reforma type: something')
+    expect(
+      () => Reforma.mapOf(Reforma.string, 'anything')
+    ).toThrow('Map\'s value type is not a valid Reforma type: anything')
   })
 })
 
@@ -66,4 +87,12 @@ function isValidable(type) {
   expect(
     () => type.validate('not-a-function')
   ).toThrow('Specify function in `validate`')
+}
+
+function hasKeyType(type, keyType) {
+  expect(type.__keyType__.name).toBe(keyType.name)
+}
+
+function hasValueType(type, valueType) {
+  expect(type.__valueType__.name).toBe(valueType.name)
 }

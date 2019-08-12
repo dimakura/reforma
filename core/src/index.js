@@ -1,7 +1,8 @@
 import {
   primitiveTypes,
   createPrimitiveType,
-  createArrayType
+  createArrayType,
+  createMapType
 } from './type'
 
 const Reforma = {}
@@ -15,15 +16,22 @@ primitiveTypes.forEach((primitiveTypeName) => {
 })
 
 Object.defineProperty(Reforma, 'arrayOf', {
-  value: function(type) {
-    return createArrayType(type)
+  value: function(valueType) {
+    return createArrayType(valueType)
+  }
+})
+
+Object.defineProperty(Reforma, 'mapOf', {
+  value: function(keyType, valueType) {
+    return createMapType(keyType, valueType)
   }
 })
 
 // TODOs:
-// -[ ] array type specs
-// -[ ] map type + specs
+// -[X] array type specs
+// -[X] map type + specs
 // -[ ] linter
+// -[ ] setup CI
 // -[ ] user-defined types + specs
 // -[ ] built-in types instantiation + specs
 // -[ ] user-defined types instantiation + specs

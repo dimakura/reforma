@@ -30,7 +30,7 @@ Object.defineProperty(Reforma, 'mapOf', {
 // TODOs:
 // -[X] array type specs
 // -[X] map type + specs
-// -[ ] linter
+// -[X] linter
 // -[ ] setup CI
 // -[ ] user-defined types + specs
 // -[ ] built-in types instantiation + specs

@@ -1,0 +1,13 @@
+{
+  "presets": ["@babel/preset-env"],
+
+  "plugins": [
+    "@babel/plugin-proposal-do-expressions",
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "@reforma/core": "./src"
+      }
+    }]
+  ]
+}

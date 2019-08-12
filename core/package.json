@@ -1,0 +1,33 @@
+{
+  "name": "@reforma/core",
+  "version": "0.2.0",
+  "description": "Reforma helps you to create rich UI forms.",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js'",
+    "test": "jest"
+  },
+  "keywords": [
+    "forms",
+    "reforma",
+    "react"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-do-expressions": "^7.5.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.8.0",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.15.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.8.0"
+  }
+}

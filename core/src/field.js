@@ -112,6 +112,7 @@ function defineCalcMethods(field, data) {
     }
 
     data.calc = calcFn
+    return field
   }
 
   Object.defineProperty(field, 'getCalc', { value: getCalc })

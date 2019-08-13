@@ -3,7 +3,7 @@
 // -[X] map type + specs
 // -[X] linter
 // -[X] setup CI
-// -[ ] field interface
+// -[-] field interface
 // -[ ] calc+id+validate into fields
 // -[ ] user-defined types + specs
 // -[ ] built-in types instantiation + specs
@@ -25,9 +25,7 @@ const Reforma = {}
 
 primitiveTypes.forEach((primitiveTypeName) => {
   Object.defineProperty(Reforma, primitiveTypeName, {
-    get: function () {
-      return createPrimitiveType(primitiveTypeName)
-    }
+    value: createPrimitiveType(primitiveTypeName)
   })
 })
 

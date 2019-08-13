@@ -1,13 +1,25 @@
+import { createField } from './field'
+
 export const primitiveTypes = ['integer', 'float', 'string', 'bool', 'datetime']
 export const buildInTypes = primitiveTypes.concat(['array', 'map'])
 
+const typeRegistry = {}
+
 export function createPrimitiveType(name) {
+  if (primitiveTypes.indexOf(name) === -1) {
+    throw new Error(`Not a primitive type: ${name}`)
+  }
+
+  if (name in typeRegistry) {
+    return typeRegistry[name]
+  }
+
   const type = {}
   defineTypeName(type, name)
-  defineBuiltInType(type)
-  defineIdAssignment(type)
-  defineCalcAssignment(type)
-  defineValidateAssinment(type)
+  defineTypeness(type, false, false, false)
+  defineIdGetter(type)
+  defineCalcMethod(type)
+  defineValidateMethod(type)
 
   return type
 }
@@ -17,12 +29,18 @@ export function createArrayType(valueType) {
     throw new Error(`Array's value type is not a valid Reforma type: ${valueType}`)
   }
 
+  const name = `[${valueType.name}]`
+
+  if (name in typeRegistry) {
+    return typeRegistry[name]
+  }
+
   const type = {}
-  defineTypeName(type, 'array')
-  defineBuiltInType(type)
-  defineCalcAssignment(type)
-  defineValidateAssinment(type)
+  defineTypeName(type, name)
   defineValueType(type, valueType)
+  defineTypeness(type, true, false, false)
+  defineCalcMethod(type)
+  defineValidateMethod(type)
 
   return type
 }
@@ -36,30 +54,27 @@ export function createMapType(keyType, valueType) {
     throw new Error(`Map's value type is not a valid Reforma type: ${valueType}`)
   }
 
+  const name = `<${keyType.name},${valueType.name}>`
+
+  if (name in typeRegistry) {
+    return typeRegistry[name]
+  }
+
   const type = {}
-  defineTypeName(type, 'map')
-  defineBuiltInType(type)
-  defineCalcAssignment(type)
-  defineValidateAssinment(type)
+  defineTypeName(type, name)
   defineKeyType(type, keyType)
   defineValueType(type, valueType)
+  defineTypeness(type, false, true, false)
+  defineCalcMethod(type)
+  defineValidateMethod(type)
 
   return type
 }
 
 export function createType(opts) {
-  // CREATE TYPE should create ""
-
   const type = {}
-  // TODO:
-  // validateName(opts.name)
-  // defineName(type, name)
-  // defineUserDefinedType(type)
-  // defineFields()
 
-  // ==> calc & validate will break mutability
-  // defineCalcAssignment(type)
-  // defineValidateAssinment(type)
+  // TODO: user defined type creation
 
   return type
 }
@@ -67,17 +82,18 @@ export function createType(opts) {
 // -- PRIVATE
 
 function defineTypeName(type, name) {
-  if (buildInTypes.indexOf(name) === -1) {
-    throw new Error(`Not a built-in type: ${name}`)
-  }
-
   Object.defineProperty(type, 'name', { value: name })
+  typeRegistry[name] = type
 }
 
-function defineBuiltInType(type) {
+function defineTypeness(type, isArray = false, isMap = false, isUserDefined = false) {
+  const isPrimitive = !isArray && !isMap && !isUserDefined
+
   Object.defineProperty(type, '__isType__', { value: true })
-  Object.defineProperty(type, '__isBuiltInType__', { value: true })
-  Object.defineProperty(type, '__isUserDefinedType__', { value: false })
+  Object.defineProperty(type, '__isPrimitivType__', { value: isPrimitive })
+  Object.defineProperty(type, '__isArray__', { value: isArray })
+  Object.defineProperty(type, '__isMap__', { value: isMap })
+  Object.defineProperty(type, '__isUserDefinedType__', { value: isUserDefined })
 }
 
 function defineValueType(type, baseType) {
@@ -88,51 +104,26 @@ function defineKeyType(type, keyType) {
   Object.defineProperty(type, 'keyType', { value: keyType })
 }
 
-function defineIdAssignment(type) {
-  function assignmentFn(value) {
-    Object.defineProperty(this, '__id__', { value })
-    return this
+function defineIdGetter(type) {
+  function getter() {
+    return createField(type).id
   }
 
-  Object.defineProperty(type, 'id', {
-    get: assignmentFn.bind(type, true)
-  })
+  Object.defineProperty(type, 'id', { get: getter })
 }
 
-function defineCalcAssignment(type) {
-  function assignmentFn(calcFn) {
-    if (typeof calcFn !== 'function') {
-      throw new Error('Specify function in `calc`')
-    }
-
-    if (this.__calc__ != null) {
-      throw new Error('Only single assignment permitted in `calc`')
-    }
-
-    Object.defineProperty(this, '__calc__', { value: calcFn })
-    return this
+function defineCalcMethod(type) {
+  function calcMethod(calcFn) {
+    return createField(type).calc(calcFn)
   }
 
-  Object.defineProperty(type, 'calc', {
-    value: assignmentFn.bind(type)
-  })
+  Object.defineProperty(type, 'calc', { value: calcMethod })
 }
 
-function defineValidateAssinment(type) {
-  function assignmentFn(validateFn) {
-    if (typeof validateFn !== 'function') {
-      throw new Error('Specify function in `validate`')
-    }
-
-    if (this.__validators__ == null) {
-      Object.defineProperty(this, '__validators__', { value: [] })
-    }
-    this.__validators__.push(validateFn)
-
-    return this
+function defineValidateMethod(type) {
+  function validateMethod(validateFn) {
+    return createField(type).validate(validateFn)
   }
 
-  Object.defineProperty(type, 'validate', {
-    value: assignmentFn.bind(type)
-  })
+  Object.defineProperty(type, 'validate', { value: validateMethod })
 }

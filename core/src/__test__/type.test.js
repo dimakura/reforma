@@ -90,9 +90,9 @@ function isValidable(type) {
 }
 
 function hasKeyType(type, keyType) {
-  expect(type.__keyType__.name).toBe(keyType.name)
+  expect(type.keyType.name).toBe(keyType.name)
 }
 
 function hasValueType(type, valueType) {
-  expect(type.__valueType__.name).toBe(valueType.name)
+  expect(type.valueType.name).toBe(valueType.name)
 }

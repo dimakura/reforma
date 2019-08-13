@@ -47,11 +47,28 @@ export function createMapType(keyType, valueType) {
   return type
 }
 
+export function createType(opts) {
+  // CREATE TYPE should create ""
+
+  const type = {}
+  // TODO:
+  // validateName(opts.name)
+  // defineName(type, name)
+  // defineUserDefinedType(type)
+  // defineFields()
+
+  // ==> calc & validate will break mutability
+  // defineCalcAssignment(type)
+  // defineValidateAssinment(type)
+
+  return type
+}
+
 // -- PRIVATE
 
 function defineTypeName(type, name) {
   if (buildInTypes.indexOf(name) === -1) {
-    throw new Error(`Not a primitive type: ${name}`)
+    throw new Error(`Not a built-in type: ${name}`)
   }
 
   Object.defineProperty(type, 'name', { value: name })
@@ -61,6 +78,14 @@ function defineBuiltInType(type) {
   Object.defineProperty(type, '__isType__', { value: true })
   Object.defineProperty(type, '__isBuiltInType__', { value: true })
   Object.defineProperty(type, '__isUserDefinedType__', { value: false })
+}
+
+function defineValueType(type, baseType) {
+  Object.defineProperty(type, 'valueType', { value: baseType })
+}
+
+function defineKeyType(type, keyType) {
+  Object.defineProperty(type, 'keyType', { value: keyType })
 }
 
 function defineIdAssignment(type) {
@@ -110,12 +135,4 @@ function defineValidateAssinment(type) {
   Object.defineProperty(type, 'validate', {
     value: assignmentFn.bind(type)
   })
-}
-
-function defineValueType(type, baseType) {
-  Object.defineProperty(type, '__valueType__', { value: baseType })
-}
-
-function defineKeyType(type, keyType) {
-  Object.defineProperty(type, '__keyType__', { value: keyType })
 }

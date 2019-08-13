@@ -1,8 +1,24 @@
+// TODOs:
+// -[X] array type specs
+// -[X] map type + specs
+// -[X] linter
+// -[X] setup CI
+// -[ ] field interface
+// -[ ] calc+id+validate into fields
+// -[ ] user-defined types + specs
+// -[ ] built-in types instantiation + specs
+// -[ ] user-defined types instantiation + specs
+// -[ ] validations + specs
+// -[ ] built-in validations + specs
+// -[ ] built-in types serialization + specs
+// -[ ] user-defined types serialization + specs
+
 import {
   primitiveTypes,
   createPrimitiveType,
   createArrayType,
-  createMapType
+  createMapType,
+  createType
 } from './type'
 
 const Reforma = {}
@@ -27,17 +43,8 @@ Object.defineProperty(Reforma, 'mapOf', {
   }
 })
 
-// TODOs:
-// -[X] array type specs
-// -[X] map type + specs
-// -[X] linter
-// -[ ] setup CI
-// -[ ] user-defined types + specs
-// -[ ] built-in types instantiation + specs
-// -[ ] user-defined types instantiation + specs
-// -[ ] validations + specs
-// -[ ] built-in validations + specs
-// -[ ] built-in types serialization + specs
-// -[ ] user-defined types serialization + specs
+Object.defineProperty(Reforma, 'createType', {
+  value: createType
+})
 
 export default Reforma

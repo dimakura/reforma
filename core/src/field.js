@@ -66,7 +66,7 @@ function setNameMethods(field, data) {
       throw new Error(`Illegal field name: ${name}`)
     }
 
-    if (data.name != null) {
+    if (data.name != null && data.name != name) {
       throw new Error('Field name is already defined')
     }
 
@@ -89,10 +89,10 @@ function setIdMethods(field, data) {
 
   function setId(newValue) {
     data.id = !!newValue
-    return field
   }
 
-  // we can put "id" field property only on primitive types
+  // `id=true` is valid state only for primitive types
+  // therefore, changind `id` is only allowed for primitive types
   if (field.getType().__isPrimitiveType__) {
     Object.defineProperty(field, 'id', { get: getter })
     Object.defineProperty(field, 'setId', { value: setId })

@@ -15,11 +15,11 @@ export function createPrimitiveType(name) {
   }
 
   const type = {}
-  defineTypeName(type, name)
-  defineTypeness(type, false, false, false)
-  defineIdGetter(type)
-  defineCalcMethod(type)
-  defineValidateMethod(type)
+  setTypeName(type, name)
+  setTypeness(type, false, false, false)
+  setIdGetter(type)
+  setCalcMethod(type)
+  setValidateMethod(type)
 
   return type
 }
@@ -36,11 +36,11 @@ export function createArrayType(valueType) {
   }
 
   const type = {}
-  defineTypeName(type, name)
-  defineValueType(type, valueType)
-  defineTypeness(type, true, false, false)
-  defineCalcMethod(type)
-  defineValidateMethod(type)
+  setTypeName(type, name)
+  setTypeness(type, true, false, false)
+  setValueType(type, valueType)
+  setCalcMethod(type)
+  setValidateMethod(type)
 
   return type
 }
@@ -61,50 +61,61 @@ export function createMapType(keyType, valueType) {
   }
 
   const type = {}
-  defineTypeName(type, name)
-  defineKeyType(type, keyType)
-  defineValueType(type, valueType)
-  defineTypeness(type, false, true, false)
-  defineCalcMethod(type)
-  defineValidateMethod(type)
+  setTypeName(type, name)
+  setTypeness(type, false, true, false)
+  setKeyType(type, keyType)
+  setValueType(type, valueType)
+  setCalcMethod(type)
+  setValidateMethod(type)
 
   return type
 }
 
-export function createType(opts) {
-  const type = {}
+export function createType(opts = {}) {
+  const name = opts.name
+  // const fields = opts.fields
 
-  // TODO: user defined type creation
+  // TODO:
+  // 1. name should match pattern Namespace.Name
+  // 2. assign fields
+
+  const type = {}
+  setTypeName(type, name)
+  setTypeness(type, false, false, true)
+  setCalcMethod(type)
+  setValidateMethod(type)
+  // 3. add defineFields method
+  // setDefineFieldsMethod(type)
 
   return type
 }
 
 // -- PRIVATE
 
-function defineTypeName(type, name) {
+function setTypeName(type, name) {
   Object.defineProperty(type, 'name', { value: name })
   typeRegistry[name] = type
 }
 
-function defineTypeness(type, isArray = false, isMap = false, isUserDefined = false) {
+function setTypeness(type, isArray = false, isMap = false, isUserDefined = false) {
   const isPrimitive = !isArray && !isMap && !isUserDefined
 
   Object.defineProperty(type, '__isType__', { value: true })
-  Object.defineProperty(type, '__isPrimitivType__', { value: isPrimitive })
+  Object.defineProperty(type, '__isPrimitiveType__', { value: isPrimitive })
   Object.defineProperty(type, '__isArray__', { value: isArray })
   Object.defineProperty(type, '__isMap__', { value: isMap })
   Object.defineProperty(type, '__isUserDefinedType__', { value: isUserDefined })
 }
 
-function defineValueType(type, baseType) {
+function setValueType(type, baseType) {
   Object.defineProperty(type, 'valueType', { value: baseType })
 }
 
-function defineKeyType(type, keyType) {
+function setKeyType(type, keyType) {
   Object.defineProperty(type, 'keyType', { value: keyType })
 }
 
-function defineIdGetter(type) {
+function setIdGetter(type) {
   function getter() {
     return createField(type).id
   }
@@ -112,7 +123,7 @@ function defineIdGetter(type) {
   Object.defineProperty(type, 'id', { get: getter })
 }
 
-function defineCalcMethod(type) {
+function setCalcMethod(type) {
   function calcMethod(calcFn) {
     return createField(type).calc(calcFn)
   }
@@ -120,7 +131,7 @@ function defineCalcMethod(type) {
   Object.defineProperty(type, 'calc', { value: calcMethod })
 }
 
-function defineValidateMethod(type) {
+function setValidateMethod(type) {
   function validateMethod(validateFn) {
     return createField(type).validate(validateFn)
   }

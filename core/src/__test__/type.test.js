@@ -50,7 +50,7 @@ describe('Built-in types', () => {
 function isPrimitiveType(type, name) {
   expect(type.name).toBe(name)
   expect(type.__isType__).toBe(true)
-  expect(type.__isPrimitivType__).toBe(true)
+  expect(type.__isPrimitiveType__).toBe(true)
   expect(type.__isArray__).toBe(false)
   expect(type.__isMap__).toBe(false)
   expect(type.__isUserDefinedType__).toBe(false)
@@ -59,7 +59,7 @@ function isPrimitiveType(type, name) {
 function isArrayType(type) {
   expect(type.name).toBe(`[${type.valueType.name}]`)
   expect(type.__isType__).toBe(true)
-  expect(type.__isPrimitivType__).toBe(false)
+  expect(type.__isPrimitiveType__).toBe(false)
   expect(type.__isArray__).toBe(true)
   expect(type.__isMap__).toBe(false)
   expect(type.__isUserDefinedType__).toBe(false)
@@ -68,7 +68,7 @@ function isArrayType(type) {
 function isMapType(type) {
   expect(type.name).toBe(`<${type.keyType.name},${type.valueType.name}>`)
   expect(type.__isType__).toBe(true)
-  expect(type.__isPrimitivType__).toBe(false)
+  expect(type.__isPrimitiveType__).toBe(false)
   expect(type.__isArray__).toBe(false)
   expect(type.__isMap__).toBe(true)
   expect(type.__isUserDefinedType__).toBe(false)

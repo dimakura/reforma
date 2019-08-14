@@ -30,23 +30,23 @@ export function createField(type) {
   }
 
   const field = {}
-  defineFieldness(field)
-  defineFieldType(field, type)
-  defineNameMethods(field, privateData)
-  defineIdMethods(field, privateData)
-  defineCalcMethods(field, privateData)
-  defineValidateMethods(field, privateData)
+  setFieldness(field)
+  setFieldType(field, type)
+  setNameMethods(field, privateData)
+  setIdMethods(field, privateData)
+  setCalcMethods(field, privateData)
+  setValidateMethods(field, privateData)
 
   return field
 }
 
 // -- PRIVATE
 
-function defineFieldness(field) {
+function setFieldness(field) {
   Object.defineProperty(field, '__isField__', { value: true })
 }
 
-function defineFieldType(field, type) {
+function setFieldType(field, type) {
   function getType() {
     return type
   }
@@ -54,7 +54,7 @@ function defineFieldType(field, type) {
   Object.defineProperty(field, 'getType', { value: getType })
 }
 
-function defineNameMethods(field, data) {
+function setNameMethods(field, data) {
   function getName() {
     return data.name
   }
@@ -77,7 +77,7 @@ function defineNameMethods(field, data) {
   Object.defineProperty(field, 'setName', { value: setName })
 }
 
-function defineIdMethods(field, data) {
+function setIdMethods(field, data) {
   function getter() {
     data.id = true
     return field
@@ -92,12 +92,16 @@ function defineIdMethods(field, data) {
     return field
   }
 
-  Object.defineProperty(field, 'id', { get: getter })
+  // we can put "id" field property only on primitive types
+  if (field.getType().__isPrimitiveType__) {
+    Object.defineProperty(field, 'id', { get: getter })
+    Object.defineProperty(field, 'setId', { value: setId })
+  }
+
   Object.defineProperty(field, 'getId', { value: getId })
-  Object.defineProperty(field, 'setId', { value: setId })
 }
 
-function defineCalcMethods(field, data) {
+function setCalcMethods(field, data) {
   function getCalc() {
     return data.calc
   }
@@ -119,7 +123,7 @@ function defineCalcMethods(field, data) {
   Object.defineProperty(field, 'calc', { value: calc })
 }
 
-function defineValidateMethods(field, data) {
+function setValidateMethods(field, data) {
   function getValidators() {
     return data.validators
   }

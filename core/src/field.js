@@ -66,7 +66,7 @@ function setNameMethods(field, data) {
       throw new Error(`Illegal field name: ${name}`)
     }
 
-    if (data.name != null && data.name != name) {
+    if (data.name != null && data.name !== name) {
       throw new Error('Field name is already defined')
     }
 

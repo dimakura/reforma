@@ -2,8 +2,8 @@ import { createField } from './field'
 
 export const primitiveTypes = ['integer', 'float', 'string', 'bool', 'datetime']
 export const buildInTypes = primitiveTypes.concat(['array', 'map'])
-
 const typeRegistry = {}
+const userDefinedTypeRegex = /^([A-Z][a-z0-9_]*\.?)+$/
 
 export function createPrimitiveType(name) {
   if (primitiveTypes.indexOf(name) === -1) {
@@ -74,9 +74,14 @@ export function createMapType(keyType, valueType) {
 export function createType(opts = {}) {
   const name = opts.name
   // const fields = opts.fields
+  // const serialMap = opts.serialMap
+
+  const isValidName = typeof name === 'string' && userDefinedTypeRegex.test(name)
+  if (!isValidName) {
+    throw new Error(`Invalid name for a user defined type: ${name}`)
+  }
 
   // TODO:
-  // 1. name should match pattern Namespace.Name
   // 2. assign fields
 
   const type = {}

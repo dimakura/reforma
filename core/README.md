@@ -51,7 +51,7 @@ const profileType = Reforma.createType({
 and add fields later:
 
 ```js
-profileType.addFileds({
+profileType.defineFields({
   id: Reforma.integer.id,
   firstName: Reforma.string,
   lastName: Reforma.string,
@@ -61,22 +61,22 @@ profileType.addFileds({
 })
 ```
 
-Please note, that you can use `addFileds` method only once for a type. It's illegal to add fields several times, and it will raise exception.
+You can call `defineFields` method only for user defined types without fields. If you call it on a user defined type with fields, it will raise exception.
 
-You can also build more complex types, using user defined types:
+You can also put user defined types as field types:
 
 ```js
 const orderType = Reforma.createType({
   name: 'Order'
 })
 
-orderType.addFileds({
+orderType.defineFields({
   profile: profileType,
   total: Reforma.float.greaterThan(0)
 })
 ```
 
-Because we can split type declaration into two parts (declaration and field definition), it's possible to have circular references of types.
+Because we can split type creation into two parts (declaration and field definition), it's possible to have circular references of user defined types.
 
 ## Instantiating Reforma types
 
@@ -200,12 +200,13 @@ profileInstance.serialize()
 // => {id: 1, first_name: 'Amerigo', last_name: 'Vespucci'}
 ```
 
-By default Reforma names fields in user defined types, using snake-case.
+By default serialized field names will be snake_cased.
 
-To deserialize a type, provide type and raw JSON value to the `Reforma.deserialize` function:
+Deserialization is equally simple:
+
 
 ```js
-Reforma.deserialize(profileType, {
+profileType.deserialize({
   id: 1,
   first_name: 'Amerigo',
   last_name: 'Vespucci'
@@ -221,13 +222,16 @@ const profileType = Reforma.createType({
   serialMap: {
     id: 'id',
     firstName: 'firstName',
-    lastName: 'last'
+    lastName: 'last',
+    fullName: true
   }
 })
 
 profileInstance.serialize()
-// => {id: 1, firstName: 'Amerigo', last: 'Vespucci'}
+// => {id: 1, firstName: 'Amerigo', last: 'Vespucci', full_name: 'Amerigo Vespucci'}
 ```
+
+By default calculated fields are not serialized, but as the example above shows, by putting them into `serialMap` we can get calculated fields in resulting JSON.
 
 ## Data sources
 

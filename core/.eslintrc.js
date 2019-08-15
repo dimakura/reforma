@@ -2,8 +2,9 @@ module.exports = {
   env: {
     'jest/globals': true
   },
+  parser: 'babel-eslint',
   extends: 'standard',
-  plugins: ['jest'],
+  plugins: ['jest', 'babel'],
   rules: {
     'space-before-function-paren': ['error', {
       anonymous: 'always',
@@ -14,6 +15,10 @@ module.exports = {
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
-    'jest/valid-expect': 'error'
+    'jest/valid-expect': 'error',
+    // use babel/no-unused-expressions which includes do expressions
+    // https://github.com/babel/eslint-plugin-babel/pull/131
+    'babel/no-unused-expressions': 'error',
+    'no-unused-expressions': 'off'
   }
 }

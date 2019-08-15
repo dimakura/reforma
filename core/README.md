@@ -200,12 +200,13 @@ profileInstance.serialize()
 // => {id: 1, first_name: 'Amerigo', last_name: 'Vespucci'}
 ```
 
-By default Reforma names fields in user defined types, using snake-case.
+By default serialized field names will be snake_cased.
 
-To deserialize a type, provide type and raw JSON value to the `Reforma.deserialize` function:
+Deserialization is equally simple:
+
 
 ```js
-Reforma.deserialize(profileType, {
+profileType.deserialize({
   id: 1,
   first_name: 'Amerigo',
   last_name: 'Vespucci'
@@ -221,13 +222,16 @@ const profileType = Reforma.createType({
   serialMap: {
     id: 'id',
     firstName: 'firstName',
-    lastName: 'last'
+    lastName: 'last',
+    fullName: true
   }
 })
 
 profileInstance.serialize()
-// => {id: 1, firstName: 'Amerigo', last: 'Vespucci'}
+// => {id: 1, firstName: 'Amerigo', last: 'Vespucci', full_name: 'Amerigo Vespucci'}
 ```
+
+By default calculated fields are not serialized, but as the example above shows, by putting them into `serialMap` we can get calculated fields in resulting JSON.
 
 ## Data sources
 

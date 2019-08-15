@@ -1,9 +1,9 @@
 import { createField } from './field'
 
-export const primitiveTypes = ['integer', 'float', 'string', 'bool', 'datetime']
-export const buildInTypes = primitiveTypes.concat(['array', 'map'])
-const typeRegistry = {}
 const userDefinedTypeRegex = /^([A-Z][a-z0-9_]*\.?)+$/
+let typeRegistry = {}
+
+export const primitiveTypes = ['integer', 'float', 'string', 'bool', 'datetime']
 
 export function createPrimitiveType(name) {
   if (primitiveTypes.indexOf(name) === -1) {
@@ -73,26 +73,41 @@ export function createMapType(keyType, valueType) {
 
 export function createType(opts = {}) {
   const name = opts.name
-  // const fields = opts.fields
-  // const serialMap = opts.serialMap
-
+  const fields = opts.fields
+  // TODO: const serialMap = opts.serialMap
   const isValidName = typeof name === 'string' && userDefinedTypeRegex.test(name)
+  const typeAlreadyDefined = name in typeRegistry
+  const areValidFields = fields == null || typeof fields === 'object'
+
   if (!isValidName) {
     throw new Error(`Invalid name for a user defined type: ${name}`)
   }
 
-  // TODO:
-  // 2. assign fields
+  if (typeAlreadyDefined) {
+    throw new Error(`Type was already defined: ${name}`)
+  }
+
+  if (!areValidFields) {
+    throw new Error(`Invalid fields definition: ${fields}`)
+  }
 
   const type = {}
+
   setTypeName(type, name)
   setTypeness(type, false, false, true)
   setCalcMethod(type)
   setValidateMethod(type)
-  // 3. add defineFields method
-  // setDefineFieldsMethod(type)
+  setDefineFieldsMethod(type)
+
+  if (fields != null) {
+    type.defineFields(fields)
+  }
 
   return type
+}
+
+export function __cleanupTypes__() {
+  typeRegistry = {}
 }
 
 // -- PRIVATE
@@ -118,6 +133,54 @@ function setValueType(type, baseType) {
 
 function setKeyType(type, keyType) {
   Object.defineProperty(type, 'keyType', { value: keyType })
+}
+
+function setDefineFieldsMethod(type) {
+  let fields = null
+
+  function getFields() {
+    return fields
+  }
+
+  function defineFields(newFields) {
+    if (fields != null) {
+      throw new Error('You cannot redefine fields')
+    }
+
+    const names = Object.getOwnPropertyNames(newFields)
+    if (names.length === 0) {
+      throw new Error('Please provide at least one field')
+    }
+
+    const extractedFields = {}
+    for (let i = 0; i < names.length; i++) {
+      const name = names[i]
+      const data = newFields[name]
+
+      const field = do {
+        if (data.__isType__) {
+          const field = createField(data)
+          field.setName(name)
+          field
+        } else if (data.__isField__) {
+          data.setName(name)
+          data
+        } else {
+          throw new Error(`Wrong field descriptor for ${name}: ${data}`)
+        }
+      }
+
+      Object.defineProperty(extractedFields, name, {
+        value: field,
+        enumerable: true
+      })
+    }
+
+    fields = extractedFields
+  }
+
+  Object.defineProperty(type, 'defineFields', { value: defineFields })
+  Object.defineProperty(type, 'getFields', { value: getFields })
 }
 
 function setIdGetter(type) {

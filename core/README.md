@@ -80,39 +80,23 @@ Because we can split type creation into two parts (declaration and field definit
 
 ## Instantiating Reforma types
 
-Every Reforma type can be instantiated. You might occasionally interact with Reforma instances, so it makes sense to know them closer.
+Every Reforma type can be instantiated using `create` method defined on the type itself.
 
 Built-in Reforma types are a good point to start:
 
 ```js
-const integerInstance = Reforma.integer.create(1)
-integerInstance.valueOf()
+Reforma.integer.create(1)
 // => 1
 
-integerInstance.instanceOf(Reforma.integer)
-// => true
-
-integerInstance.isPrimitiveType
-// => true
-
-integerInstance.isUserDefinedType
-// => false
-
-integerInstance.setValue('2')
-integerInstance.valueOf()
+Reforma.integer.create('2')
 // => 2
 
-integerInstance.setValue(null)
-integerInstance.valueOf()
+Reforma.integer.create({value: 1})
+// reforma: 
 // => null
-
-integerInstance.setValue({value: 1})
-// => Uncaught Error: type mismatch
 ```
 
-Instance of a built-in type is an object. You can get to its value using `.valueOf()` method. Instances of built-in types are mutable, and you can update their values using `setValue`.
-
-User defined types also provide `create` method, for instantiation:
+User defined types also provide `create` method:
 
 ```js
 const profileInstance = profileType.create({
@@ -123,12 +107,6 @@ const profileInstance = profileType.create({
 
 profileInstance.id
 // => 1
-
-profileInstance.isPrimitiveType
-// => false
-
-profileInstance.isUserDefinedType
-// => true
 
 profileInstance.firstName
 // => "Amerigo"
@@ -143,8 +121,6 @@ profileInstance.firstName = 'Christopher'
 profileInstance.fullName
 // => "Christopher Vespucci"
 ```
-
-Instance of a user defined type is a JavaScript object. Please note, that properties of user-defined types produce pure primitive values (e.g. `profile.firstName` returns pure `String`), unlike built-in types, which come wrapped into an object.
 
 ## Validation
 

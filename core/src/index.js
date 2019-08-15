@@ -3,14 +3,14 @@
 // -[X] map type + specs
 // -[X] linter
 // -[X] setup CI
-// -[-] field interface
-// -[ ] calc+id+validate into fields
-// -[ ] user-defined types + specs
+// -[X] field interface
+// -[X] move calc+id+validate into fields
+// -[X] user-defined types + specs
 // -[ ] built-in types instantiation + specs
 // -[ ] user-defined types instantiation + specs
 // -[ ] validations + specs
 // -[ ] built-in validations + specs
-// -[ ] built-in types serialization + specs
+// -[ ] built-in types serialization + specs 
 // -[ ] user-defined types serialization + specs
 
 import {

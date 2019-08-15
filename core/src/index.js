@@ -10,7 +10,7 @@
 // -[ ] user-defined types instantiation + specs
 // -[ ] validations + specs
 // -[ ] built-in validations + specs
-// -[ ] built-in types serialization + specs 
+// -[ ] built-in types serialization + specs
 // -[ ] user-defined types serialization + specs
 
 import {

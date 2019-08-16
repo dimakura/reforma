@@ -1,8 +1,10 @@
 var debug = require('debug')('reforma')
 
-export function instantinateType(type, value) {
+export function instantiateType(type, value) {
   return do {
-    if (type.__isPrimitiveType__) {
+    if (value == null) {
+      null
+    } else if (type.__isPrimitiveType__) {
       if (type.name === 'integer') {
         createInteger(value)
       } else if (type.name === 'float') {
@@ -29,54 +31,38 @@ export function instantinateType(type, value) {
 }
 
 function createInteger(value) {
-  return do {
-    if (value == null) {
-      null
-    } else {
-      const parsedValue = parseInt(value, 10)
+  const parsedValue = parseInt(value, 10)
 
-      if (Number.isFinite(parsedValue)) {
-        parsedValue
-      } else {
-        debug(`[WARNING] Not a finite integer: ${value}`)
-        null
-      }
+  return do {
+    if (Number.isFinite(parsedValue)) {
+      parsedValue
+    } else {
+      debug(`[WARNING] Not a finite integer: ${value}`)
+      null
     }
   }
 }
 
 function createFloat(value) {
-  return do {
-    if (value == null) {
-      null
-    } else {
-      const parsedValue = parseFloat()
+  const parsedValue = parseFloat(value)
 
-      if (Number.isFinite(parsedValue)) {
-        parsedValue
-      } else {
-        debug(`[WARNING] Not a finite float: ${value}`)
-        null
-      }
+  return do {
+    if (Number.isFinite(parsedValue)) {
+      parsedValue
+    } else {
+      debug(`[WARNING] Not a finite float: ${value}`)
+      null
     }
   }
 }
 
 function createString(value) {
-  return do {
-    if (value == null) {
-      null
-    } else {
-      value.toString()
-    }
-  }
+  return value.toString()
 }
 
 function createBool(value) {
   return do {
-    if (value == null) {
-      null
-    } else if (value === true || value === 1) {
+    if (value === true || value === 1) {
       true
     } else if (value === false || value === 0) {
       false
@@ -89,9 +75,7 @@ function createBool(value) {
 
 function createDatetime(value) {
   return do {
-    if (value == null) {
-      null
-    } else if (value instanceof Date) {
+    if (value instanceof Date) {
       value
     } else if (typeof value === 'string') {
       const parsedValue = Date.parse(value)
@@ -110,11 +94,29 @@ function createDatetime(value) {
 }
 
 function createArray(type, value) {
-  throw new Error('Not yet implemented')
+  return do {
+    if (Array.isArray(value)) {
+      value.map((v) => instantiateType(type.valueType, v))
+    } else {
+      [instantiateType(type.valueType, value)]
+    }
+  }
 }
 
 function createMap(type, value) {
-  throw new Error('Not yet implemented')
+  if (typeof value !== 'object') {
+    debug(`[WARNING] Not a proper map type: ${value}`)
+    return null
+  }
+
+  const inst = {}
+  const names = Object.getOwnPropertyNames(value)
+  for (let i = 0; i < names.length; i++) {
+    const key = names[i]
+    const val = value[key]
+    inst[instantiateType(type.keyType, key)] = instantiateType(type.valueType, val)
+  }
+  return inst
 }
 
 function createUserDefinedType(type, value) {

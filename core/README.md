@@ -92,7 +92,6 @@ Reforma.integer.create('2')
 // => 2
 
 Reforma.integer.create({value: 1})
-// reforma: 
 // => null
 ```
 
@@ -123,6 +122,8 @@ profileInstance.fullName
 ```
 
 ## Validation
+
+TODO: this should be revisited
 
 Reforma provides you with built-in validators:
 

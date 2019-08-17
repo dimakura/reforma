@@ -123,7 +123,7 @@ profileInstance.fullName
 
 ## Validation
 
-Reforma provides you with built-in validators:
+Reforma provides built-in validators:
 
 ```js
 const integerField = Reforma.integer.presence().greaterThan(0, { allowBlank: true })
@@ -144,17 +144,55 @@ There are more build-in validators:
 - `.lessOrEqualTo(number)`
 - `.inclusion(array)`
 
-You can also define your custom validators:
+Programmer can also specify custom validators:
 
 ```js
-const anotherField = Reforma.integer.validate((record, value) => {
+const anotherField = Reforma.integer.validate((field, value) => {
   if (value === 0) {
-    record.addError('Zero is not acceptable!')
+    field.addError('Zero is not acceptable!')
   }
 })
 
 anotherField.validate(0)
 // => ['Zero is not acceptable!']
+```
+
+Field validations are aggregated in the `validate` method of an instance of the user defined type:
+
+```js
+const profileType = Reforma.createType({
+  name: 'Profile',
+  fields: {
+    id: Reforma.integer.id,
+    firstName: Reforma.string.presence(),
+    lastName: Reforma.string.presence()
+  }
+})
+
+const profile = profileType.create({ id: 1 })
+
+profile.validate()
+// {
+//   firstName: ['can\'t be empty'],
+//   lastName: ['can\'t be empty']
+// }
+```
+
+You can also define type-wide validation for user defined type. Type-wide validators agregate under `__base__` key:
+
+```js
+profileType.validate((model) => {
+  if (model.firstName === model.lastName) {
+    model.addError('First and last names should be different')
+  }
+})
+
+profile.validate()
+// {
+//   __base__: ['First and last names should be different'],
+//   firstName: ['can\'t be empty'],
+//   lastName: ['can\'t be empty']
+// }
 ```
 
 ## Serialization

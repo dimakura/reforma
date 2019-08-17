@@ -1,4 +1,5 @@
 import { createField } from './field'
+import { instantiateType } from './instance'
 
 const userDefinedTypeRegex = /^([A-Z][a-z0-9_]*\.?)+$/
 let typeRegistry = {}
@@ -20,6 +21,7 @@ export function createPrimitiveType(name) {
   setIdGetter(type)
   setCalcMethod(type)
   setValidateMethod(type)
+  setCreateMethod(type)
 
   return type
 }
@@ -41,6 +43,7 @@ export function createArrayType(valueType) {
   setValueType(type, valueType)
   setCalcMethod(type)
   setValidateMethod(type)
+  setCreateMethod(type)
 
   return type
 }
@@ -67,6 +70,7 @@ export function createMapType(keyType, valueType) {
   setValueType(type, valueType)
   setCalcMethod(type)
   setValidateMethod(type)
+  setCreateMethod(type)
 
   return type
 }
@@ -98,6 +102,7 @@ export function createType(opts = {}) {
   setCalcMethod(type)
   setValidateMethod(type)
   setDefineFieldsMethod(type)
+  setCreateMethod(type)
 
   if (fields != null) {
     type.defineFields(fields)
@@ -205,4 +210,12 @@ function setValidateMethod(type) {
   }
 
   Object.defineProperty(type, 'validate', { value: validateMethod })
+}
+
+function setCreateMethod(type) {
+  Object.defineProperty(type, 'create', {
+    value: function (value) {
+      return instantiateType(type, value)
+    }
+  })
 }

@@ -5,6 +5,8 @@
 // - `getName(): String`, returns field name
 // - `setName(String)`, sets field name (only once!)
 //
+// - `getType(): Type`, returns field type
+//
 // - `id: Field`, sets field `id` property to `true`
 // - `getId(): boolean`, returns field `id` property
 // - `setId(boolean): Field`, sets field `id` property
@@ -106,6 +108,10 @@ function setCalcMethods(field, data) {
     return data.calc
   }
 
+  function isCalculable() {
+    return data.calc != null
+  }
+
   function calc(calcFn) {
     if (typeof calcFn !== 'function') {
       throw new Error('Specify function in `calc`')
@@ -121,6 +127,7 @@ function setCalcMethods(field, data) {
 
   Object.defineProperty(field, 'getCalc', { value: getCalc })
   Object.defineProperty(field, 'calc', { value: calc })
+  Object.defineProperty(field, 'isCalculable', { get: isCalculable })
 }
 
 function setValidateMethods(field, data) {

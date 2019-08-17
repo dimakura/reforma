@@ -6,7 +6,7 @@ In theory Reforma can also be used in end-user facing applications, where data i
 
 ## About the core module
 
-The core module (`@reforma/core`) defines the basic abstractions. The core module is not bound to any UI library (except React ***???***). Reforma provides an official UI implementation `@reforma/blueprint`, which is based on [Blueprint](https://blueprintjs.com) widget library. But Reforma can be easily implemented for other widget libraries as well.
+The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides an official UI implementation `@reforma/blueprint`, which is based on [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
 
 ## User defined types
 
@@ -48,7 +48,7 @@ const profileType = Reforma.createType({
 })
 ```
 
-and add fields later:
+and define fields later:
 
 ```js
 profileType.defineFields({
@@ -61,7 +61,7 @@ profileType.defineFields({
 })
 ```
 
-You can call `defineFields` method only for user defined types without fields. If you call it on a user defined type with fields, it will raise exception.
+You can use `defineFields` only once for a user defined type without fields.
 
 You can also put user defined types as field types:
 
@@ -123,19 +123,16 @@ profileInstance.fullName
 
 ## Validation
 
-TODO: this should be revisited
-
 Reforma provides you with built-in validators:
 
 ```js
-const intType = Reforma.integer.presence().greaterThan(0)
-const intInstance = intType.create(null)
+const integerField = Reforma.integer.presence().greaterThan(0, { allowBlank: true })
 
-intInstance.isValid
-// => false
+integerField.validate(null)
+// => ['can\'t be empty']
 
-intInstance.errors
-// => ['you cannot leave this empty', 'should be greater than 0']
+integerField.validate(0)
+// => ['should be greater than 0']
 ```
 
 There are more build-in validators:
@@ -150,18 +147,13 @@ There are more build-in validators:
 You can also define your custom validators:
 
 ```js
-const intType = Reforma.integer.validate((record, value) => {
+const anotherField = Reforma.integer.validate((record, value) => {
   if (value === 0) {
     record.addError('Zero is not acceptable!')
   }
 })
 
-const intInstance = intType.create(0)
-
-intInstance.isValid
-// => false
-
-intInstance.errors
+anotherField.validate(0)
 // => ['Zero is not acceptable!']
 ```
 
@@ -170,10 +162,10 @@ intInstance.errors
 At this stage Reforma supports only JSON serialization/deserialization.
 
 ```js
-intInstance.serialize()
+Reforma.integer.serialize(1)
 // => 1
 
-profileInstance.serialize()
+profileType.serialize({id: 1, firstName: 'Amerigo', lastName: 'Vespucci'})
 // => {id: 1, first_name: 'Amerigo', last_name: 'Vespucci'}
 ```
 
@@ -181,13 +173,13 @@ By default serialized field names will be snake_cased.
 
 Deserialization is equally simple:
 
-
 ```js
 profileType.deserialize({
   id: 1,
   first_name: 'Amerigo',
   last_name: 'Vespucci'
 })
+// => {id: 1, firstName: 'Amerigo', lastName: 'Vespucci'}
 ```
 
 You can also alter the way how serialization/deserialization works for user defined types using `serialMap` property:
@@ -204,11 +196,11 @@ const profileType = Reforma.createType({
   }
 })
 
-profileInstance.serialize()
+profileType.serialize({id: 1, firstName: 'Amerigo', lastName: 'Vespucci'})
 // => {id: 1, firstName: 'Amerigo', last: 'Vespucci', full_name: 'Amerigo Vespucci'}
 ```
 
-By default calculated fields are not serialized, but as the example above shows, by putting them into `serialMap` we can get calculated fields in resulting JSON.
+By default calculated fields are not serialized. But as the example above shows, by putting them into `serialMap` we can get calculated fields in resulting JSON.
 
 ## Data sources
 
@@ -289,6 +281,8 @@ datasource.isFetched
 // => true/false
 ```
 
+TODO: listeners
+
 ### HTTP methods
 
 Besides operations described above, every datasource exposes methods related to HTTP:
@@ -300,7 +294,7 @@ datasource.httpPut(url, data)
 datasource.httpDelete(url, params)
 ```
 
-This methods might be usefull when defining actions on datasources.
+These methods might be useful when defining actions on datasources.
 
 ### Actions
 

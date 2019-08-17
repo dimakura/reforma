@@ -5,13 +5,13 @@
 // -[X] setup CI
 // -[X] field interface
 // -[X] move calc+id+validate into fields
-// -[X] user-defined types + specs
-// -[ ] built-in types instantiation + specs
-// -[ ] user-defined types instantiation + specs
-// -[ ] validations + specs
-// -[ ] built-in validations + specs
-// -[ ] built-in types serialization + specs
-// -[ ] user-defined types serialization + specs
+// -[X] user-defined types
+// -[X] built-in types instantiation
+// -[X] user-defined types instantiation
+// -[ ] built-in type validations
+// -[ ] user defined type validations
+// -[ ] built-in types serialization
+// -[ ] user-defined types serialization
 
 import {
   primitiveTypes,

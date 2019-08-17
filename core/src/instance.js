@@ -1,4 +1,5 @@
-var debug = require('debug')('reforma')
+import snakeCase from 'lodash.snakecase'
+const debug = require('debug')('reforma')
 
 export function instantiateType(type, value) {
   return do {
@@ -119,6 +120,69 @@ function createMap(type, value) {
   return inst
 }
 
-function createUserDefinedType(type, value) {
-  throw new Error('Not yet implemented')
+function createUserDefinedType(type, data) {
+  const instance = {}
+  const fields = type.getFields()
+  const fieldNames = Object.getOwnPropertyNames(fields)
+
+  Object.defineProperty(instance, '__data__', { value: {} })
+  Object.defineProperty(instance, '__type__', { value: type })
+
+  function definePlainProp(field) {
+    const name = field.getName()
+    const type = field.getType()
+
+    Object.defineProperty(instance, name, {
+      get: function () {
+        return instance.__data__[name]
+      },
+
+      set: function (newValue) {
+        if (type.__isUserDefinedType__) {
+          newValue = do {
+            if (newValue == null) {
+              null
+            } else if (newValue.__type__ === type) {
+              newValue
+            } else {
+              instantiateType(type, newValue)
+            }
+          }
+        } else {
+          newValue = instantiateType(type, newValue)
+        }
+
+        instance.__data__[name] = newValue
+      }
+    })
+  }
+
+  function defineCalcProp(field) {
+    const name = field.getName()
+    const calcFn = field.getCalc()
+
+    Object.defineProperty(instance, name, {
+      get: function () {
+        return calcFn(instance)
+      }
+    })
+  }
+
+  for (let i = 0; i < fieldNames.length; i++) {
+    const field = fields[fieldNames[i]]
+
+    if (field.isCalculable) {
+      defineCalcProp(field)
+    } else {
+      definePlainProp(field)
+
+      const name = field.getName()
+      instance.__data__[name] = instantiateType(
+        field.getType(),
+        data[snakeCase(name)]
+      )
+    }
+  }
+
+  return instance
 }

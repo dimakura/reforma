@@ -59,4 +59,37 @@ describe('instantiateType', () => {
     expect(instantiateType(type, { a: 1, b: '2', 3: '300' })).toEqual({ a: 1, b: 2, 3: 300 })
     expect(instantiateType(type, 10)).toBeNull()
   })
+
+  test('user defined type', () => {
+    const type = Reforma.createType({
+      name: 'Profie',
+      fields: {
+        id: Reforma.integer,
+        firstName: Reforma.string,
+        lastName: Reforma.string,
+        fullName: Reforma.string.calc((self) => `${self.firstName} ${self.lastName}`)
+      }
+    })
+
+    const instance = instantiateType(type, {
+      id: '1',
+      first_name: 'Henry',
+      last_name: 'Ford'
+    })
+
+    expect(instance.__type__).toBe(type)
+
+    expect(instance.id).toBe(1)
+    expect(instance.firstName).toBe('Henry')
+    expect(instance.lastName).toBe('Ford')
+    expect(instance.fullName).toBe('Henry Ford')
+
+    instance.id = '100'
+    instance.firstName = 'Wernher'
+    instance.lastName = 'von Braun'
+    expect(instance.id).toBe(100)
+    expect(instance.firstName).toBe('Wernher')
+    expect(instance.lastName).toBe('von Braun')
+    expect(instance.fullName).toBe('Wernher von Braun')
+  })
 })

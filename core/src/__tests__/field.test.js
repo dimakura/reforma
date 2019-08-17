@@ -68,12 +68,14 @@ describe('Field', () => {
   function canCalc(field) {
     expect(() => field.calc('something')).toThrow('Specify function in `calc`')
     expect(field.getCalc()).toBeNull()
+    expect(field.isCalculable).toBe(false)
 
     const fn = jest.fn()
 
     // `.calc` can be chained
     expect(field.calc(fn)).toBe(field)
     expect(field.getCalc()).toBe(fn)
+    expect(field.isCalculable).toBe(true)
 
     // subsequent `.calc` calls are banned
     expect(() => field.calc(jest.fn())).toThrow('Only single assignment permitted in `calc`')

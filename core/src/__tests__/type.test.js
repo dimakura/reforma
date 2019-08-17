@@ -45,22 +45,32 @@ describe('Built-in types', () => {
       () => Reforma.mapOf(Reforma.string, 'anything')
     ).toThrow('Map\'s value type is not a valid Reforma type: anything')
   })
+
+  test('instantiation', () => {
+    expect(Reforma.integer.create('1.5')).toBe(1)
+    expect(Reforma.float.create('1.5')).toBe(1.5)
+    expect(Reforma.string.create([1, 2, 3])).toBe('1,2,3')
+    expect(Reforma.bool.create(1)).toBe(true)
+    expect(Reforma.datetime.create('2019-08-12 20:00:00')).toBeInstanceOf(Date)
+    expect(Reforma.arrayOf(Reforma.integer).create(['1', '2', '3'])).toEqual([1, 2, 3])
+    expect(Reforma.mapOf(Reforma.string, Reforma.integer).create({ a: '1', b: '2', c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
+  })
 })
 
 describe('User defined types', () => {
-  test('normal scenario', () => {
-    const calc = jest.fn()
-    const profileType = Reforma.createType({
-      name: 'Profile',
-      fields: {
-        id: Reforma.integer.id,
-        email: Reforma.string,
-        firstName: Reforma.string,
-        lastName: Reforma.string,
-        fullName: Reforma.string.calc(calc)
-      }
-    })
+  const calc = jest.fn()
+  const profileType = Reforma.createType({
+    name: 'Profile',
+    fields: {
+      id: Reforma.integer.id,
+      email: Reforma.string,
+      firstName: Reforma.string,
+      lastName: Reforma.string,
+      fullName: Reforma.string.calc(calc)
+    }
+  })
 
+  test('normal scenario', () => {
     isUserDefinedType(profileType, 'Profile')
     hasNoIdGetter(profileType)
     isCalculable(profileType)
@@ -141,6 +151,19 @@ describe('User defined types', () => {
         })
       }).toThrow('Wrong field descriptor for id: id-field')
     })
+  })
+
+  test('instantiation', () => {
+    const instance = profileType.create({
+      id: '1',
+      first_name: 'Henry',
+      last_name: 'Ford'
+    })
+
+    expect(instance.__type__).toBe(profileType)
+    expect(instance.id).toBe(1)
+    expect(instance.firstName).toBe('Henry')
+    expect(instance.lastName).toBe('Ford')
   })
 })
 

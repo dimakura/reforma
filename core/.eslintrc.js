@@ -19,6 +19,7 @@ module.exports = {
     // use babel/no-unused-expressions which includes do expressions
     // https://github.com/babel/eslint-plugin-babel/pull/131
     'babel/no-unused-expressions': 'error',
-    'no-unused-expressions': 'off'
+    'no-unused-expressions': 'off',
+    'no-new': 'off'
   }
 }

@@ -30,7 +30,9 @@ export function validateField(field, value) {
 }
 
 export function validateUserDefinedType(type, value) {
-  // TODO:
+  // TODO: before continuing here, fix FIXME in type.js
+
+  return null
 }
 
 // -- PRIVATE

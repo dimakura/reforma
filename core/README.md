@@ -157,7 +157,7 @@ anotherField.getErrors(0)
 // => ['Zero is not acceptable!']
 ```
 
-Field validations are aggregated in the `validate` method of an instance of the user defined type:
+Field validations are aggregated in the `getErrors` method of an instance of the user defined type:
 
 ```js
 const profileType = Reforma.createType({

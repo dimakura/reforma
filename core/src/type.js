@@ -99,10 +99,15 @@ export function createType(opts = {}) {
 
   setTypeName(type, name)
   setTypeness(type, false, false, true)
-  setCalcMethod(type)
-  setValidateMethod(type)
   setDefineFieldsMethod(type)
   setCreateMethod(type)
+
+  // FIXME:
+  // 1. in case of a user defined type we should not use plain calc/validate methods
+  // 2. we first need to convert type into field explicitly (using `toField` method)
+  // 3. we need to support type level validations for user defined types
+  setCalcMethod(type)
+  setValidateMethod(type)
 
   if (fields != null) {
     type.defineFields(fields)

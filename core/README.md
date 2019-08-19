@@ -128,10 +128,10 @@ Reforma provides built-in validators:
 ```js
 const integerField = Reforma.integer.presence().greaterThan(0, { allowBlank: true })
 
-integerField.validate(null)
+integerField.getErrors(null)
 // => ['can\'t be empty']
 
-integerField.validate(0)
+integerField.getErrors(0)
 // => ['should be greater than 0']
 ```
 
@@ -147,13 +147,13 @@ There are more build-in validators:
 Programmer can also specify custom validators:
 
 ```js
-const anotherField = Reforma.integer.validate((field, value) => {
+const anotherField = Reforma.integer.validate((value, field) => {
   if (value === 0) {
-    field.addError('Zero is not acceptable!')
+    return 'Zero is not acceptable!'
   }
 })
 
-anotherField.validate(0)
+anotherField.getErrors(0)
 // => ['Zero is not acceptable!']
 ```
 
@@ -171,28 +171,37 @@ const profileType = Reforma.createType({
 
 const profile = profileType.create({ id: 1 })
 
-profile.validate()
-// {
+profile.getErrors()
+// => {
 //   firstName: ['can\'t be empty'],
 //   lastName: ['can\'t be empty']
 // }
 ```
 
-You can also define type-wide validation for user defined type. Type-wide validators agregate under `__base__` key:
+You can also define type-wide validation for user defined type. Type-wide validators aggregate under `__base__` key:
 
 ```js
-profileType.validate((model) => {
-  if (model.firstName === model.lastName) {
-    model.addError('First and last names should be different')
+profileType.validate((value, type) => {
+  if (value.firstName === value.lastName) {
+    return 'First and last names should be different'
   }
 })
 
-profile.validate()
-// {
+profile.getErrors()
+// => {
 //   __base__: ['First and last names should be different'],
 //   firstName: ['can\'t be empty'],
 //   lastName: ['can\'t be empty']
 // }
+```
+
+Note: in case you need to return several errors from a validation function, return them as an array.
+
+When there is a type mismatch between validated field and the value provided, a special ("type mismatch") object is returned from the validation:
+
+```js
+integerField.validate('x').isTypeMismatch
+// => true
 ```
 
 ## Serialization

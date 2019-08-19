@@ -52,6 +52,7 @@ describe('instantiateType', () => {
     expect(instantiateType(type, [1, 2, 3])).toEqual([1, 2, 3])
     expect(instantiateType(type, ['1', '2', '3'])).toEqual([1, 2, 3])
     expect(instantiateType(type, '10')).toEqual([10])
+    expect(instantiateType(type, 'x')).toBeNull()
   })
 
   test('map', () => {

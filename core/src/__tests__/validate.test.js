@@ -24,3 +24,64 @@ describe('validateField', () => {
     expect(validateField(field, -1)).toEqual(['Please provide positive number'])
   })
 })
+
+describe('validate user definde type', () => {
+  const orderType = Reforma.createType({
+    name: 'Order',
+    fields: {
+      id: Reforma.integer.id,
+      price: Reforma.float.validate((value) => {
+        return do {
+          if (value < 0) {
+            'Please provide positive price'
+          }
+        }
+      }),
+      quantity: Reforma.integer.validate((value) => {
+        return do {
+          if (value < 0) {
+            'Please provide positive quantity'
+          }
+        }
+      })
+    }
+  }).validate((model) => {
+    if (model != null) {
+      const total = model.price * model.quantity
+
+      if (total < 0) {
+        return 'Total should be greater than 0'
+      }
+    }
+  })
+
+  const instance = orderType.create({
+    id: 1,
+    price: 10,
+    quantity: 1
+  })
+
+  const instance2 = orderType.create({
+    id: 2,
+    price: -10,
+    quantity: 1
+  })
+
+  const instance3 = orderType.create({
+    id: 3,
+    price: -10,
+    quantity: -1
+  })
+
+  expect(validateUserDefinedType(orderType, null)).toBeNull()
+  expect(validateUserDefinedType(orderType, 0).isTypeMismatch).toBe(true)
+  expect(validateUserDefinedType(orderType, instance)).toBeNull()
+  expect(validateUserDefinedType(orderType, instance2)).toEqual({
+    __base__: ['Total should be greater than 0'],
+    price: ['Please provide positive price']
+  })
+  expect(validateUserDefinedType(orderType, instance3)).toEqual({
+    price: ['Please provide positive price'],
+    quantity: ['Please provide positive quantity']
+  })
+})

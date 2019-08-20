@@ -7,6 +7,7 @@ describe('Built-in types', () => {
 
       expect(type).toBe(Reforma[typeName])
       isPrimitiveType(type, typeName)
+      hasToFieldConverter(type)
       hasIdGetter(type)
       isCalculable(type)
       isValidable(type)
@@ -19,6 +20,7 @@ describe('Built-in types', () => {
     expect(type).toBe(Reforma.arrayOf(Reforma.integer))
     expect(type).not.toBe(Reforma.arrayOf(Reforma.string))
     isArrayType(type)
+    hasToFieldConverter(type)
     hasNoIdGetter(type)
     isCalculable(type)
     isValidable(type)
@@ -34,6 +36,7 @@ describe('Built-in types', () => {
     expect(type).toBe(Reforma.mapOf(Reforma.string, Reforma.integer))
     expect(type).not.toBe(Reforma.mapOf(Reforma.string, Reforma.string))
     isMapType(type, 'map')
+    hasToFieldConverter(type)
     hasNoIdGetter(type)
     isCalculable(type)
     isValidable(type)
@@ -58,22 +61,23 @@ describe('Built-in types', () => {
 })
 
 describe('User defined types', () => {
-  const calc = jest.fn()
-  const profileType = Reforma.createType({
-    name: 'Profile',
-    fields: {
-      id: Reforma.integer.id,
-      email: Reforma.string,
-      firstName: Reforma.string,
-      lastName: Reforma.string,
-      fullName: Reforma.string.calc(calc)
-    }
-  })
-
   test('normal scenario', () => {
+    const calc = jest.fn()
+    const profileType = Reforma.createType({
+      name: 'Profile',
+      fields: {
+        id: Reforma.integer.id,
+        email: Reforma.string,
+        firstName: Reforma.string,
+        lastName: Reforma.string,
+        fullName: Reforma.string.calc(calc)
+      }
+    })
+
     isUserDefinedType(profileType, 'Profile')
+    hasToFieldConverter(profileType)
     hasNoIdGetter(profileType)
-    isCalculable(profileType)
+    isNotCalculable(profileType)
     isValidable(profileType)
     hasFieldOfNameAndType(profileType, 'id', Reforma.integer)
     hasFieldOfNameAndType(profileType, 'email', Reforma.string)
@@ -92,8 +96,9 @@ describe('User defined types', () => {
     })
 
     isUserDefinedType(profileType, 'Profile')
+    hasToFieldConverter(profileType)
     hasNoIdGetter(profileType)
-    isCalculable(profileType)
+    isNotCalculable(profileType)
     isValidable(profileType)
     expect(profileType.getFields()).toBeNull()
 
@@ -154,6 +159,15 @@ describe('User defined types', () => {
   })
 
   test('instantiation', () => {
+    const profileType = Reforma.createType({
+      name: 'Profile',
+      fields: {
+        id: Reforma.integer.id,
+        firstName: Reforma.string,
+        lastName: Reforma.string
+      }
+    })
+
     const instance = profileType.create({
       id: '1',
       first_name: 'Henry',
@@ -203,6 +217,12 @@ function isUserDefinedType(type, name) {
   expect(type.__isUserDefinedType__).toBe(true)
 }
 
+function hasToFieldConverter(type) {
+  const field = type.toField
+  expect(field.__isField__).toBe(true)
+  expect(field.getType()).toBe(type)
+}
+
 function hasIdGetter(type) {
   const field = type.id
   expect(field.__isField__).toBe(true)
@@ -228,12 +248,16 @@ function isCalculable(type) {
   ).toThrow('Only single assignment permitted in `calc`')
 }
 
+function isNotCalculable(type) {
+  expect('calc' in type).toBe(false)
+}
+
 function isValidable(type) {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const field = type.validate(fn1).validate(fn2)
 
-  expect(field.__isField__).toBe(true)
+  expect(field.__isField__ || field.__isUserDefinedType__).toBe(true)
   expect(field.getValidators()).toEqual([fn1, fn2])
 
   expect(

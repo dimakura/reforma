@@ -1,5 +1,6 @@
 import { createField } from './field'
 import { instantiateType } from './instance'
+import { setValidateMethods as setValidateMethodForUDT } from './validate'
 
 const userDefinedTypeRegex = /^([A-Z][a-z0-9_]*\.?)+$/
 let typeRegistry = {}
@@ -18,6 +19,7 @@ export function createPrimitiveType(name) {
   const type = {}
   setTypeName(type, name)
   setTypeness(type, false, false, false)
+  setToField(type)
   setIdGetter(type)
   setCalcMethod(type)
   setValidateMethod(type)
@@ -41,6 +43,7 @@ export function createArrayType(valueType) {
   setTypeName(type, name)
   setTypeness(type, true, false, false)
   setValueType(type, valueType)
+  setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
   setCreateMethod(type)
@@ -68,6 +71,7 @@ export function createMapType(keyType, valueType) {
   setTypeness(type, false, true, false)
   setKeyType(type, keyType)
   setValueType(type, valueType)
+  setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
   setCreateMethod(type)
@@ -75,6 +79,7 @@ export function createMapType(keyType, valueType) {
   return type
 }
 
+// Create user defined type.
 export function createType(opts = {}) {
   const name = opts.name
   const fields = opts.fields
@@ -96,18 +101,20 @@ export function createType(opts = {}) {
   }
 
   const type = {}
+  const privateData = {
+    validators: []
+  }
 
   setTypeName(type, name)
   setTypeness(type, false, false, true)
   setDefineFieldsMethod(type)
   setCreateMethod(type)
-
-  // FIXME:
-  // 1. in case of a user defined type we should not use plain calc/validate methods
-  // 2. we first need to convert type into field explicitly (using `toField` method)
-  // 3. we need to support type level validations for user defined types
-  setCalcMethod(type)
-  setValidateMethod(type)
+  setToField(type)
+  // User defined type is different from built-in type in few aspects:
+  // 1. We don't have `id`, or `calc` methods defined on it
+  // 2. We have `validate(fn)` method, which returns type itself.
+  // In case of a built-in type, field is returned instead.
+  setValidateMethodForUDT(type, privateData)
 
   if (fields != null) {
     type.defineFields(fields)
@@ -221,6 +228,14 @@ function setCreateMethod(type) {
   Object.defineProperty(type, 'create', {
     value: function (value) {
       return instantiateType(type, value)
+    }
+  })
+}
+
+function setToField(type) {
+  Object.defineProperty(type, 'toField', {
+    get: function () {
+      return createField(type)
     }
   })
 }

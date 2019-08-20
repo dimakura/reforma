@@ -17,6 +17,8 @@
 // - `validate(function): Field`, adds validation to the field
 // - `getValidators(): Array[function]`, returns field validators
 
+import { setValidateMethods } from './validate'
+
 const nameRegex = /^[a-z][a-z0-9_]*$/i
 
 export function createField(type) {
@@ -128,23 +130,4 @@ function setCalcMethods(field, data) {
   Object.defineProperty(field, 'getCalc', { value: getCalc })
   Object.defineProperty(field, 'calc', { value: calc })
   Object.defineProperty(field, 'isCalculable', { get: isCalculable })
-}
-
-function setValidateMethods(field, data) {
-  function getValidators() {
-    return data.validators
-  }
-
-  function valiate(validateFn) {
-    if (typeof validateFn !== 'function') {
-      throw new Error('Specify function in `validate`')
-    }
-
-    data.validators.push(validateFn)
-
-    return field
-  }
-
-  Object.defineProperty(field, 'getValidators', { value: getValidators })
-  Object.defineProperty(field, 'validate', { value: valiate })
 }

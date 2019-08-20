@@ -8,7 +8,7 @@ In theory Reforma can also be used in end-user facing applications, where data i
 
 The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides an official UI implementation `@reforma/blueprint`, which is based on [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
 
-## User defined types
+## Reforma types
 
 User defined types (UDT) are the basis of the Reforma.
 
@@ -77,6 +77,28 @@ orderType.defineFields({
 ```
 
 Because we can split type creation into two parts (declaration and field definition), it's possible to have circular references of user defined types.
+
+### Distinction from fields
+
+In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce single user defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, they are implicitly converted into "fields".
+
+```js
+Reforma.integer.__isType__
+// => true
+
+Reforma.integer.presence.__isField__
+// => true
+```
+
+User defined types cannot be converted to field implicitly. When needed, this conversion should be explicit using `toField` getter.
+
+```js
+profileType.__isType__
+// => true
+
+profileType.toField.__isField__
+// => true
+```
 
 ## Instantiating Reforma types
 

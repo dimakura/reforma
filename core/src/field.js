@@ -41,6 +41,10 @@ export function createField(type) {
   setCalcMethods(field, privateData)
   setValidateMethods(field, privateData)
 
+  // TODO: inclusion validators
+  // TODO: built-in validators
+  // TODO: built-in validators on built-in types
+
   return field
 }
 

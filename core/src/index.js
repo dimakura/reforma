@@ -9,7 +9,7 @@
 // -[X] built-in types instantiation
 // -[X] user-defined types instantiation
 // -[X] user defined type validations
-// -[-] built-in type validations
+// -[X] built-in validations
 // -[ ] built-in types serialization
 // -[ ] user-defined types serialization
 // -[ ] HTTP methods

@@ -270,6 +270,7 @@ function setBuiltInValidatorMethods(type) {
   }
 
   defineValidator('presence')
+  defineValidator('inclusion')
 }
 
 function setCreateMethod(type) {

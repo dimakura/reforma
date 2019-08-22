@@ -16,8 +16,10 @@
 //
 // - `validate(function): Field`, adds validation to the field
 // - `getValidators(): Array[function]`, returns field validators
+// - builtin validators: `presence`, `inclusion`, `greaterThan`, etc.
 
 import { setValidateMethods } from './validate'
+import inclusion from './validators/inclusion'
 import presence from './validators/presence'
 import { greaterThan, greaterOrEqualTo, lessThan, lessOrEqualTo } from './validators/numeric'
 
@@ -42,7 +44,6 @@ export function createField(type) {
   setIdMethods(field, privateData)
   setCalcMethods(field, privateData)
   setValidateMethods(field, privateData)
-  // TODO: inclusion validator
   setBuiltInValidatorMethods(field, type)
 
   return field
@@ -154,4 +155,5 @@ function setBuiltInValidatorMethods(field, type) {
   }
 
   defineValidator('presence', presence)
+  defineValidator('inclusion', inclusion)
 }

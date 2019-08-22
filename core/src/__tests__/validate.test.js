@@ -19,6 +19,13 @@ describe('validateField', () => {
       expect(validateField(field, '')).toEqual(['this field is required!'])
     })
 
+    test('inclusion', () => {
+      const field = Reforma.string.inclusion(['a', 'b', 'c'])
+
+      expect(validateField(field, 'a')).toBeNull()
+      expect(validateField(field, 'd')).toEqual(['not in [a, b, c]'])
+    })
+
     test('numeric validators', () => {
       const field = Reforma.integer.greaterThan(0)
 

@@ -16,11 +16,17 @@
 //
 // - `validate(function): Field`, adds validation to the field
 // - `getValidators(): Array[function]`, returns field validators
+// - builtin validators: `presence`, `inclusion`, `greaterThan`, etc.
+
+import { setValidateMethods } from './validate'
+import inclusion from './validators/inclusion'
+import presence from './validators/presence'
+import { greaterThan, greaterOrEqualTo, lessThan, lessOrEqualTo } from './validators/numeric'
 
 const nameRegex = /^[a-z][a-z0-9_]*$/i
 
 export function createField(type) {
-  if (!type.__isType__) {
+  if (type == null || !type.__isType__) {
     throw new Error(`Field type is not a valid Reforma type: ${type}`)
   }
 
@@ -38,6 +44,7 @@ export function createField(type) {
   setIdMethods(field, privateData)
   setCalcMethods(field, privateData)
   setValidateMethods(field, privateData)
+  setBuiltInValidatorMethods(field, type)
 
   return field
 }
@@ -130,21 +137,23 @@ function setCalcMethods(field, data) {
   Object.defineProperty(field, 'isCalculable', { get: isCalculable })
 }
 
-function setValidateMethods(field, data) {
-  function getValidators() {
-    return data.validators
+function setBuiltInValidatorMethods(field, type) {
+  function defineValidator(name, validatorFn) {
+    Object.defineProperty(field, name, {
+      value: function () {
+        field.validate(validatorFn.apply(null, arguments))
+        return field
+      }
+    })
   }
 
-  function valiate(validateFn) {
-    if (typeof validateFn !== 'function') {
-      throw new Error('Specify function in `validate`')
-    }
-
-    data.validators.push(validateFn)
-
-    return field
+  if (type.name === 'integer' || type.name === 'float') {
+    defineValidator('greaterThan', greaterThan)
+    defineValidator('greaterOrEqualTo', greaterOrEqualTo)
+    defineValidator('lessThan', lessThan)
+    defineValidator('lessOrEqualTo', lessOrEqualTo)
   }
 
-  Object.defineProperty(field, 'getValidators', { value: getValidators })
-  Object.defineProperty(field, 'validate', { value: valiate })
+  defineValidator('presence', presence)
+  defineValidator('inclusion', inclusion)
 }

@@ -31,6 +31,8 @@ export function instantiateType(type, value) {
   }
 }
 
+// -- PRIVATE
+
 function createInteger(value) {
   const parsedValue = parseInt(value, 10)
 
@@ -99,7 +101,12 @@ function createArray(type, value) {
     if (Array.isArray(value)) {
       value.map((v) => instantiateType(type.valueType, v))
     } else {
-      [instantiateType(type.valueType, value)]
+      const element = instantiateType(type.valueType, value)
+      if (element == null) {
+        null
+      } else {
+        [element]
+      }
     }
   }
 }

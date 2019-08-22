@@ -8,7 +8,7 @@ In theory Reforma can also be used in end-user facing applications, where data i
 
 The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides an official UI implementation `@reforma/blueprint`, which is based on [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
 
-## User defined types
+## Reforma types
 
 User defined types (UDT) are the basis of the Reforma.
 
@@ -78,6 +78,31 @@ orderType.defineFields({
 
 Because we can split type creation into two parts (declaration and field definition), it's possible to have circular references of user defined types.
 
+### Distinction from fields
+
+In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce single user defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, they are implicitly converted into a field object. This conversion can be explicit, using `toField` getter on any type:
+
+```js
+Reforma.integer.__isType__
+// => true
+
+Reforma.integer.presence.__isField__
+// => true
+
+Reforma.integer.toField.__isField__
+// => true
+```
+
+User defined types cannot be converted to field implicitly. When needed, this conversion should be explicit using `toField` getter.
+
+```js
+profileType.__isType__
+// => true
+
+profileType.toField.__isField__
+// => true
+```
+
 ## Instantiating Reforma types
 
 Every Reforma type can be instantiated using `create` method defined on the type itself.
@@ -123,15 +148,15 @@ profileInstance.fullName
 
 ## Validation
 
-Reforma provides you with built-in validators:
+Reforma provides built-in validators:
 
 ```js
 const integerField = Reforma.integer.presence().greaterThan(0, { allowBlank: true })
 
-integerField.validate(null)
+integerField.getErrors(null)
 // => ['can\'t be empty']
 
-integerField.validate(0)
+integerField.getErrors(0)
 // => ['should be greater than 0']
 ```
 
@@ -144,17 +169,64 @@ There are more build-in validators:
 - `.lessOrEqualTo(number)`
 - `.inclusion(array)`
 
-You can also define your custom validators:
+Programmer can also specify custom validators:
 
 ```js
-const anotherField = Reforma.integer.validate((record, value) => {
+const anotherField = Reforma.integer.validate((value, field) => {
   if (value === 0) {
-    record.addError('Zero is not acceptable!')
+    return 'Zero is not acceptable!'
   }
 })
 
-anotherField.validate(0)
+anotherField.getErrors(0)
 // => ['Zero is not acceptable!']
+```
+
+Field validations are aggregated under respective fields when you use `getErrors` method on an instance of the user defined type:
+
+```js
+const profileType = Reforma.createType({
+  name: 'Profile',
+  fields: {
+    id: Reforma.integer.id,
+    firstName: Reforma.string.presence(),
+    lastName: Reforma.string.presence()
+  }
+})
+
+const profile = profileType.create({ id: 1 })
+
+profile.getErrors()
+// => {
+//   firstName: ['can\'t be empty'],
+//   lastName: ['can\'t be empty']
+// }
+```
+
+You can also define type-wide validation for user defined type. Note that type-wide validations affect the user defined type itself. There are not type-wide validation for a primitive type. Type-wide validators aggregate under `__base__` key:
+
+```js
+profileType.validate((profile, type) => {
+  if (profile.firstName === profile.lastName) {
+    return 'First and last names should be different'
+  }
+})
+
+profileType.create({}).getErrors()
+// => {
+//   __base__: ['First and last names should be different'],
+//   firstName: ['can\'t be empty'],
+//   lastName: ['can\'t be empty']
+// }
+```
+
+Note: in case you need to return several errors from a validation function, return them as an array.
+
+When there is a type mismatch between validated field and the value provided, a special ("type mismatch") object is returned from the validation:
+
+```js
+integerField.validate('x').isTypeMismatch
+// => true
 ```
 
 ## Serialization

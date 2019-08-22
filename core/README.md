@@ -80,13 +80,16 @@ Because we can split type creation into two parts (declaration and field definit
 
 ### Distinction from fields
 
-In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce single user defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, they are implicitly converted into "fields".
+In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce single user defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, they are implicitly converted into a field object. This conversion can be explicit, using `toField` getter on any type:
 
 ```js
 Reforma.integer.__isType__
 // => true
 
 Reforma.integer.presence.__isField__
+// => true
+
+Reforma.integer.toField.__isField__
 // => true
 ```
 
@@ -179,7 +182,7 @@ anotherField.getErrors(0)
 // => ['Zero is not acceptable!']
 ```
 
-Field validations are aggregated in the `getErrors` method of an instance of the user defined type:
+Field validations are aggregated under respective fields when you use `getErrors` method on an instance of the user defined type:
 
 ```js
 const profileType = Reforma.createType({
@@ -200,16 +203,16 @@ profile.getErrors()
 // }
 ```
 
-You can also define type-wide validation for user defined type. Type-wide validators aggregate under `__base__` key:
+You can also define type-wide validation for user defined type. Note that type-wide validations affect the user defined type itself. There are not type-wide validation for a primitive type. Type-wide validators aggregate under `__base__` key:
 
 ```js
-profileType.validate((value, type) => {
-  if (value.firstName === value.lastName) {
+profileType.validate((profile, type) => {
+  if (profile.firstName === profile.lastName) {
     return 'First and last names should be different'
   }
 })
 
-profile.getErrors()
+profileType.create({}).getErrors()
 // => {
 //   __base__: ['First and last names should be different'],
 //   firstName: ['can\'t be empty'],

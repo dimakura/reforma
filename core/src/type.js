@@ -17,12 +17,18 @@ export function createPrimitiveType(name) {
   }
 
   const type = {}
+
+  // type definitions
   setTypeName(type, name)
   setTypeness(type, false, false, false)
+
+  // field shortcuts
   setToField(type)
   setIdGetter(type)
   setCalcMethod(type)
   setValidateMethod(type)
+
+  // create method
   setCreateMethod(type)
 
   return type
@@ -40,12 +46,18 @@ export function createArrayType(valueType) {
   }
 
   const type = {}
+
+  // type definitions
   setTypeName(type, name)
   setTypeness(type, true, false, false)
   setValueType(type, valueType)
+
+  // field shortcuts
   setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
+
+  // create method
   setCreateMethod(type)
 
   return type
@@ -67,13 +79,19 @@ export function createMapType(keyType, valueType) {
   }
 
   const type = {}
+
+  // type definitions
   setTypeName(type, name)
   setTypeness(type, false, true, false)
   setKeyType(type, keyType)
   setValueType(type, valueType)
+
+  // field shortcuts
   setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
+
+  // create method
   setCreateMethod(type)
 
   return type
@@ -105,17 +123,25 @@ export function createType(opts = {}) {
     validators: []
   }
 
+  // User defined type is different from built-in type in few aspects:
+  // 1. We don't have `id`, or `calc` methods defined on it
+  // 2. We have `validate(fn)` method, which applies to the type itself.
+  // In case of a built-in type, no changes happen with type, but
+  // with a field.
+
+  // type definitions
   setTypeName(type, name)
   setTypeness(type, false, false, true)
   setDefineFieldsMethod(type)
-  setCreateMethod(type)
-  setToField(type)
-  // User defined type is different from built-in type in few aspects:
-  // 1. We don't have `id`, or `calc` methods defined on it
-  // 2. We have `validate(fn)` method, which returns type itself.
-  // In case of a built-in type, field is returned instead.
   setValidateMethodForUDT(type, privateData)
 
+  // field shortcuts
+  setToField(type)
+
+  // create method
+  setCreateMethod(type)
+
+  // define fields
   if (fields != null) {
     type.defineFields(fields)
   }
@@ -210,7 +236,7 @@ function setIdGetter(type) {
 
 function setCalcMethod(type) {
   function calcMethod(calcFn) {
-    return createField(type).calc(calcFn)
+    return type.toField.calc(calcFn)
   }
 
   Object.defineProperty(type, 'calc', { value: calcMethod })
@@ -218,7 +244,7 @@ function setCalcMethod(type) {
 
 function setValidateMethod(type) {
   function validateMethod(validateFn) {
-    return createField(type).validate(validateFn)
+    return type.toField.validate(validateFn)
   }
 
   Object.defineProperty(type, 'validate', { value: validateMethod })

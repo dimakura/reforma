@@ -2,13 +2,13 @@ import { instantiateType } from './instance'
 
 const typeMismatch = Object.defineProperty({}, 'isTypeMismatch', { value: true })
 
-// Defines `getValidators` and `valiate` methods for fields and user defined types.
+// Defines `getValidators` and `validate` methods for fields and user defined types.
 export function setValidateMethods(fieldOrType, privateData) {
   function getValidators() {
     return privateData.validators
   }
 
-  function valiate(validateFn) {
+  function validate(validateFn) {
     if (typeof validateFn !== 'function') {
       throw new Error('Specify function in `validate`')
     }
@@ -19,7 +19,7 @@ export function setValidateMethods(fieldOrType, privateData) {
   }
 
   Object.defineProperty(fieldOrType, 'getValidators', { value: getValidators })
-  Object.defineProperty(fieldOrType, 'validate', { value: valiate })
+  Object.defineProperty(fieldOrType, 'validate', { value: validate })
 }
 
 export function validateField(field, value) {

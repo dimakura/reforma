@@ -18,11 +18,13 @@
 // - `getValidators(): Array[function]`, returns field validators
 
 import { setValidateMethods } from './validate'
+import presence from './validators/presence'
+import { greaterThan, greaterOrEqualTo, lessThan, lessOrEqualTo } from './validators/numeric'
 
 const nameRegex = /^[a-z][a-z0-9_]*$/i
 
 export function createField(type) {
-  if (!type.__isType__) {
+  if (type == null || !type.__isType__) {
     throw new Error(`Field type is not a valid Reforma type: ${type}`)
   }
 
@@ -40,10 +42,8 @@ export function createField(type) {
   setIdMethods(field, privateData)
   setCalcMethods(field, privateData)
   setValidateMethods(field, privateData)
-
-  // TODO: inclusion validators
-  // TODO: built-in validators
-  // TODO: built-in validators on built-in types
+  // TODO: inclusion validator
+  setBuiltInValidatorMethods(field, type)
 
   return field
 }
@@ -134,4 +134,24 @@ function setCalcMethods(field, data) {
   Object.defineProperty(field, 'getCalc', { value: getCalc })
   Object.defineProperty(field, 'calc', { value: calc })
   Object.defineProperty(field, 'isCalculable', { get: isCalculable })
+}
+
+function setBuiltInValidatorMethods(field, type) {
+  function defineValidator(name, validatorFn) {
+    Object.defineProperty(field, name, {
+      value: function () {
+        field.validate(validatorFn.apply(null, arguments))
+        return field
+      }
+    })
+  }
+
+  if (type.name === 'integer' || type.name === 'float') {
+    defineValidator('greaterThan', greaterThan)
+    defineValidator('greaterOrEqualTo', greaterOrEqualTo)
+    defineValidator('lessThan', lessThan)
+    defineValidator('lessOrEqualTo', lessOrEqualTo)
+  }
+
+  defineValidator('presence', presence)
 }

@@ -27,6 +27,7 @@ export function createPrimitiveType(name) {
   setIdGetter(type)
   setCalcMethod(type)
   setValidateMethod(type)
+  setBuiltInValidatorMethods(type)
 
   // create method
   setCreateMethod(type)
@@ -56,6 +57,7 @@ export function createArrayType(valueType) {
   setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
+  setBuiltInValidatorMethods(type)
 
   // create method
   setCreateMethod(type)
@@ -90,6 +92,7 @@ export function createMapType(keyType, valueType) {
   setToField(type)
   setCalcMethod(type)
   setValidateMethod(type)
+  setBuiltInValidatorMethods(type)
 
   // create method
   setCreateMethod(type)
@@ -248,6 +251,25 @@ function setValidateMethod(type) {
   }
 
   Object.defineProperty(type, 'validate', { value: validateMethod })
+}
+
+function setBuiltInValidatorMethods(type) {
+  function defineValidator(name) {
+    Object.defineProperty(type, name, {
+      value: function () {
+        return type.toField[name].apply(null, arguments)
+      }
+    })
+  }
+
+  if (type.name === 'integer' || type.name === 'float') {
+    defineValidator('greaterThan')
+    defineValidator('greaterOrEqualTo')
+    defineValidator('lessThan')
+    defineValidator('lessOrEqualTo')
+  }
+
+  defineValidator('presence')
 }
 
 function setCreateMethod(type) {

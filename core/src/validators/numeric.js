@@ -59,7 +59,7 @@ function createNumericValidator(compFn, defaultMessage, number, opts) {
     }
   }
 
-  return function (_field, value) {
+  return function (value, field) {
     return do {
       if (value == null && allowBlank) {
         null

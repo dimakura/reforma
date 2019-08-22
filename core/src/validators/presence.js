@@ -1,10 +1,14 @@
 const defaultMessage = 'cannot be empty'
 
-export default function presence(message = defaultMessage) {
-  return function (field, value) {
+export default function presence(opts = {}) {
+  return function (value, field) {
     return do {
       if (isBlank(value)) {
-        message
+        if ('message' in opts) {
+          opts.message
+        } else {
+          defaultMessage
+        }
       } else {
         null
       }

@@ -1,5 +1,4 @@
 import snakeCase from 'lodash.snakecase'
-const debug = require('debug')('reforma')
 
 export function instantiateType(type, value) {
   return do {
@@ -40,7 +39,6 @@ function createInteger(value) {
     if (Number.isFinite(parsedValue)) {
       parsedValue
     } else {
-      debug(`[WARNING] Not a finite integer: ${value}`)
       null
     }
   }
@@ -53,7 +51,6 @@ function createFloat(value) {
     if (Number.isFinite(parsedValue)) {
       parsedValue
     } else {
-      debug(`[WARNING] Not a finite float: ${value}`)
       null
     }
   }
@@ -70,7 +67,6 @@ function createBool(value) {
     } else if (value === false || value === 0) {
       false
     } else {
-      debug(`[WARNING] Not a proper bool: ${value}`)
       null
     }
   }
@@ -86,11 +82,9 @@ function createDatetime(value) {
       if (Number.isFinite(parsedValue)) {
         new Date(parsedValue)
       } else {
-        debug(`[WARNING] Not a proper date: ${value}`)
         null
       }
     } else {
-      debug(`[WARNING] Not a proper date: ${value}`)
       null
     }
   }
@@ -113,7 +107,6 @@ function createArray(type, value) {
 
 function createMap(type, value) {
   if (typeof value !== 'object') {
-    debug(`[WARNING] Not a proper map type: ${value}`)
     return null
   }
 

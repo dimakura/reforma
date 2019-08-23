@@ -231,7 +231,7 @@ integerField.validate('x').isTypeMismatch
 
 ## Serialization
 
-At this stage Reforma supports only JSON serialization/deserialization.
+At this stage Reforma supports only JSON serialization:
 
 ```js
 Reforma.integer.serialize(1)
@@ -241,38 +241,17 @@ profileType.serialize({id: 1, firstName: 'Amerigo', lastName: 'Vespucci'})
 // => {id: 1, first_name: 'Amerigo', last_name: 'Vespucci'}
 ```
 
-By default serialized field names will be snake_cased.
+Serialized field names will be snake_cased.
 
-Deserialization is equally simple:
-
-```js
-profileType.deserialize({
-  id: 1,
-  first_name: 'Amerigo',
-  last_name: 'Vespucci'
-})
-// => {id: 1, firstName: 'Amerigo', lastName: 'Vespucci'}
-```
-
-You can also alter the way how serialization/deserialization works for user defined types using `serialMap` property:
+Four user defined types you can also specify array of serializable fields:
 
 ```js
-const profileType = Reforma.createType({
-  name: 'Profie',
-  fields: {...},
-  serialMap: {
-    id: 'id',
-    firstName: 'firstName',
-    lastName: 'last',
-    fullName: true
-  }
-})
-
-profileType.serialize({id: 1, firstName: 'Amerigo', lastName: 'Vespucci'})
-// => {id: 1, firstName: 'Amerigo', last: 'Vespucci', full_name: 'Amerigo Vespucci'}
+profileType.serialize(
+  {id: 1, firstName: 'Amerigo', lastName: 'Vespucci'},
+  ['firstName', 'lastName']
+)
+// => {first_name: 'Amerigo', last_name: 'Vespucci'}
 ```
-
-By default calculated fields are not serialized. But as the example above shows, by putting them into `serialMap` we can get calculated fields in resulting JSON.
 
 ## Data sources
 

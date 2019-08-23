@@ -10,8 +10,7 @@
 // -[X] user-defined types instantiation
 // -[X] user defined type validations
 // -[X] built-in validations
-// -[ ] built-in types serialization
-// -[ ] user-defined types serialization
+// -[-] serialization
 // -[ ] HTTP methods
 // -[ ] collection data source
 // -[ ] record data source

@@ -104,7 +104,6 @@ export function createMapType(keyType, valueType) {
 export function createType(opts = {}) {
   const name = opts.name
   const fields = opts.fields
-  // TODO: const serialMap = opts.serialMap
   const isValidName = typeof name === 'string' && userDefinedTypeRegex.test(name)
   const typeAlreadyDefined = name in typeRegistry
   const areValidFields = fields == null || typeof fields === 'object'

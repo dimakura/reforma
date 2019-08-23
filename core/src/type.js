@@ -1,5 +1,6 @@
 import { createField } from './field'
 import { instantiateType } from './instance'
+import { serializeType } from './serialize'
 import { setValidateMethods as setValidateMethodForUDT } from './validate'
 
 const userDefinedTypeRegex = /^([A-Z][a-z0-9_]*\.?)+$/
@@ -32,6 +33,9 @@ export function createPrimitiveType(name) {
   // create method
   setCreateMethod(type)
 
+  // serialize method
+  setSerializeMethod(type)
+
   return type
 }
 
@@ -61,6 +65,9 @@ export function createArrayType(valueType) {
 
   // create method
   setCreateMethod(type)
+
+  // serialize method
+  setSerializeMethod(type)
 
   return type
 }
@@ -96,6 +103,9 @@ export function createMapType(keyType, valueType) {
 
   // create method
   setCreateMethod(type)
+
+  // serialize method
+  setSerializeMethod(type)
 
   return type
 }
@@ -142,6 +152,9 @@ export function createType(opts = {}) {
 
   // create method
   setCreateMethod(type)
+
+  // serialize method
+  setSerializeMethod(type)
 
   // define fields
   if (fields != null) {
@@ -284,6 +297,14 @@ function setToField(type) {
   Object.defineProperty(type, 'toField', {
     get: function () {
       return createField(type)
+    }
+  })
+}
+
+function setSerializeMethod(type) {
+  Object.defineProperty(type, 'serialize', {
+    value: function (value, fields) {
+      return serializeType(type, value, fields)
     }
   })
 }

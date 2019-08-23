@@ -58,6 +58,26 @@ describe('Built-in types', () => {
     expect(Reforma.arrayOf(Reforma.integer).create(['1', '2', '3'])).toEqual([1, 2, 3])
     expect(Reforma.mapOf(Reforma.string, Reforma.integer).create({ a: '1', b: '2', c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
   })
+
+  test('serialization', () => {
+    expect(Reforma.integer.serialize(1)).toBe(1)
+    expect(Reforma.createType({
+      name: 'Profile',
+      fields: {
+        id: Reforma.integer.id,
+        firstName: Reforma.string,
+        lastName: Reforma.string
+      }
+    }).serialize({
+      id: 1,
+      firstName: 'Leo',
+      lastName: 'Tolstoy'
+    })).toEqual({
+      id: 1,
+      first_name: 'Leo',
+      last_name: 'Tolstoy'
+    })
+  })
 })
 
 describe('User defined types', () => {

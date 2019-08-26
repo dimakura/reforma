@@ -2,8 +2,13 @@
   "name": "@reforma/core",
   "version": "0.2.0",
   "description": "Reforma helps you to create rich UI forms.",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
+    "dev": "node_modules/.bin/babel --watch -s inline -d lib src",
+    "build": "node_modules/.bin/babel -s inline -d lib src",
     "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js'",
     "test": "jest"
   },

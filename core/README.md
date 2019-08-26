@@ -334,19 +334,6 @@ datasource.isFetched
 
 TODO: listeners
 
-### HTTP methods
-
-Besides operations described above, every datasource exposes methods related to HTTP:
-
-```js
-datasource.httpGet(url, params)
-datasource.httpPost(url, data)
-datasource.httpPut(url, data)
-datasource.httpDelete(url, params)
-```
-
-These methods might be useful when defining actions on datasources.
-
 ### Actions
 
 You can define custom actions on datasources:
@@ -357,6 +344,21 @@ datasource.defineAction('enable', async (ds) => {
   return ds.createRecord(resp)
 })
 ```
+
+## HTTP methods
+
+When dealing with HTTP, Reforma uses `@reforma/core/http` module.
+
+```js
+import http from '@reforma/core/http'
+
+const resp = http.get(url, params)
+// http.post(url, data)
+// http.put(url, data)
+// http.delete(url, params)
+```
+
+These methods might be useful when defining actions on datasources.
 
 ## Configuration
 

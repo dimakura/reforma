@@ -63,7 +63,7 @@ describe('instantiateType', () => {
 
   test('user defined type', () => {
     const type = Reforma.createType({
-      name: 'Profie',
+      name: 'Profile',
       fields: {
         id: Reforma.integer,
         firstName: Reforma.string,

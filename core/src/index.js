@@ -11,7 +11,7 @@
 // -[X] user defined type validations
 // -[X] built-in validations
 // -[X] serialization
-// -[ ] HTTP methods
+// -[-] HTTP methods
 // -[ ] collection data source
 // -[ ] record data source
 
@@ -22,6 +22,8 @@ import {
   createMapType,
   createType
 } from './type'
+
+import config from './config'
 
 const Reforma = {}
 
@@ -45,6 +47,10 @@ Object.defineProperty(Reforma, 'mapOf', {
 
 Object.defineProperty(Reforma, 'createType', {
   value: createType
+})
+
+Object.defineProperty(Reforma, 'config', {
+  value: config
 })
 
 export default Reforma

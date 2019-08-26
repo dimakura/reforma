@@ -347,22 +347,33 @@ datasource.defineAction('enable', async (ds) => {
 
 ## HTTP methods
 
-When dealing with HTTP, Reforma uses `@reforma/core/http` module.
+You can set `baseUrl` and add headers for all HTTP calls in Reforma:
+
+```js
+Reforma.config.http.baseUrl = 'https://move4.app/api'
+Reforma.config.http.setHeader('Authorization', 'my-token')
+```
+
+You can use `@reforma/core/http` for your HTTP requests, e.g. when creating actions:
 
 ```js
 import http from '@reforma/core/http'
 
-const resp = http.get(url, params)
-// http.post(url, data)
-// http.put(url, data)
-// http.delete(url, params)
+const resp = await http.get('/profiles')
+resp.json()
+// => [{id: 1, ...}]
 ```
 
-These methods might be useful when defining actions on datasources.
-
-## Configuration
+All requests in Reforma are cancelable:
 
 ```js
-Reforma.config.baseUrl = '/api'
-Reforma.config.setHeader('Authorization', 'my-token')
+import AbortController from 'abort-controller'
+
+const controller = new AbortController()
+
+http.get('/profiles', {
+  signal: controller.signal
+})
+
+controller.cancel()
 ```

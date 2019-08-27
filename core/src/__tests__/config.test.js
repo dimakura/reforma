@@ -16,4 +16,10 @@ describe('config', () => {
       MaxAge: '3 days'
     })
   })
+
+  test('timeout', () => {
+    expect(Reforma.config.http.timeout).toBe(10000)
+    Reforma.config.http.timeout = 5000
+    expect(Reforma.config.http.timeout).toBe(5000)
+  })
 })

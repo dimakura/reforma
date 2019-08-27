@@ -24,6 +24,7 @@ import {
 } from './type'
 
 import config from './config'
+import http from './http'
 
 const Reforma = {}
 
@@ -51,6 +52,10 @@ Object.defineProperty(Reforma, 'createType', {
 
 Object.defineProperty(Reforma, 'config', {
   value: config
+})
+
+Object.defineProperty(Reforma, 'http', {
+  value: http
 })
 
 export default Reforma

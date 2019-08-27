@@ -2,7 +2,8 @@
 
 const httpData = {
   baseUrl: null,
-  headers: {}
+  headers: {},
+  timeout: 10000
 }
 
 const http = {}
@@ -26,6 +27,16 @@ Object.defineProperty(http, 'headers', {
 Object.defineProperty(http, 'setHeader', {
   value: function (name, value) {
     httpData.headers[name] = value
+  }
+})
+
+Object.defineProperty(http, 'timeout', {
+  get: function () {
+    return httpData.timeout
+  },
+
+  set: function (newValue) {
+    httpData.timeout = newValue
   }
 })
 

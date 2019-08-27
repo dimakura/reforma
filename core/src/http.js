@@ -20,8 +20,8 @@ export default {
 
 function getFn(path, params, opts) {
   const url = resolvePath(path, params)
-  const signal = opts && opts.signal
-  const timeout = (opts && opts.timeout) || Reforma.config.http.timeout
+  const signal = get(opts, 'signal')
+  const timeout = get(opts, 'timeout', Reforma.config.http.timeout)
   const headers = merge({}, Reforma.config.http.headers, opts && opts.headers)
 
   return fetch(url, {
@@ -30,4 +30,16 @@ function getFn(path, params, opts) {
     signal,
     timeout
   })
+}
+
+function get(obj, prop, defaultValue = null) {
+  return do {
+    if (obj == null) {
+      defaultValue
+    } else if (prop in obj) {
+      obj[prop]
+    } else {
+      defaultValue
+    }
+  }
 }

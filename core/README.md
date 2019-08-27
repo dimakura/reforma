@@ -334,19 +334,6 @@ datasource.isFetched
 
 TODO: listeners
 
-### HTTP methods
-
-Besides operations described above, every datasource exposes methods related to HTTP:
-
-```js
-datasource.httpGet(url, params)
-datasource.httpPost(url, data)
-datasource.httpPut(url, data)
-datasource.httpDelete(url, params)
-```
-
-These methods might be useful when defining actions on datasources.
-
 ### Actions
 
 You can define custom actions on datasources:
@@ -358,9 +345,35 @@ datasource.defineAction('enable', async (ds) => {
 })
 ```
 
-## Configuration
+## HTTP methods
+
+You can set `baseUrl` and add headers for all HTTP calls in Reforma:
 
 ```js
-Reforma.config.baseUrl = '/api'
-Reforma.config.setHeader('Authorization', 'my-token')
+Reforma.config.http.baseUrl = 'https://move4.app/api'
+Reforma.config.http.setHeader('Authorization', 'my-token')
+```
+
+You can use `@reforma/core/http` for your HTTP requests, e.g. when creating actions:
+
+```js
+import http from '@reforma/core/http'
+
+const resp = await http.get('/profiles')
+resp.json()
+// => [{id: 1, ...}]
+```
+
+All requests in Reforma are cancelable:
+
+```js
+import AbortController from 'abort-controller'
+
+const controller = new AbortController()
+
+http.get('/profiles', {
+  signal: controller.signal
+})
+
+controller.cancel()
 ```

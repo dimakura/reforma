@@ -2,8 +2,13 @@
   "name": "@reforma/core",
   "version": "0.2.0",
   "description": "Reforma helps you to create rich UI forms.",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
+    "dev": "node_modules/.bin/babel --watch -s inline -d lib src --ignore \"src/**/*.test.js\"",
+    "build": "node_modules/.bin/babel -s inline -d lib src --ignore \"src/**/*.test.js\"",
     "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js'",
     "test": "jest"
   },
@@ -33,6 +38,8 @@
     "jest": "^24.8.0"
   },
   "dependencies": {
-    "lodash.snakecase": "^4.1.1"
+    "lodash.merge": "^4.6.2",
+    "lodash.snakecase": "^4.1.1",
+    "node-fetch": "^2.6.0"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "presidents": [
+    {"id": 1, "first_name": "George", "last_name": "Washington"},
+    {"id": 2, "first_name": "John", "last_name": "Adams"},
+    {"id": 3, "first_name": "Thomas", "last_name": "Jefferson"},
+    {"id": 4, "first_name": "James", "last_name": "Madison"},
+    {"id": 5, "first_name": "James", "last_name": "Monroe"},
+    {"id": 6, "first_name": "John", "last_name": "Quincy Adams"},
+    {"id": 7, "first_name": "Andrew", "last_name": "Jackson"},
+    {"id": 8, "first_name": "Martin", "last_name": "Van Buren"},
+    {"id": 9, "first_name": "William", "last_name": "Henry Harrison"},
+    {"id": 10, "first_name": "John", "last_name": "Tyler"},
+    {"id": 11, "first_name": "James", "last_name": "K. Polk"},
+    {"id": 12, "first_name": "Zachary", "last_name": "Taylor"}
+  ]
+}

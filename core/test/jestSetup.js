@@ -4,4 +4,5 @@ import { __cleanupConfig__ } from '@reforma/core/config'
 afterEach(() => {
   __cleanupTypes__()
   __cleanupConfig__()
+  jest.resetAllMocks()
 })

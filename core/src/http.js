@@ -4,24 +4,19 @@ import fetch from 'node-fetch'
 import { resolvePath } from './urlHelpers'
 
 export default {
-  get: getFn
+  get: getFn,
+  post: postFn,
+  put: putFn,
+  delete: delteFn
 }
 
 // -- PRIVATE
 
-// [+] GET
-// [ ] GET-specs
-// [ ] POST
-// [ ] POST-specs
-// [ ] PUT
-// [ ] PUT-specs
-// [ ] DELETE
-// [ ] DELETE-specs
-
-function getFn(path, params, opts) {
+function getFn(path, opts) {
+  const params = getProp(opts, 'params')
+  const signal = getProp(opts, 'signal')
+  const timeout = getProp(opts, 'timeout', Reforma.config.http.timeout)
   const url = resolvePath(path, params)
-  const signal = get(opts, 'signal')
-  const timeout = get(opts, 'timeout', Reforma.config.http.timeout)
   const headers = merge({}, Reforma.config.http.headers, opts && opts.headers)
 
   return fetch(url, {
@@ -32,7 +27,56 @@ function getFn(path, params, opts) {
   })
 }
 
-function get(obj, prop, defaultValue = null) {
+function postFn(path, opts) {
+  const data = getProp(opts, 'data', {})
+  const params = getProp(opts, 'params')
+  const signal = getProp(opts, 'signal')
+  const timeout = getProp(opts, 'timeout', Reforma.config.http.timeout)
+  const url = resolvePath(path, params)
+  const headers = merge({}, Reforma.config.http.headers, opts && opts.headers)
+
+  return fetch(url, {
+    method: 'POST',
+    headers,
+    signal,
+    timeout,
+    body: JSON.stringify(data)
+  })
+}
+
+function putFn(path, opts) {
+  const data = getProp(opts, 'data', {})
+  const params = getProp(opts, 'params')
+  const signal = getProp(opts, 'signal')
+  const timeout = getProp(opts, 'timeout', Reforma.config.http.timeout)
+  const url = resolvePath(path, params)
+  const headers = merge({}, Reforma.config.http.headers, opts && opts.headers)
+
+  return fetch(url, {
+    method: 'PUT',
+    headers,
+    signal,
+    timeout,
+    body: JSON.stringify(data)
+  })
+}
+
+function delteFn(path, opts) {
+  const params = getProp(opts, 'params')
+  const signal = getProp(opts, 'signal')
+  const timeout = getProp(opts, 'timeout', Reforma.config.http.timeout)
+  const url = resolvePath(path, params)
+  const headers = merge({}, Reforma.config.http.headers, opts && opts.headers)
+
+  return fetch(url, {
+    method: 'DELETE',
+    headers,
+    signal,
+    timeout
+  })
+}
+
+function getProp(obj, prop, defaultValue = null) {
   return do {
     if (obj == null) {
       defaultValue

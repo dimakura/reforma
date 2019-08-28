@@ -16,14 +16,15 @@
 // -[ ] record data source
 
 import {
-  primitiveTypes,
-  createPrimitiveType,
   createArrayType,
   createMapType,
-  createType
+  createPrimitiveType,
+  createType,
+  primitiveTypes
 } from './type'
 
 import config from './config'
+import createCollectionDS from './collectionDS'
 import http from './http'
 
 const Reforma = {}
@@ -56,6 +57,10 @@ Object.defineProperty(Reforma, 'config', {
 
 Object.defineProperty(Reforma, 'http', {
   value: http
+})
+
+Object.defineProperty(Reforma, 'createCollectionDS', {
+  value: createCollectionDS
 })
 
 export default Reforma

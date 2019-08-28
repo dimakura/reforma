@@ -262,7 +262,7 @@ A data source is a mechanism to send and receive data from backend service. Refo
 A collection data source is a data source to operate on a collection of data (of Reforma types).
 
 ```js
-const profilesDS = Reforma.createCollectionDataSource({
+const profilesDS = Reforma.createCollectionDS({
   type: profileType,
   serialRoot: 'profiles',
   url: '/profiles',

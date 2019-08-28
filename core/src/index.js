@@ -11,8 +11,8 @@
 // -[X] user defined type validations
 // -[X] built-in validations
 // -[X] serialization
-// -[-] HTTP methods
-// -[ ] collection data source
+// -[X] HTTP methods
+// -[-] collection data source
 // -[ ] record data source
 
 import {

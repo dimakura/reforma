@@ -255,11 +255,11 @@ profileType.serialize(
 
 ## Data sources
 
-Data source is a mechanism to send and receive data from backend service. Reforma supports two kind of data sources: collection and record.
+A data source is a mechanism to send and receive data from backend service. Reforma supports two kinds of data sources: collection and record.
 
 ### Collection data source
 
-Collection data source is a data source to operate on a collection of Reforma types.
+A collection data source is a data source to operate on a collection of data (of Reforma types).
 
 ```js
 const profilesDS = Reforma.createCollectionDataSource({
@@ -272,20 +272,67 @@ const profilesDS = Reforma.createCollectionDataSource({
 })
 ```
 
-Now you can retrieve data using collection data source.
+To retrieve data from a remote server, use the `fetch` method. You can pass params to the call:
 
 ```js
 const profiles = await profilesDS.fetch({
   cityName: 'Florence'
 })
-// => GET /api/profiles?country_name=Italy&city_name=Florence
+// GET /api/profiles?country_name=Italy&city_name=Florence
+// => Array[]
 ```
 
-Note that `params` property defined during data source creation is present in the request, along with the parameter values specified in `fetch()`.
+Note that the params defined during data source creation (`countryName`) are present in the request, along with the params specified in the call (`cityName`).
+
+An important property of data source is its status.
+
+```js
+profilesDS.status
+// => "ready"
+```
+
+Other possible values for the status of a collection data source are:
+
+- `initial` initial status.
+- `fetching` status during fetching.
+- `ready` status after successful fetch. You can get fetched data using `.data` property.
+- `failed` status after failed fetch. You can get error details using `.errors` property. Note, that `.data` will be still available from the previous fetch.
+
+You can listen for status changes:
+
+```js
+const unsubscribe = profileDS.addStatusListener((profileDS, prevStatus) => ...)
+```
+
+There are other useful props available for a collection data source:
+
+```js
+profileDS.data
+// => Array[]
+
+profileDS.params
+// => {countryName: "Italy", cityName: "Florence"}
+
+const promise = profileDS.fetch({cityName: 'Milan'})
+
+profileDS.status
+// => "fetching"
+
+profileDS.params
+// => {countryName: "Italy", cityName: "Milan"}
+profileDS.prevParams
+// => {countryName: "Italy", cityName: "Florence"}
+
+await promise
+profileDS.params
+// => {countryName: "Italy", cityName: "Milan"}
+profileDS.prevParams
+// => null
+```
 
 ### Record data source
 
-Record data source is a data source to operate on a single Reforma type.
+Record data source is a data source to operate on a single record (Reforma type).
 
 ```js
 const profileDS = Reforma.createRecordDataSource({
@@ -295,31 +342,24 @@ const profileDS = Reforma.createRecordDataSource({
 })
 ```
 
-Now you can retrieve profile record from the server.
+Now you can retrieve profile record from the server:
 
 ```js
 const profile = await profileDS.fetch(1)
-// => GET /api/profiles/1
+// GET /api/profiles/1
+// => Profile{...}
 ```
 
-TODO: create/update/delete
-
-### Fetching
-
-By default datasource fetches records only once. Subsequent `fetch` calls, will return previously fetched value, even if you change params. To make data source fetch new values, pass `true` as a second parameter to `fetch`:
+Other CRUD operations are also supported:
 
 ```js
-await datasource.fetch(1)
-// => {id: 1}
-
-await datasource.fetch(2)
-// => {id: 1}
-
-await datasource.fetch(2, true)
-// => {id: 2}
+await profileDS.save(profileInstance) // create/update
+await profileDS.delete(profileInstance) // delete
 ```
 
-There are other useful properties of datasource you can employ:
+### Shared properties
+
+Both
 
 ```js
 datasource.isBusy
@@ -347,7 +387,7 @@ datasource.defineAction('enable', async (ds) => {
 
 ## HTTP methods
 
-You can set `baseUrl` and add headers for all HTTP calls in Reforma:
+You can set `baseUrl` and add headers for all HTTP calls in Reforma (this includes HTTP requests from datasources):
 
 ```js
 Reforma.config.http.baseUrl = 'https://move4.app/api'

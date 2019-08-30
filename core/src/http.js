@@ -7,7 +7,9 @@ export default {
   get: getFn,
   post: postFn,
   put: putFn,
-  delete: delteFn
+  delete: delteFn,
+  exceptionError,
+  failedError
 }
 
 // -- PRIVATE
@@ -86,4 +88,34 @@ function getProp(obj, prop, defaultValue = null) {
       defaultValue
     }
   }
+}
+
+function exceptionError(ex) {
+  return createError({
+    __isException__: true,
+    exception: ex
+  })
+}
+
+function failedError(status, statusText, body) {
+  return createError({
+    __isBadResponse__: true,
+    status,
+    statusText,
+    body
+  })
+}
+
+function createError(data) {
+  const error = {}
+
+  const names = Object.getOwnPropertyNames(data)
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i]
+    Object.defineProperty(error, name, { value: data[name] })
+  }
+
+  Object.defineProperty(error, '__isError__', { value: true })
+
+  return error
 }

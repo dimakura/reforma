@@ -12,7 +12,7 @@
 // -[X] built-in validations
 // -[X] serialization
 // -[X] HTTP methods
-// -[-] collection data source
+// -[X] collection data source
 // -[ ] record data source
 
 import {

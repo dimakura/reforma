@@ -15,6 +15,11 @@ const President = Reforma.createType({
   }
 })
 
+const presidentDS = Reforma.createCollectionDS({
+  type: President,
+  url: '/presidents'
+})
+
 class App extends React.PureComponent {
   render() {
     const presidents = this.state && this.state.presidents
@@ -28,18 +33,8 @@ class App extends React.PureComponent {
             {presidents.map(president => (
               <tr key={president.id}>
                 <td>{president.id}</td>
-                <td>
-                  <input
-                    value={president.firstName}
-                    onChange={this.onFirstNameChange.bind(this, president.id)}
-                  />
-                </td>
-                <td>
-                  <input
-                    value={president.lastName}
-                    readOnly
-                  />
-                </td>
+                <td>{president.firstName}</td>
+                <td>{president.lastName}</td>
               </tr>
             ))}
           </tbody>
@@ -53,22 +48,10 @@ class App extends React.PureComponent {
   }
 
   async loadData() {
-    const resp = await Reforma.http.get('/presidents')
-    const data = await resp.json()
-    const presidents = data.map(r => President.create(r))
-    this.setState({
-      presidents: presidents
-    })
-  }
+    await presidentDS.fetch()
 
-  async onFirstNameChange(id, evt) {
-    await Reforma.http.put('/presidents/:id', {
-      params: {
-        id: id
-      },
-      data: {
-        first_name: evt.target.value
-      }
+    this.setState({
+      presidents: presidentDS.data
     })
   }
 }

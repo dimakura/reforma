@@ -171,8 +171,14 @@ export function __cleanupTypes__() {
 // -- PRIVATE
 
 function setTypeName(type, name) {
-  Object.defineProperty(type, 'name', { value: name })
   typeRegistry[name] = type
+
+  Object.defineProperty(type, 'name', { value: name })
+  Object.defineProperty(type, 'toString', {
+    value: function () {
+      return name
+    }
+  })
 }
 
 function setTypeness(type, isArray = false, isMap = false, isUserDefined = false) {

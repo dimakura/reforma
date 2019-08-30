@@ -82,3 +82,23 @@ describe('http', () => {
     })
   })
 })
+
+describe('http errors', () => {
+  test('fromException', () => {
+    const ex = new Error()
+    const error = Reforma.http.exceptionError(ex)
+
+    expect(error.__isError__).toBe(true)
+    expect(error.__isException__).toBe(true)
+    expect(error.exception).toBe(ex)
+  })
+
+  test('failedResponse', () => {
+    const error = Reforma.http.failedError(404, 'Not found', 'No such order')
+
+    expect(error.__isError__).toBe(true)
+    expect(error.status).toBe(404)
+    expect(error.statusText).toBe('Not found')
+    expect(error.body).toBe('No such order')
+  })
+})

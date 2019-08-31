@@ -18,16 +18,18 @@ import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 ```
 
-## Collection data source components
+## Collection components
 
-### `CollectionDSComponent`
+Collection components render data which they get from a collection data source.
 
-`CollectionDSComponent` is a generic collection data source component. All other collection data source components in Reforma UI are based on `CollectionDSComponent`. You can use `CollectionDSComponent` to implement your own
+### `CollectionComponent`
+
+`CollectionComponent` is a generic collection component. All other collection components in Reforma UI are based on `CollectionComponent`. You can use `CollectionComponent` to implement your own components.
 
 ```js
-import { CollectionDSComponent } from '@reforma/ui'
+import { CollectionComponent } from '@reforma/ui'
 
-<CollectionDSComponent
+<CollectionComponent
   autofetch
   cached
   dataSource={profilesDS}
@@ -41,7 +43,8 @@ import { CollectionDSComponent } from '@reforma/ui'
 | :------- | :------ | :--------- |
 | `autofetch` | `false` | When `true`, this component will try to fetch the `dataSource` initial state. |
 | `cached` | `true` | When `true`, this component will try to reuse existing data in the `dataSource`. |
-| `dataSource` | `null` | Collection data source for this component. This property is required.
+| `dataSource` | `null` | Collection data source for this component. This property is required. |
+| `initialParams` | `null` | Initial parameters for `fetch` function. Initial parameters will be used only when `autofetch=true`. |
 | `render` | `null` | Function which renders the component. This property is required.
 
 ### `Table`
@@ -66,12 +69,14 @@ import { Table } from '@reforma/ui'
 | `dataSource` | `null` | Collection data source for this component. This property is required.
 | `columns` | `null` | Array of columns for the given table. This property is required.
 
-Table columns can be given as property names or as a full column qualifiers:
+Table columns can be given as property names or as full column qualifiers:
 
 ```js
 const column = {
   name: 'fullName',
   header: 'Painter Name',
-  renderCell: (model) => (<span>{model.fullName}</span>)
+  renderCell: (model) => (<span>{model.fullName}</span>),
+  width: 100,
+  align: 'right'
 }
 ```

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
 import CollectionComponent from '../CollectionComponent'
 import Header from './Header'
-import Loading from './Loading'
+import Placeholder from './Loading'
 import Data from './Data'
 
 class Table extends React.PureComponent {
@@ -49,7 +49,7 @@ class Table extends React.PureComponent {
                 {
                   do {
                     if (status === 'initial' || (status === 'fetching' && !hasData)) {
-                      <Loading columns={columns} />
+                      <Placeholder columns={columns}>Loading...</Placeholder>
                     } else if (status === 'failed') {
                       // TODO: error indicator? toast?
                       <Data columns={columns} dataSource={dataSource} />

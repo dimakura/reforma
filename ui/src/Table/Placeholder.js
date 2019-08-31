@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-class Loading extends React.PureComponent {
+class Placeholder extends React.PureComponent {
   render() {
     const { columns } = this.props
 
@@ -11,15 +11,16 @@ class Loading extends React.PureComponent {
           colSpan={columns.length}
           style={{ padding: 16 }}
         >
-          Loading...
+          {this.props.children}
         </td>
       </tr>
     )
   }
 }
 
-Loading.propTypes = {
+Placeholder.propTypes = {
+  children: PropTypes.node.isRequired,
   columns: PropTypes.array.isRequired
 }
 
-export default Loading
+export default Placeholder

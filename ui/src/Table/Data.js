@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Placeholder from './Placeholder'
 
 function renderCell(col, item, key) {
   const value = do {
@@ -45,21 +46,14 @@ class Data extends React.PureComponent {
         data.map((item, i) => {
           return (
             <tr key={i}>
-              {
-                columns.map((col, j) => renderCell(col, item, j))
-              }
+              {columns.map((col, j) => renderCell(col, item, j))}
             </tr>
           )
         })
       } else {
-        <tr>
-          <td
-            colSpan={columns.length}
-            style={{ padding: 16 }}
-          >
-            No data
-          </td>
-        </tr>
+        <Placeholder columns={columns}>
+          No data
+        </Placeholder>
       }
     }
   }

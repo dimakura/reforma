@@ -33,6 +33,7 @@ describe('Collection data source', () => {
       expect(ds.prevParams).toBeNull()
       expect(ds.status).toBe('initial')
       expect(ds.data).toBeNull()
+      expect(ds.headers).toBeNull()
       expect(ds.error).toBeNull()
     })
 
@@ -71,7 +72,8 @@ describe('Collection data source', () => {
             first_name: 'John',
             last_name: 'Quincy Adams'
           }]
-        })
+        }),
+        headers: { 'X-Total-Count': 10 }
       }))
 
       expectInitialDS(ds)
@@ -79,6 +81,7 @@ describe('Collection data source', () => {
       expectFetchingDS(ds)
       await promise
       expectReadyDS(ds)
+      expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
 
       const profile = ds.data[0]
       expect(profile.id).toBe(1)
@@ -91,7 +94,8 @@ describe('Collection data source', () => {
         ok: false,
         status: 404,
         statusText: 'Not found',
-        json: () => ({})
+        json: () => ({}),
+        headers: { 'X-Total-Count': 10 }
       }))
 
       expectInitialDS(ds)
@@ -99,6 +103,7 @@ describe('Collection data source', () => {
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
+      expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
     })
 
     test('exception request', async () => {
@@ -118,6 +123,7 @@ describe('Collection data source', () => {
 
 function expectInitialDS(ds) {
   expect(ds.status).toBe('initial')
+  expect(ds.headers).toBeNull()
   expect(ds.data).toBeNull()
   expect(ds.error).toBeNull()
 }
@@ -125,6 +131,7 @@ function expectInitialDS(ds) {
 function expectFetchingDS(ds) {
   expect(ds.status).toBe('fetching')
   expect(ds.data).toBeNull()
+  expect(ds.headers).toBeNull()
   expect(ds.error).toBeNull()
 }
 

@@ -1,4 +1,4 @@
-import snakeCase from 'lodash.snakecase'
+import { snakeCase } from './helpers'
 
 export function serializeType(type, value, fields) {
   return do {

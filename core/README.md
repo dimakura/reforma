@@ -1,6 +1,6 @@
 # Reforma
 
-Reforma (from React+Form) is a framework which will help you to create rich UI forms. Reforma is especially suited for creating admin panels, and pages with massive data processing. It will save you a lot of time which you will hopefully spend wisely.
+Reforma (from React+Form) is a framework which helps you create rich UI forms. Reforma is especially suited for creating admin panels, and pages with massive data processing. It will save you a lot of time which you will hopefully spend wisely.
 
 In theory, Reforma can also be used in end-user facing applications, where data intensity is not that high. But keep in mind, that in such scenario Reforma will save you less time, and you should consider whether constraints implied by Reforma suit you well.
 

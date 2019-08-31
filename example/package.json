@@ -5,6 +5,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.18.0",
     "@reforma/core": "file:../core",
+    "@reforma/ui": "file:../ui",
     "json-server": "^0.15.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

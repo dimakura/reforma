@@ -2,6 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { startCase } from 'lodash'
 
+function styleFor(col) {
+  return do {
+    if (typeof col === 'object' && 'width' in col) {
+      ({
+        width: col.width
+      })
+    }
+  }
+}
+
+function headerFor(col) {
+  return do {
+    if (typeof col === 'string') {
+      startCase(col)
+    } else if ('header' in col) {
+      col.header
+    } else {
+      startCase(col.name)
+    }
+  }
+}
+
 class Header extends React.PureComponent {
   render() {
     const { columns } = this.props
@@ -10,24 +32,14 @@ class Header extends React.PureComponent {
       <thead>
         <tr>
           {columns.map((col, idx) => {
-            return do {
-              if (typeof col === 'string') {
-                <th key={idx}>
-                  {startCase(col)}
-                </th>
-              } else {
-                const header = col.header || col.name
-                const style = {}
+            const style = styleFor(col)
+            const header = headerFor(col)
 
-                if ('width' in col) {
-                  style.width = col.width
-                }
-
-                <th key={idx} style={style}>
-                  {startCase(header)}
-                </th>
-              }
-            }
+            return (
+              <th key={idx} style={style}>
+                {header}
+              </th>
+            )
           })}
         </tr>
       </thead>

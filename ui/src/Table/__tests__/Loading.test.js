@@ -8,7 +8,8 @@ test('<Loading />', () => {
   )
 
   expect(comp.is('tr')).toBe(true)
-  expect(comp.childAt(0).is('td')).toBe(true)
-  expect(comp.childAt(0).text()).toBe('Loading...')
-  expect(comp.childAt(0).prop('colSpan')).toBe(2)
+  const cell = comp.childAt(0)
+  expect(cell.is('td')).toBe(true)
+  expect(cell.text()).toBe('Loading...')
+  expect(cell.prop('colSpan')).toBe(2)
 })

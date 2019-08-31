@@ -1,4 +1,4 @@
-import snakeCase from 'lodash.snakecase'
+import { snakeCase } from './helpers'
 
 export function instantiateType(type, value) {
   return do {

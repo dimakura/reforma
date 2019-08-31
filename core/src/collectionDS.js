@@ -2,7 +2,7 @@ import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
 import merge from 'lodash.merge'
-import snakeCase from 'lodash.snakecase'
+import { snakeCase } from './helpers'
 
 const INITIAL = 'initial'
 const FETCHING = 'fetching'
@@ -23,6 +23,7 @@ export default function createCollectionDS(opts) {
     params: null,
     prevParams: null,
     data: null,
+    headers: null,
     error: null,
     emitter: new DataSourceEvents()
   }
@@ -115,6 +116,12 @@ function definedDataAndError(collectionDS, privateData) {
     }
   })
 
+  Object.defineProperty(collectionDS, 'headers', {
+    get: function () {
+      return privateData.headers
+    }
+  })
+
   Object.defineProperty(collectionDS, 'error', {
     get: function () {
       return privateData.error
@@ -178,6 +185,8 @@ function defineFetch(collectionDS, opts, privateData) {
         params: fullParams,
         signal: privateData.controller.signal
       })
+
+      privateData.headers = resp.headers
 
       if (resp.ok) {
         const data = await resp.json()

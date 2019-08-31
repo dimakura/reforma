@@ -1,5 +1,5 @@
 import Reforma from '@reforma/core'
-import snakeCase from 'lodash.snakecase'
+import { snakeCase } from './helpers'
 const URL = global.URL || require('url').URL
 
 const absoluteUrlRegex = /^https?:\/\//i

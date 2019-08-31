@@ -75,18 +75,52 @@ describe('Collection data source', () => {
         }),
         headers: { 'X-Total-Count': 10 }
       }))
+      const listener = jest.fn()
 
       expectInitialDS(ds)
-      const promise = ds.fetch()
+      ds.addStatusListener(listener)
+      const promise = ds.fetch({
+        lastName: 'Quincy Adams'
+      })
       expectFetchingDS(ds)
       await promise
       expectReadyDS(ds)
       expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
 
+      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
+
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
+        params: {
+          firstName: 'John',
+          lastName: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
+
       const profile = ds.data[0]
+      expect(profile.__type__).toBe(type)
       expect(profile.id).toBe(1)
       expect(profile.firstName).toBe('John')
       expect(profile.lastName).toBe('Quincy Adams')
+
+      // re-fetch
+      Reforma.http.get.mockClear()
+      listener.mockClear()
+      await ds.refetch()
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
+        params: {
+          firstName: 'John',
+          lastName: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
+      expect(listener).toHaveBeenCalledWith('ready', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
     })
 
     test('failed request', async () => {
@@ -94,16 +128,20 @@ describe('Collection data source', () => {
         ok: false,
         status: 404,
         statusText: 'Not found',
-        json: () => ({}),
-        headers: { 'X-Total-Count': 10 }
+        json: () => ({})
       }))
+      const listener = jest.fn()
 
       expectInitialDS(ds)
+      ds.addStatusListener(listener)
       const promise = ds.fetch()
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
-      expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
+
+      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'failed')
+      expect(listener).toHaveBeenCalledTimes(2)
     })
 
     test('exception request', async () => {

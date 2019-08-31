@@ -129,7 +129,7 @@ function definedDataAndError(collectionDS, privateData) {
   })
 }
 
-function defineStatusListener(collectionDS, opts, privateData) {
+function defineStatusListener(collectionDS, privateData) {
   function addStatusListener(handler) {
     privateData.emitter.on(STATUS_CHANGED, handler)
 
@@ -224,4 +224,10 @@ function defineFetch(collectionDS, opts, privateData) {
   }
 
   Object.defineProperty(collectionDS, 'fetch', { value: fetch })
+
+  Object.defineProperty(collectionDS, 'refetch', {
+    value: function () {
+      return collectionDS.fetch(privateData.params)
+    }
+  })
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import Reforma from '@reforma/core'
 import { Button, FocusStyleManager, HTMLTable } from '@blueprintjs/core'
 
+import 'normalize.css/normalize.css'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 

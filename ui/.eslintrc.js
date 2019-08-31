@@ -3,8 +3,16 @@ module.exports = {
     'jest/globals': true
   },
   parser: 'babel-eslint',
-  extends: 'standard',
-  plugins: ['jest', 'babel'],
+  extends: [
+    'standard',
+    'plugin:react/recommended'
+  ],
+  plugins: ['jest', 'babel', 'react'],
+  settings: {
+    react: {
+      version: '16.9'
+    }
+  },
   rules: {
     'space-before-function-paren': ['error', {
       anonymous: 'always',

@@ -7,8 +7,16 @@ node_js:
 
 cache: npm
 
-script:
+before_script:
   - cd core/
   - npm install
+  - cd ../ui
+  - npm install
+  - cd ../
+
+script:
+  - cd core/
   - npm run lint
   - npm test
+  - cd ../ui
+  - npm run lint

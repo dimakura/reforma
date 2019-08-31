@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 function renderCell(col, item, key) {
   const value = do {
@@ -62,6 +63,11 @@ class Data extends React.PureComponent {
       }
     }
   }
+}
+
+Data.propTypes = {
+  columns: PropTypes.array.isRequired,
+  dataSource: PropTypes.object.isRequired
 }
 
 export default Data

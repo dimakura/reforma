@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { startCase } from 'lodash'
 import { HTMLTable } from '@blueprintjs/core'
 import CollectionComponent from '../CollectionComponent'
 import Header from './Header'
@@ -39,12 +38,18 @@ class Table extends React.PureComponent {
               interactive={hasData && interactive}
               style={style}
             >
-              <Header columns={columns} />
+              {
+                do {
+                  if (header) {
+                    <Header columns={columns} />
+                  }
+                }
+              }
               <tbody>
                 {
                   do {
                     if (status === 'initial' || (status === 'fetching' && !hasData)) {
-                      <Loading cols={columns.length} />
+                      <Loading columns={columns} />
                     } else if (status === 'failed') {
                       // TODO: error indicator? toast?
                       <Data columns={columns} dataSource={dataSource} />

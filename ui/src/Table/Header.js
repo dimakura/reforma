@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { startCase } from 'lodash'
 
 class Header extends React.PureComponent {
@@ -32,6 +33,10 @@ class Header extends React.PureComponent {
       </thead>
     )
   }
+}
+
+Header.propTypes = {
+  columns: PropTypes.array.isRequired
 }
 
 export default Header

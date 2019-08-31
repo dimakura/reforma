@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import isPresent from '@reforma/ui/utils/isPresent'
 import Placeholder from './Placeholder'
 
 function renderCell(col, item, key) {
@@ -22,7 +23,7 @@ function renderCell(col, item, key) {
   }
 
   return do {
-    if (value != null) {
+    if (isPresent(value)) {
       <td key={key} style={style}>
         {value}
       </td>
@@ -38,8 +39,7 @@ function renderCell(col, item, key) {
 
 class Data extends React.PureComponent {
   render() {
-    const { columns, dataSource } = this.props
-    const data = dataSource.data
+    const { columns, data } = this.props
 
     return do {
       if (data != null && data.length > 0) {
@@ -61,7 +61,7 @@ class Data extends React.PureComponent {
 
 Data.propTypes = {
   columns: PropTypes.array.isRequired,
-  dataSource: PropTypes.object.isRequired
+  data: PropTypes.array
 }
 
 export default Data

@@ -52,9 +52,9 @@ class Table extends React.PureComponent {
                       <Placeholder columns={columns}>Loading...</Placeholder>
                     } else if (status === 'failed') {
                       // TODO: error indicator? toast?
-                      <Data columns={columns} dataSource={dataSource} />
+                      <Data columns={columns} data={dataSource.data} />
                     } else {
-                      <Data columns={columns} dataSource={dataSource} />
+                      <Data columns={columns} data={dataSource.data} />
                     }
                   }
                 }

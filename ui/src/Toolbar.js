@@ -8,7 +8,8 @@ const toolbarMargin = Theme.marginTimes(2)
 class Toolbar extends React.PureComponent {
   render() {
     const style = {
-      padding: toolbarPadding
+      paddingTop: toolbarPadding,
+      paddingBottom: toolbarPadding
     }
 
     if (this.props.topMargin) {

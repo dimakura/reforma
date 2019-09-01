@@ -81,18 +81,18 @@ const column = {
 }
 ```
 
-### `RefreshCollection`
+### `RefreshAction`
 
-`RefreshCollection` renders as a button which re-fetches underlying collection data source when clicked.
+`RefreshAction` renders as a button which re-fetches underlying collection data source when clicked.
 
-In the following example, `RefreshCollection` and `Table` share the same collection data source, which makes the `RefreshCollection` button a "refresh" button for the table.
+In the following example, `RefreshAction` and `Table` share the same collection data source, which makes the `RefreshAction` button a "refresh" button for the table.
 
 ```js
-import { RefreshCollection, Table, Toolbar } from '@reforma/ui'
+import { RefreshAction, Table, Toolbar } from '@reforma/ui'
 
 <div>
   <Toolbar>
-    <RefreshCollection dataSource={profilesDS} />
+    <RefreshAction dataSource={profilesDS} />
   </Toolbar>
   <Table
     columns={['id', 'firstName', 'lastName']}

@@ -1,5 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Theme from '../Theme'
+
+const placeholderPadding = Theme.paddingUnit * 4
 
 class Placeholder extends React.PureComponent {
   render() {
@@ -9,7 +12,7 @@ class Placeholder extends React.PureComponent {
       <tr>
         <td
           colSpan={columns.length}
-          style={{ padding: 16 }}
+          style={{ padding: placeholderPadding }}
         >
           {this.props.children}
         </td>

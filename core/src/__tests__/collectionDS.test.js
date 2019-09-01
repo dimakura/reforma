@@ -1,5 +1,4 @@
 import Reforma from '@reforma/core'
-// jest.mock('../http')
 
 describe('Collection data source', () => {
   let type
@@ -32,6 +31,7 @@ describe('Collection data source', () => {
       expect(ds.params).toEqual({ firstName: 'Ben' })
       expect(ds.prevParams).toBeNull()
       expect(ds.status).toBe('initial')
+      expect(ds.body).toBeNull()
       expect(ds.data).toBeNull()
       expect(ds.headers).toBeNull()
       expect(ds.error).toBeNull()
@@ -71,7 +71,8 @@ describe('Collection data source', () => {
             id: '1',
             first_name: 'John',
             last_name: 'Quincy Adams'
-          }]
+          }],
+          totalCount: 10
         }),
         headers: { 'X-Total-Count': 10 }
       }))
@@ -86,6 +87,14 @@ describe('Collection data source', () => {
       await promise
       expectReadyDS(ds)
       expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
+      expect(ds.body).toEqual({
+        profiles: [{
+          id: '1',
+          first_name: 'John',
+          last_name: 'Quincy Adams'
+        }],
+        totalCount: 10
+      })
 
       expect(listener).toHaveBeenCalledWith('initial', 'fetching')
       expect(listener).toHaveBeenCalledWith('fetching', 'ready')
@@ -128,7 +137,9 @@ describe('Collection data source', () => {
         ok: false,
         status: 404,
         statusText: 'Not found',
-        json: () => ({})
+        json: () => ({
+          error: 'Unknown resource'
+        })
       }))
       const listener = jest.fn()
 
@@ -138,6 +149,9 @@ describe('Collection data source', () => {
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
+      expect(ds.body).toEqual({
+        error: 'Unknown resource'
+      })
 
       expect(listener).toHaveBeenCalledWith('initial', 'fetching')
       expect(listener).toHaveBeenCalledWith('fetching', 'failed')
@@ -155,6 +169,7 @@ describe('Collection data source', () => {
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
+      expect(ds.body).toBeNull()
     })
   })
 })

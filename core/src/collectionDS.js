@@ -23,6 +23,7 @@ export default function createCollectionDS(opts) {
     params: null,
     prevParams: null,
     data: null,
+    body: null,
     headers: null,
     error: null,
     emitter: new DataSourceEvents()
@@ -116,6 +117,12 @@ function definedDataAndError(collectionDS, privateData) {
     }
   })
 
+  Object.defineProperty(collectionDS, 'body', {
+    get: function () {
+      return privateData.body
+    }
+  })
+
   Object.defineProperty(collectionDS, 'headers', {
     get: function () {
       return privateData.headers
@@ -189,22 +196,24 @@ function defineFetch(collectionDS, opts, privateData) {
       privateData.headers = resp.headers
 
       if (resp.ok) {
-        const data = await resp.json()
-        const collectionData = do {
-          if (Array.isArray(data)) {
-            data
+        const body = await resp.json()
+        privateData.body = body
+
+        const data = do {
+          if (Array.isArray(body)) {
+            body
           } else if (
-            data != null &&
-            collectionDS.serialRoot in data &&
-            Array.isArray(data[collectionDS.serialRoot])
+            body != null &&
+            collectionDS.serialRoot in body &&
+            Array.isArray(body[collectionDS.serialRoot])
           ) {
-            data[collectionDS.serialRoot]
+            body[collectionDS.serialRoot]
           }
         }
 
-        if (collectionData != null) {
+        if (data != null) {
           privateData.status = READY
-          privateData.data = collectionData.map(data => collectionDS.type.create(data))
+          privateData.data = data.map(data => collectionDS.type.create(data))
         } else {
           privateData.data = []
         }
@@ -213,12 +222,14 @@ function defineFetch(collectionDS, opts, privateData) {
         privateData.prevParams = null
         privateData.emitter.emit(STATUS_CHANGED, FETCHING, READY)
       } else {
-        const data = await resp.json()
-        const err = Reforma.http.failedError(resp.status, resp.statusText, data)
+        const body = await resp.json()
+        privateData.body = body
+        const err = Reforma.http.failedError(resp.status, resp.statusText, body)
         reportError(err)
       }
     } catch (e) {
       const err = Reforma.http.exceptionError(e)
+      privateData.body = null
       reportError(err)
     }
   }

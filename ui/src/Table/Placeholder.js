@@ -9,7 +9,7 @@ class Placeholder extends React.PureComponent {
       <tr>
         <td
           colSpan={columns.length}
-          className="rt-placeholder"
+          className="rf-placeholder"
         >
           {this.props.children}
         </td>

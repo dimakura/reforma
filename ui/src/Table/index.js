@@ -32,10 +32,11 @@ class Table extends React.PureComponent {
 
           return (
             <HTMLTable
-              bordered={false}
+              bordered
               condensed={condensed}
               interactive={hasData && interactive}
               style={style}
+              className="rt-table"
             >
               {
                 do {

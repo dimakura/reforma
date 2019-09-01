@@ -1,5 +1,5 @@
 import React from 'react'
-import { RefreshAction, Table, Toolbar } from '@reforma/ui'
+import { LoadingIndicator, RefreshAction, Table, Toolbar } from '@reforma/ui'
 import presidentsDS from './presidentsDS'
 
 const initialParams = { _page: 1, _limit: 5 }
@@ -15,6 +15,9 @@ class App extends React.PureComponent {
           <RefreshAction
             dataSource={presidentsDS}
             text="Reload"
+          />
+          <LoadingIndicator
+            dataSource={presidentsDS}
           />
         </Toolbar>
         <Table

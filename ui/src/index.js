@@ -1,13 +1,13 @@
 import CollectionComponent from './CollectionComponent'
+import LoadingIndicator from './LoadingIndicator'
 import RefreshAction from './RefreshAction'
 import Table from './Table'
-import Theme from './Theme'
 import Toolbar from './Toolbar'
 
 export {
   CollectionComponent,
+  LoadingIndicator,
   RefreshAction,
   Table,
-  Theme,
   Toolbar
 }

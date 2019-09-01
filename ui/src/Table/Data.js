@@ -1,12 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { merge } from 'lodash'
 import isPresent from '../utils/isPresent'
 import Placeholder from './Placeholder'
-import Theme from '../Theme'
-
-const border = `1px solid ${Theme.borderColor}`
-const invisibleShadow = 'inset 0 0 0 0 #0000'
 
 function renderCell(col, item, idx) {
   const value = do {
@@ -19,22 +14,13 @@ function renderCell(col, item, idx) {
     }
   }
 
-  const baseStyle = {
-    boxShadow: invisibleShadow,
-    borderLeft: idx === 0 ? border : null,
-    borderRight: border,
-    borderBottom: border
-  }
-
-  const style = merge({}, baseStyle, col.cellStyle)
-
   return do {
     if (isPresent(value)) {
-      <td key={idx} style={style}>
+      <td key={idx} style={col.cellStyle}>
         {value}
       </td>
     } else {
-      <td key={idx} style={baseStyle}>
+      <td key={idx} style={col.cellStyle}>
         <span className="bp3-text-muted">
           (empty)
         </span>

@@ -7,31 +7,20 @@ describe('<Toolbar />', () => {
     const comp = shallow(<Toolbar>content</Toolbar>)
 
     expect(comp.text()).toBe('content')
-    expect(comp.prop('style')).toEqual({
-      paddingTop: 6,
-      paddingBottom: 6
-    })
+    expect(comp.prop('className')).toBe('rf-toolbar')
   })
 
   test('with top margin', () => {
     const comp = shallow(<Toolbar topMargin>content</Toolbar>)
 
     expect(comp.text()).toBe('content')
-    expect(comp.prop('style')).toEqual({
-      paddingTop: 6,
-      paddingBottom: 6,
-      marginTop: 11
-    })
+    expect(comp.prop('className')).toBe('rf-toolbar rf-top-margin')
   })
 
   test('with bottom margin', () => {
     const comp = shallow(<Toolbar bottomMargin>content</Toolbar>)
 
     expect(comp.text()).toBe('content')
-    expect(comp.prop('style')).toEqual({
-      paddingTop: 6,
-      paddingBottom: 6,
-      marginBottom: 11
-    })
+    expect(comp.prop('className')).toBe('rf-toolbar rf-bottom-margin')
   })
 })

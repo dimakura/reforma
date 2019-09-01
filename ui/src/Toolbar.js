@@ -1,27 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Theme from './Theme'
-
-const toolbarPadding = Theme.paddingTimes(1)
-const toolbarMargin = Theme.marginTimes(2)
 
 class Toolbar extends React.PureComponent {
   render() {
-    const style = {
-      paddingTop: toolbarPadding,
-      paddingBottom: toolbarPadding
-    }
+    const classNames = ['rf-toolbar']
 
     if (this.props.topMargin) {
-      style.marginTop = toolbarMargin
+      classNames.push('rf-top-margin')
     }
 
     if (this.props.bottomMargin) {
-      style.marginBottom = toolbarMargin
+      classNames.push('rf-bottom-margin')
     }
 
     return (
-      <div style={style}>
+      <div className={classNames.join(' ')}>
         {this.props.children}
       </div>
     )

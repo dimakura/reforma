@@ -1,23 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { startCase } from 'lodash'
-import Theme from '../Theme'
-
-const border = `1px solid ${Theme.borderColor}`
-const invisibleShadow = 'inset 0 0 0 0 #0000'
 
 function styleFor(col, idx) {
-  const style = {
-    border,
-    boxShadow: invisibleShadow
-  }
-
-  if (idx > 0) {
-    style.borderLeft = null
-  }
-
-  if (typeof col === 'object' && 'width' in col) {
-    style.width = col.width
+  const style = do {
+    if (typeof col === 'object' && 'width' in col) {
+      ({ width: col.width })
+    }
   }
 
   return style

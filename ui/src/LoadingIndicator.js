@@ -4,7 +4,7 @@ import { Spinner } from '@blueprintjs/core'
 import CollectionComponent from './CollectionComponent'
 
 function isBusy(dataSource) {
-  return dataSource.status === 'fetching'
+  return dataSource.status === 'fetching' || dataSource.status === 'initial'
 }
 
 class LoadingIndicator extends React.PureComponent {
@@ -34,7 +34,7 @@ class LoadingIndicator extends React.PureComponent {
 }
 
 LoadingIndicator.defaultProps = {
-  size: 20
+  size: 16
 }
 
 LoadingIndicator.propTypes = {

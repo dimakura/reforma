@@ -36,3 +36,11 @@ table.bp3-html-table.rt-table {
     margin-right: $space-x1;
   }
 }
+
+.rf-pagination {
+  align-items: center;
+
+  .rf-pages {
+    padding: 0 $space-x1;
+  }
+}

@@ -15,7 +15,7 @@ describe('<LoadingIndicator />', () => {
 
     expect(comp.is(CollectionComponent)).toBe(true)
     expect(spinner.is(Spinner)).toBe(true)
-    expect(spinner.prop('size')).toBe(20)
+    expect(spinner.prop('size')).toBe(16)
   })
 
   test('ready dataSource', () => {

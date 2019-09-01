@@ -1,8 +1,14 @@
 import React from 'react'
-import { LoadingIndicator, RefreshAction, Table, Toolbar } from '@reforma/ui'
+import {
+  LoadingIndicator,
+  Pagination,
+  RefreshAction,
+  Table,
+  Toolbar
+} from '@reforma/ui'
 import presidentsDS from './presidentsDS'
 
-const initialParams = { _page: 1, _limit: 5 }
+const initialParams = { _page: 1, _limit: 3 }
 const id = { name: 'id', header: 'N', width: 50, cellStyle: { textAlign: 'right' } }
 const firstName = 'firstName'
 const lastName = 'lastName'
@@ -12,13 +18,7 @@ class App extends React.PureComponent {
     return (
       <div style={{ padding: 16 }}>
         <Toolbar>
-          <RefreshAction
-            dataSource={presidentsDS}
-            text="Reload"
-          />
-          <LoadingIndicator
-            dataSource={presidentsDS}
-          />
+          <RefreshAction dataSource={presidentsDS} />
         </Toolbar>
         <Table
           dataSource={presidentsDS}
@@ -26,6 +26,10 @@ class App extends React.PureComponent {
           style={{ width: '100%' }}
           initialParams={initialParams}
         />
+        <Toolbar>
+          <Pagination dataSource={presidentsDS} />
+          <LoadingIndicator dataSource={presidentsDS} />
+        </Toolbar>
       </div>
     )
   }

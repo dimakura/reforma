@@ -29,7 +29,6 @@ describe('Collection data source', () => {
       expect(ds.serialRoot).toBe('profiles')
       expect(ds.url).toBe('/profiles')
       expect(ds.params).toEqual({ firstName: 'Ben' })
-      expect(ds.prevParams).toBeNull()
       expect(ds.status).toBe('initial')
       expect(ds.body).toBeNull()
       expect(ds.data).toBeNull()
@@ -153,9 +152,9 @@ describe('Collection data source', () => {
         error: 'Unknown resource'
       })
 
+      expect(listener).toHaveBeenCalledTimes(2)
       expect(listener).toHaveBeenCalledWith('initial', 'fetching')
       expect(listener).toHaveBeenCalledWith('fetching', 'failed')
-      expect(listener).toHaveBeenCalledTimes(2)
     })
 
     test('exception request', async () => {

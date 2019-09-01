@@ -1,3 +1,4 @@
+/* global DOMException */
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
@@ -21,7 +22,6 @@ export default function createCollectionDS(opts) {
   const privateData = {
     status: INITIAL,
     params: null,
-    prevParams: null,
     data: null,
     body: null,
     headers: null,
@@ -94,12 +94,6 @@ function defineParams(collectionDS, opts, privateData) {
       return merge({}, originalParams, privateData.params)
     }
   })
-
-  Object.defineProperty(collectionDS, 'prevParams', {
-    get: function () {
-      return privateData.prevParams
-    }
-  })
 }
 
 function defineStatus(collectionDS, privateData) {
@@ -151,86 +145,80 @@ function defineStatusListener(collectionDS, privateData) {
 }
 
 function defineFetch(collectionDS, opts, privateData) {
-  const originalParams = opts.params
+  function reportError(error, wasAborted = false) {
+    // We have race condition here!
+    // We should not do anything on abort: because this aborted call most likely
+    // comes late and another request is under the way.
 
-  function cancelIfBusy() {
-    const isBusy = privateData.status === FETCHING
-    if (isBusy && privateData.controller != null) {
+    if (wasAborted) {
+      return
+    }
+
+    if (privateData.controller != null) {
       privateData.controller.abort()
       privateData.controller = null
     }
 
-    return isBusy
+    const oldStatus = privateData.status
+    privateData.status = FAILED
+    privateData.error = error
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, FAILED)
   }
 
-  function reportError(error) {
-    privateData.status = FAILED
-    privateData.controller = null
-    privateData.params = privateData.prevParams
-    privateData.prevParams = null
-    privateData.error = error
-    privateData.emitter.emit(STATUS_CHANGED, FETCHING, FAILED)
+  function extractData(body) {
+    const data = do {
+      if (Array.isArray(body)) {
+        body
+      } else if (
+        body != null &&
+        collectionDS.serialRoot in body &&
+        Array.isArray(body[collectionDS.serialRoot])
+      ) {
+        body[collectionDS.serialRoot]
+      }
+    }
+
+    return do {
+      if (data != null) {
+        data.map(data => collectionDS.type.create(data))
+      } else {
+        []
+      }
+    }
   }
 
   async function fetch(params) {
-    const isBusy = cancelIfBusy()
+    if (privateData.controller != null) {
+      privateData.controller.abort()
+    }
+
     const oldStatus = privateData.status
     privateData.status = FETCHING
     privateData.controller = new AbortController()
-    privateData.prevParams = privateData.params
     privateData.params = params
     privateData.error = null
-
-    if (!isBusy) {
-      privateData.emitter.emit(STATUS_CHANGED, oldStatus, FETCHING)
-    }
-
-    const fullParams = merge({}, originalParams, params)
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, FETCHING)
 
     try {
       const resp = await Reforma.http.get(collectionDS.url, {
-        params: fullParams,
+        params: collectionDS.params,
         signal: privateData.controller.signal
       })
 
+      privateData.body = await resp.json()
       privateData.headers = resp.headers
 
       if (resp.ok) {
-        const body = await resp.json()
-        privateData.body = body
-
-        const data = do {
-          if (Array.isArray(body)) {
-            body
-          } else if (
-            body != null &&
-            collectionDS.serialRoot in body &&
-            Array.isArray(body[collectionDS.serialRoot])
-          ) {
-            body[collectionDS.serialRoot]
-          }
-        }
-
-        if (data != null) {
-          privateData.status = READY
-          privateData.data = data.map(data => collectionDS.type.create(data))
-        } else {
-          privateData.data = []
-        }
-
+        privateData.status = READY
         privateData.controller = null
-        privateData.prevParams = null
+        privateData.data = extractData(privateData.body)
         privateData.emitter.emit(STATUS_CHANGED, FETCHING, READY)
       } else {
-        const body = await resp.json()
-        privateData.body = body
-        const err = Reforma.http.failedError(resp.status, resp.statusText, body)
-        reportError(err)
+        reportError(Reforma.http.failedError(resp.status, resp.statusText, privateData.body))
       }
     } catch (e) {
-      const err = Reforma.http.exceptionError(e)
-      privateData.body = null
-      reportError(err)
+      const abortError = e instanceof DOMException && (e.code === 20 || e.name === 'AbortError')
+      reportError(Reforma.http.exceptionError(e), abortError)
     }
   }
 

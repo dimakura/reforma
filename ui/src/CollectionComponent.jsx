@@ -3,14 +3,18 @@ import PropTypes from 'prop-types'
 
 class CollectionComponent extends React.PureComponent {
   componentDidMount() {
+    let counter = 0
     const { autofetch, cached, initialParams, dataSource } = this.props
     const status = dataSource.status
     const isInitial = status === 'initial'
     const isBusy = status === 'fetching'
 
     this.unsubscribe = dataSource.addStatusListener((oldStatus, newStatus) => {
+      counter += 1
+
       this.setState({
-        status: newStatus
+        status: newStatus,
+        shakeTree: counter
       })
     })
 

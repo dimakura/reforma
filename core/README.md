@@ -331,14 +331,10 @@ profileDS.status
 
 profileDS.params
 // => {countryName: "Italy", cityName: "Milan"}
-profileDS.prevParams
-// => {countryName: "Italy", cityName: "Florence"}
 
 await promise
 profileDS.params
 // => {countryName: "Italy", cityName: "Milan"}
-profileDS.prevParams
-// => null
 ```
 
 ### Record data source

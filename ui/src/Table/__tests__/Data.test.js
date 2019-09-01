@@ -8,7 +8,7 @@ describe('<Data />', () => {
     { id: 2, firstName: 'James', lastName: 'Hutton' },
     { id: 3, firstName: '', lastName: '' }
   ]
-  const id = { name: 'id', header: 'id', align: 'right' }
+  const id = { name: 'id', header: 'id', cellStyle: { textAlign: 'right' } }
   const firstName = 'firstName'
   const lastName = { name: 'lastName', render: (profile) => `${profile.firstName} ${profile.lastName}` }
   const columns = [id, firstName, lastName]

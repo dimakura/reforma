@@ -3,7 +3,7 @@ import { Table } from '@reforma/ui'
 import presidentsDS from './presidentsDS'
 
 const initialParams = { _page: 1, _limit: 5 }
-const id = { name: 'id', header: 'N', width: 50, align: 'right' }
+const id = { name: 'id', header: 'N', width: 50, cellStyle: { textAlign: 'right' } }
 const firstName = 'firstName'
 const lastName = 'lastName'
 

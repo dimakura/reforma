@@ -55,8 +55,6 @@ import { CollectionComponent } from '@reforma/ui'
 import { Table } from '@reforma/ui'
 
 <Table
-  autofetch
-  cached
   columns={['id', 'firstName', 'lastName']}
   dataSource={profilesDS}
 />
@@ -69,14 +67,44 @@ import { Table } from '@reforma/ui'
 | `dataSource` | `null` | Collection data source for this component. This property is required.
 | `columns` | `null` | Array of columns for the given table. This property is required.
 
-Table columns can be given as property names or as full column qualifiers:
+Table columns can be given as property names or as a full column specification:
 
 ```js
 const column = {
   name: 'fullName',
   header: 'Painter Name',
-  renderCell: (model) => (<span>{model.fullName}</span>),
+  render: (model) => (<span className="some-fancy-class">{model.fullName}</span>),
   width: 100,
-  align: 'right'
+  cellStyle: {
+    textAlign: 'center'
+  }
 }
 ```
+
+### `RefreshCollection`
+
+`RefreshCollection` renders as a button which re-fetches underlying collection data source when clicked.
+
+In the following example, `RefreshCollection` and `Table` share the same collection data source, which makes the `RefreshCollection` button a "refresh" button for the table.
+
+```js
+import { RefreshCollection, Table, Toolbar } from '@reforma/ui'
+
+<div>
+  <Toolbar>
+    <RefreshCollection dataSource={profilesDS} />
+  </Toolbar>
+  <Table
+    columns={['id', 'firstName', 'lastName']}
+    dataSource={profilesDS}
+  />
+</div>
+```
+
+| Property | Default | Discussion |
+| :------- | :------ | :--------- |
+| `dataSource` | `null` | Collection data source for this component. This property is required. |
+| `icon` | `"refresh"` | Button icon. |
+| `text` | `"Refresh"` | Button text. |
+| `large` | `false` | Display as a large button. |
+| `minimal` | `false` | Display as a minimal button. |

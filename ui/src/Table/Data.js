@@ -15,10 +15,8 @@ function renderCell(col, item, key) {
   }
 
   const style = do {
-    if (col.align != null) {
-      ({
-        textAlign: col.align
-      })
+    if (typeof col !== 'string') {
+      col.cellStyle
     }
   }
 

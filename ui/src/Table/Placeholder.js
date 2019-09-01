@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Theme from '../Theme'
 
-const placeholderPadding = Theme.paddingUnit * 4
+const placeholderPadding = Theme.paddingTimes(4)
 
 class Placeholder extends React.PureComponent {
   render() {

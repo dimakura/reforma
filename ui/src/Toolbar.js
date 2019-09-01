@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Theme from './Theme'
 
-const toolbarPadding = Theme.paddingUnit
-const toolbarMargin = Theme.marginUnit * 4
+const toolbarPadding = Theme.paddingTimes(1)
+const toolbarMargin = Theme.marginTimes(2)
 
 class Toolbar extends React.PureComponent {
   render() {

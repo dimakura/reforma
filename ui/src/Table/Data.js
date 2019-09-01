@@ -1,9 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isPresent from '@reforma/ui/utils/isPresent'
+import { merge } from 'lodash'
+import isPresent from '../utils/isPresent'
 import Placeholder from './Placeholder'
+import Theme from '../Theme'
 
-function renderCell(col, item, key) {
+const border = `1px solid ${Theme.borderColor}`
+const invisibleShadow = 'inset 0 0 0 0 #0000'
+
+function renderCell(col, item, idx) {
   const value = do {
     if (typeof col === 'string') {
       item[col]
@@ -14,19 +19,22 @@ function renderCell(col, item, key) {
     }
   }
 
-  const style = do {
-    if (typeof col !== 'string') {
-      col.cellStyle
-    }
+  const baseStyle = {
+    boxShadow: invisibleShadow,
+    borderLeft: idx === 0 ? border : null,
+    borderRight: border,
+    borderBottom: border
   }
+
+  const style = merge({}, baseStyle, col.cellStyle)
 
   return do {
     if (isPresent(value)) {
-      <td key={key} style={style}>
+      <td key={idx} style={style}>
         {value}
       </td>
     } else {
-      <td key={key}>
+      <td key={idx} style={baseStyle}>
         <span className="bp3-text-muted">
           (empty)
         </span>

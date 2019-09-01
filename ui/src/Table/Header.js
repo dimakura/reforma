@@ -1,15 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { startCase } from 'lodash'
+import Theme from '../Theme'
 
-function styleFor(col) {
-  return do {
-    if (typeof col === 'object' && 'width' in col) {
-      ({
-        width: col.width
-      })
-    }
+const border = `1px solid ${Theme.borderColor}`
+const invisibleShadow = 'inset 0 0 0 0 #0000'
+
+function styleFor(col, idx) {
+  const style = {
+    border,
+    boxShadow: invisibleShadow
   }
+
+  if (idx > 0) {
+    style.borderLeft = null
+  }
+
+  if (typeof col === 'object' && 'width' in col) {
+    style.width = col.width
+  }
+
+  return style
 }
 
 function headerFor(col) {
@@ -32,7 +43,7 @@ class Header extends React.PureComponent {
       <thead>
         <tr>
           {columns.map((col, idx) => {
-            const style = styleFor(col)
+            const style = styleFor(col, idx)
             const header = headerFor(col)
 
             return (

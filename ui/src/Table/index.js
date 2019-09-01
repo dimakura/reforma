@@ -15,7 +15,6 @@ class Table extends React.PureComponent {
       initialParams,
       header,
       columns,
-      bordered,
       condensed,
       interactive,
       style
@@ -33,7 +32,7 @@ class Table extends React.PureComponent {
 
           return (
             <HTMLTable
-              bordered={bordered}
+              bordered={false}
               condensed={condensed}
               interactive={hasData && interactive}
               style={style}
@@ -83,7 +82,6 @@ Table.propTypes = {
   initialParams: PropTypes.object,
   header: PropTypes.bool.isRequired,
   columns: PropTypes.array.isRequired,
-  bordered: PropTypes.bool.isRequired,
   condensed: PropTypes.bool.isRequired,
   interactive: PropTypes.bool.isRequired,
   style: PropTypes.object

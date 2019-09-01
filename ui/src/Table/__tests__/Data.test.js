@@ -24,7 +24,7 @@ describe('<Data />', () => {
     const cells = comp.find('td')
     expect(cells).toHaveLength(9)
     expect(cells.at(0).text()).toBe('1')
-    expect(cells.at(0).prop('style')).toEqual({ textAlign: 'right' })
+    expect(cells.at(0).prop('style')).toMatchObject({ textAlign: 'right' })
     expect(cells.at(1).text()).toBe('Charles')
     expect(cells.at(2).text()).toBe('Charles Lyell')
     expect(cells.at(3).text()).toBe('2')

@@ -13,7 +13,7 @@ test('<Header />', () => {
   expect(comp.is('thead')).toBe(true)
   expect(headers).toHaveLength(3)
   expect(headers.at(0).text()).toBe('id')
-  expect(headers.at(0).prop('style')).toEqual({ width: 50 })
+  expect(headers.at(0).prop('style')).toMatchObject({ width: 50 })
   expect(headers.at(1).text()).toBe('First Name')
   expect(headers.at(2).text()).toBe('Last Name')
 })

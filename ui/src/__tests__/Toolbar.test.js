@@ -8,7 +8,7 @@ describe('<Toolbar />', () => {
 
     expect(comp.text()).toBe('content')
     expect(comp.prop('style')).toEqual({
-      padding: 4
+      padding: 6
     })
   })
 
@@ -17,8 +17,8 @@ describe('<Toolbar />', () => {
 
     expect(comp.text()).toBe('content')
     expect(comp.prop('style')).toEqual({
-      padding: 4,
-      marginTop: 16
+      padding: 6,
+      marginTop: 11
     })
   })
 
@@ -27,8 +27,8 @@ describe('<Toolbar />', () => {
 
     expect(comp.text()).toBe('content')
     expect(comp.prop('style')).toEqual({
-      padding: 4,
-      marginBottom: 16
+      padding: 6,
+      marginBottom: 11
     })
   })
 })

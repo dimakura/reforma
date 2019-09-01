@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from '@reforma/ui'
+import { Table, Toolbar } from '@reforma/ui'
 import presidentsDS from './presidentsDS'
 
 const initialParams = { _page: 1, _limit: 5 }
@@ -10,7 +10,10 @@ const lastName = 'lastName'
 class App extends React.PureComponent {
   render() {
     return (
-      <div>
+      <div style={{ padding: 16 }}>
+        <Toolbar topMargin>
+          TODO: add actions
+        </Toolbar>
         <Table
           dataSource={presidentsDS}
           columns={[id, firstName, lastName]}

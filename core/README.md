@@ -1,18 +1,18 @@
 # Reforma
 
-Reforma (from React+Form) is a framework which will help you to create rich UI forms. Reforma is especially suited for creating Admin panels, and pages with heavy data processing. It will save you a lot of time, which you will hopefully spend wisely.
+Reforma (from React+Form) is a framework which helps you create rich UI forms. Reforma is especially suited for creating admin panels, and pages with massive data processing. It will save you a lot of time which you will hopefully spend wisely.
 
-In theory Reforma can also be used in end-user facing applications, where data intensity is not that high. But keep in mind, that in such scenario Reforma will save you less time, and you should consider whether constraints implied by Reforma suit you well.
+In theory, Reforma can also be used in end-user facing applications, where data intensity is not that high. But keep in mind, that in such scenario Reforma will save you less time, and you should consider whether constraints implied by Reforma suit you well.
 
 ## About the core module
 
-The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides an official UI implementation `@reforma/blueprint`, which is based on [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
+The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides the official UI implementation `@reforma/blueprint`, which uses [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
 
 ## Reforma types
 
-User defined types (UDT) are the basis of the Reforma.
+User-defined types (UDT) are the basis of the Reforma.
 
-Let's build our first user defined type:
+Let's build our first user-defined type:
 
 ```js
 import Reforma from '@reforma/core'
@@ -30,7 +30,7 @@ const profileType = Reforma.createType({
 })
 ```
 
-As you can see, to build a user defined type, we used a built-in types, namely `Reforma.integer` and `Reforma.string`. There are few more of them:
+As you can see, to build a user-defined type, we used a built-in types, namely `Reforma.integer` and `Reforma.string`. There are few more of them:
 
 - `Reforma.integer`
 - `Reforma.float`
@@ -40,7 +40,7 @@ As you can see, to build a user defined type, we used a built-in types, namely `
 - `Reforma.arrayOf(type)`
 - `Reforma.mapOf(keyType, valueType)`
 
-There's another way to create Reforma type. First you can just "declare" the type:
+There's another way to create Reforma type. First, you can "declare" the type:
 
 ```js
 const profileType = Reforma.createType({
@@ -61,9 +61,9 @@ profileType.defineFields({
 })
 ```
 
-You can use `defineFields` only once for a user defined type without fields.
+You can use `defineFields` only once for a user-defined type without fields.
 
-You can also put user defined types as field types:
+You can also put user-defined types as field types:
 
 ```js
 const orderType = Reforma.createType({
@@ -76,11 +76,11 @@ orderType.defineFields({
 })
 ```
 
-Because we can split type creation into two parts (declaration and field definition), it's possible to have circular references of user defined types.
+Because we can split type creation into two parts (declaration and field definition), it's possible to have circular references of user-defined types.
 
 ### Distinction from fields
 
-In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce single user defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, they are implicitly converted into a field object. This conversion can be explicit, using `toField` getter on any type:
+In Reforma types are reusable. That means that we have only one `Reforma.integer` and `Reforma.createType` can produce a single user-defined type per name. When we use `id`, `validate`, or `calc` on the built-in types, Reforma implicitly converts them into field objects. This conversion can be explicit, using `toField` property on any type:
 
 ```js
 Reforma.integer.__isType__
@@ -93,7 +93,7 @@ Reforma.integer.toField.__isField__
 // => true
 ```
 
-User defined types cannot be converted to field implicitly. When needed, this conversion should be explicit using `toField` getter.
+User-defined types cannot be converted to field implicitly. When needed, this conversion should be explicit using `toField` getter.
 
 ```js
 profileType.__isType__
@@ -105,7 +105,7 @@ profileType.toField.__isField__
 
 ## Instantiating Reforma types
 
-Every Reforma type can be instantiated using `create` method defined on the type itself.
+Every Reforma type can be instantiated using the `create` method defined on the Reforma type itself.
 
 Built-in Reforma types are a good point to start:
 
@@ -243,7 +243,7 @@ profileType.serialize({id: 1, firstName: 'Amerigo', lastName: 'Vespucci'})
 
 Serialized field names will be snake_cased.
 
-Four user defined types you can also specify array of serializable fields:
+Four user-defined types you can also specify an array of serializable fields:
 
 ```js
 profileType.serialize(
@@ -275,14 +275,19 @@ const profilesDS = Reforma.createCollectionDS({
 To retrieve data from a remote server, use the `fetch` method. You can pass params to the call:
 
 ```js
-const profiles = await profilesDS.fetch({
+await profilesDS.fetch({
   cityName: 'Florence'
 })
 // GET /api/profiles?country_name=Italy&city_name=Florence
+
+profilesDS.data
 // => Array[]
+
+profilesDS.headers.get('X-Total-Count')
+// => 100
 ```
 
-Note that the params defined during data source creation (`countryName`) are present in the request, along with the params specified in the call (`cityName`).
+Note that the params defined during data source creation (`countryName`) are present in the request, along with the params specified in the call to `fetch` (`cityName`).
 
 An important property of data source is its status.
 
@@ -295,7 +300,7 @@ Other possible values for the status of a collection data source are:
 
 - `initial` initial status.
 - `fetching` status during fetching.
-- `ready` status after successful fetch. You can get fetched data using `.data` property.
+- `ready` status after a successful fetch. You can get fetched data using `.data` property.
 - `failed` status after failed fetch. You can get error details using `.errors` property. Note, that `.data` will be still available from the previous fetch.
 
 You can listen for status changes:
@@ -310,24 +315,26 @@ There are other useful props available for a collection data source:
 profileDS.data
 // => Array[]
 
+profileDS.headers
+// => Headers{}
+
+profileDS.errors
+// => null
+
 profileDS.params
 // => {countryName: "Italy", cityName: "Florence"}
 
-const promise = profileDS.fetch({cityName: 'Milan'})
+const promise = profileDS.fetch({ cityName: 'Milan' })
 
 profileDS.status
 // => "fetching"
 
 profileDS.params
 // => {countryName: "Italy", cityName: "Milan"}
-profileDS.prevParams
-// => {countryName: "Italy", cityName: "Florence"}
 
 await promise
 profileDS.params
 // => {countryName: "Italy", cityName: "Milan"}
-profileDS.prevParams
-// => null
 ```
 
 ### Record data source

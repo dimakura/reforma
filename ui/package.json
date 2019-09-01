@@ -1,0 +1,56 @@
+{
+  "name": "ui",
+  "version": "0.2.0",
+  "description": "Reforma UI is a widget library based on Reforma Core.",
+  "main": "lib/js/index.js",
+  "scripts": {
+    "clean": "rm -rf lib/*",
+    "compile:js": "node_modules/.bin/babel -s inline -d lib/js src --ignore \"src/**/*.test.js\"",
+    "compile:css": "sass scss:lib/css",
+    "dev": "run-p \"compile:js -- --watch\" \"compile:css -- --watch\"",
+    "build": "run-p \"compile:js\" \"compile:css\"",
+    "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js'",
+    "test": "jest"
+  },
+  "keywords": [
+    "reforma",
+    "forms",
+    "widget library",
+    "react"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-do-expressions": "^7.5.0",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@blueprintjs/core": "^3.18.0",
+    "@blueprintjs/icons": "^3.10.0",
+    "@reforma/core": "file:../core",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-polyfill": "^6.26.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "^6.3.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.16.0",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^24.9.0",
+    "npm-run-all": "^4.1.5",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}

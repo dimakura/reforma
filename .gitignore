@@ -1,4 +1,4 @@
-dist
-lib
-node_modules
+lib/
+node_modules/
 .DS_Store
+.sass-cache/

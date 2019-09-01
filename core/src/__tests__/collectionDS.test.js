@@ -1,5 +1,4 @@
 import Reforma from '@reforma/core'
-// jest.mock('../http')
 
 describe('Collection data source', () => {
   let type
@@ -30,8 +29,8 @@ describe('Collection data source', () => {
       expect(ds.serialRoot).toBe('profiles')
       expect(ds.url).toBe('/profiles')
       expect(ds.params).toEqual({ firstName: 'Ben' })
-      expect(ds.prevParams).toBeNull()
       expect(ds.status).toBe('initial')
+      expect(ds.body).toBeNull()
       expect(ds.data).toBeNull()
       expect(ds.headers).toBeNull()
       expect(ds.error).toBeNull()
@@ -71,22 +70,65 @@ describe('Collection data source', () => {
             id: '1',
             first_name: 'John',
             last_name: 'Quincy Adams'
-          }]
+          }],
+          totalCount: 10
         }),
         headers: { 'X-Total-Count': 10 }
       }))
+      const listener = jest.fn()
 
       expectInitialDS(ds)
-      const promise = ds.fetch()
+      ds.addStatusListener(listener)
+      const promise = ds.fetch({
+        lastName: 'Quincy Adams'
+      })
       expectFetchingDS(ds)
       await promise
       expectReadyDS(ds)
       expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
+      expect(ds.body).toEqual({
+        profiles: [{
+          id: '1',
+          first_name: 'John',
+          last_name: 'Quincy Adams'
+        }],
+        totalCount: 10
+      })
+
+      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
+
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
+        params: {
+          firstName: 'John',
+          lastName: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
 
       const profile = ds.data[0]
+      expect(profile.__type__).toBe(type)
       expect(profile.id).toBe(1)
       expect(profile.firstName).toBe('John')
       expect(profile.lastName).toBe('Quincy Adams')
+
+      // re-fetch
+      Reforma.http.get.mockClear()
+      listener.mockClear()
+      await ds.refetch()
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
+        params: {
+          firstName: 'John',
+          lastName: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
+      expect(listener).toHaveBeenCalledWith('ready', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
     })
 
     test('failed request', async () => {
@@ -94,16 +136,25 @@ describe('Collection data source', () => {
         ok: false,
         status: 404,
         statusText: 'Not found',
-        json: () => ({}),
-        headers: { 'X-Total-Count': 10 }
+        json: () => ({
+          error: 'Unknown resource'
+        })
       }))
+      const listener = jest.fn()
 
       expectInitialDS(ds)
+      ds.addStatusListener(listener)
       const promise = ds.fetch()
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
-      expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
+      expect(ds.body).toEqual({
+        error: 'Unknown resource'
+      })
+
+      expect(listener).toHaveBeenCalledTimes(2)
+      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
+      expect(listener).toHaveBeenCalledWith('fetching', 'failed')
     })
 
     test('exception request', async () => {
@@ -117,6 +168,7 @@ describe('Collection data source', () => {
       expectFetchingDS(ds)
       await promise
       expectFailedDS(ds)
+      expect(ds.body).toBeNull()
     })
   })
 })

@@ -1,7 +1,7 @@
 {
   "name": "@reforma/core",
   "version": "0.2.0",
-  "description": "Reforma helps you to create rich UI forms.",
+  "description": "Reforma (from React+Form) is a framework which helps you create rich UI forms.",
   "main": "lib/index.js",
   "files": [
     "/lib"
@@ -13,8 +13,9 @@
     "test": "jest"
   },
   "keywords": [
-    "forms",
     "reforma",
+    "forms",
+    "widget library",
     "react"
   ],
   "author": "Dimitri Kurashvili <dimakura@gmail.com>",

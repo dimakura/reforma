@@ -12,3 +12,7 @@ script:
   - npm install
   - npm run lint
   - npm test
+  - cd ../ui
+  - npm install
+  - npm run lint
+  - npm test

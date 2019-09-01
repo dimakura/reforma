@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
 import CollectionComponent from '../CollectionComponent'
 import Header from './Header'
-import Placeholder from './Loading'
+import Placeholder from './Placeholder'
 import Data from './Data'
 
 class Table extends React.PureComponent {

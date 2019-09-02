@@ -29,6 +29,7 @@ class Table extends React.PureComponent {
         render={() => {
           const status = dataSource.status
           const hasData = dataSource.data != null && dataSource.data.length > 0
+          const isInitialLoad = status === 'initial' || (status === 'fetching' && !hasData)
 
           return (
             <HTMLTable
@@ -48,11 +49,8 @@ class Table extends React.PureComponent {
               <tbody>
                 {
                   do {
-                    if (status === 'initial' || (status === 'fetching' && !hasData)) {
+                    if (isInitialLoad) {
                       <Placeholder columns={columns}>Loading...</Placeholder>
-                    } else if (status === 'failed') {
-                      // TODO: error indicator? toast?
-                      <Data columns={columns} data={dataSource.data} />
                     } else {
                       <Data columns={columns} data={dataSource.data} />
                     }

@@ -27,8 +27,9 @@ class Table extends React.PureComponent {
         dataSource={dataSource}
         initialParams={initialParams}
         render={() => {
+          const data = dataSource.data
           const status = dataSource.status
-          const hasData = dataSource.data != null && dataSource.data.length > 0
+          const hasData = data != null && data.length > 0
           const isInitialLoad = status === 'initial' || (status === 'fetching' && !hasData)
 
           return (
@@ -50,9 +51,18 @@ class Table extends React.PureComponent {
                 {
                   do {
                     if (isInitialLoad) {
-                      <Placeholder columns={columns}>Loading...</Placeholder>
+                      <Placeholder columns={columns}>
+                        Loading...
+                      </Placeholder>
+                    } else if (!hasData) {
+                      <Placeholder columns={columns}>
+                        No data
+                      </Placeholder>
                     } else {
-                      <Data columns={columns} data={dataSource.data} />
+                      <Data
+                        data={data}
+                        columns={columns}
+                      />
                     }
                   }
                 }

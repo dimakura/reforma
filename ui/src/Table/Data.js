@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import isPresent from '../utils/isPresent'
-import Placeholder from './Placeholder'
 
 function renderCell(col, item, idx) {
   const value = do {
@@ -33,27 +32,19 @@ class Data extends React.PureComponent {
   render() {
     const { columns, data } = this.props
 
-    return do {
-      if (data != null && data.length > 0) {
-        data.map((item, i) => {
-          return (
-            <tr key={i}>
-              {columns.map((col, j) => renderCell(col, item, j))}
-            </tr>
-          )
-        })
-      } else {
-        <Placeholder columns={columns}>
-          No data
-        </Placeholder>
-      }
-    }
+    return data.map((item, i) => {
+      return (
+        <tr key={i}>
+          {columns.map((col, j) => renderCell(col, item, j))}
+        </tr>
+      )
+    })
   }
 }
 
 Data.propTypes = {
   columns: PropTypes.array.isRequired,
-  data: PropTypes.array
+  data: PropTypes.array.isRequired
 }
 
 export default Data

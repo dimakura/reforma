@@ -81,14 +81,15 @@ const column = {
 }
 ```
 
-### `RefreshAction`
+### Other collection components
 
-`RefreshAction` renders as a button which re-fetches underlying collection data source when clicked.
+- `RefreshAction` renders as a button which re-fetches underlying collection data source when clicked.
+- `Pagination` renders pagination component.
 
-In the following example, `RefreshAction` and `Table` share the same collection data source, which makes the `RefreshAction` button a "refresh" button for the table.
+In the following example, `RefreshAction`, `Pagination`, and `Table` share the same collection data source:
 
 ```js
-import { RefreshAction, Table, Toolbar } from '@reforma/ui'
+import { Pagination, RefreshAction, Table, Toolbar } from '@reforma/ui'
 
 <div>
   <Toolbar>
@@ -98,8 +99,13 @@ import { RefreshAction, Table, Toolbar } from '@reforma/ui'
     columns={['id', 'firstName', 'lastName']}
     dataSource={profilesDS}
   />
+  <Toolbar>
+    <Pagination dataSource={profilesDS} />
+  </Toolbar>
 </div>
 ```
+
+#### `RefreshAction` props
 
 | Property | Default | Discussion |
 | :------- | :------ | :--------- |
@@ -108,3 +114,11 @@ import { RefreshAction, Table, Toolbar } from '@reforma/ui'
 | `text` | `"Refresh"` | Button text. |
 | `large` | `false` | Display as a large button. |
 | `minimal` | `false` | Display as a minimal button. |
+
+#### `Pagination` props
+
+| Property | Default | Discussion |
+| :------- | :------ | :--------- |
+| `dataSource` | `null` | Collection data source for this component. This property is required. |
+| `pageExtractor` | `defaultPageExtractor` | Function which given `dataSource`, returns object containing keys: `limit`, `total`, `page`, `pages`. |
+| `pageMover` | `defaultPageMover` | Function which given `dataSource` and `page`, fetches given page on the data source. |

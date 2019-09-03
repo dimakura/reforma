@@ -18,18 +18,16 @@ table.bp3-html-table.rt-table {
 }
 
 .rf-toolbar {
-  padding-top: $space-x1;
-  padding-bottom: $space-x1;
   display: flex;
   flex-direction: row;
   align-items: center;
 
   &.rf-top-margin {
-    margin-top: $space-x2;
+    margin-top: $space-x1;
   }
 
   &.rf-bottom-margin {
-    margin-bottom: $space-x2;
+    margin-bottom: $space-x1;
   }
 
   > * {
@@ -42,5 +40,15 @@ table.bp3-html-table.rt-table {
 
   .rf-pages {
     padding: 0 $space-x1;
+  }
+}
+
+.rf-error {
+  &.rf-top-margin {
+    margin-top: $space-x1;
+  }
+
+  &.rf-bottom-margin {
+    margin-bottom: $space-x1;
   }
 }

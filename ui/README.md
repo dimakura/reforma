@@ -83,23 +83,25 @@ const column = {
 
 ### Other collection components
 
-- `RefreshAction` renders as a button which re-fetches underlying collection data source when clicked.
-- `Pagination` renders pagination component.
+- `RefreshAction` renders as a button which re-fetches underlying collection data source when clicked;
+- `Pagination` renders pagination component;
+- `Error` renders errors.
 
-In the following example, `RefreshAction`, `Pagination`, and `Table` share the same collection data source:
+In the following example, all components hare the same collection data source:
 
 ```js
-import { Pagination, RefreshAction, Table, Toolbar } from '@reforma/ui'
+import { Error, Pagination, RefreshAction, Table, Toolbar } from '@reforma/ui'
 
 <div>
-  <Toolbar>
+  <Toolbar marginBottom>
     <RefreshAction dataSource={profilesDS} />
   </Toolbar>
+  <Error marginBottom dataSource={profilesDS} />
   <Table
     columns={['id', 'firstName', 'lastName']}
     dataSource={profilesDS}
   />
-  <Toolbar>
+  <Toolbar topMargin>
     <Pagination dataSource={profilesDS} />
   </Toolbar>
 </div>

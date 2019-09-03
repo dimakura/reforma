@@ -51,6 +51,11 @@ class Error extends React.PureComponent {
   }
 }
 
+Error.defaultProps = {
+  topMargin: false,
+  bottomMargin: false
+}
+
 Error.propTypes = {
   dataSource: PropTypes.object.isRequired,
   topMargin: PropTypes.bool.isRequired,

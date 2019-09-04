@@ -1,20 +1,3 @@
-// TODOs:
-// -[X] array type specs
-// -[X] map type + specs
-// -[X] linter
-// -[X] setup CI
-// -[X] field interface
-// -[X] move calc+id+validate into fields
-// -[X] user-defined types
-// -[X] built-in types instantiation
-// -[X] user-defined types instantiation
-// -[X] user defined type validations
-// -[X] built-in validations
-// -[X] serialization
-// -[X] HTTP methods
-// -[X] collection data source
-// -[ ] record data source
-
 import {
   createArrayType,
   createMapType,

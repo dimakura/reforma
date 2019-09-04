@@ -10,6 +10,7 @@ cache: npm
 script:
   - cd core/
   - npm install
+  - npm run build
   - npm run lint
   - npm test
   - cd ../ui

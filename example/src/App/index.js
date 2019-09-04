@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Error,
   LoadingIndicator,
   Pagination,
   RefreshAction,
@@ -17,16 +18,17 @@ class App extends React.PureComponent {
   render() {
     return (
       <div style={{ padding: 16 }}>
-        <Toolbar>
+        <Toolbar bottomMargin>
           <RefreshAction dataSource={presidentsDS} />
         </Toolbar>
+        <Error dataSource={presidentsDS} bottomMargin />
         <Table
           dataSource={presidentsDS}
           columns={[id, firstName, lastName]}
           style={{ width: '100%' }}
           initialParams={initialParams}
         />
-        <Toolbar>
+        <Toolbar topMargin>
           <Pagination dataSource={presidentsDS} />
           <LoadingIndicator dataSource={presidentsDS} />
         </Toolbar>

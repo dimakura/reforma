@@ -1,0 +1,12 @@
+{
+  "name": "reforma-example",
+  "version": "0.2.0",
+  "private": true,
+  "dependencies": {
+    "@reforma/core": "^0.2.0",
+    "@reforma/ui": "^0.2.0"
+  },
+  "scripts": {
+    "dev": "react-scripts start & node_modules/.bin/json-server --watch db.json --port 3001"
+  }
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { merge } from 'lodash'
 import { Button } from '@blueprintjs/core'
-import Pagination from '..'
+import Pagination from '../index'
 
 describe('<Pagination />', () => {
   const dataSource = {

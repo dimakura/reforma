@@ -1,0 +1,26 @@
+{
+  "name": "@reforma/ui",
+  "version": "0.2.0",
+  "description": "Reforma (from React+Form) simplifies creation of data-heavy interfaces.",
+  "main": "lib/js/index.js",
+  "scripts": {
+    "clean": "rm -rf lib/*",
+    "compile:js": "babel -s inline -d lib/js src --ignore \"src/**/*.test.js\"",
+    "compile:css": "node-sass scss/ -o lib/css",
+    "dev": "run-p \"compile:js -- --watch\" \"compile:css -- --watch\"",
+    "build": "run-p \"compile:js\" \"compile:css\"",
+    "lint": "eslint 'src/**/*.js' --color",
+    "test": "jest --colors"
+  },
+  "keywords": [
+    "reforma",
+    "forms",
+    "widget library",
+    "react"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@reforma/core": "^0.2.0"
+  }
+}

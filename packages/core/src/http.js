@@ -1,5 +1,5 @@
 import Reforma from '@reforma/core'
-import merge from 'lodash.merge'
+import { merge } from 'lodash'
 import fetch from 'node-fetch'
 import { resolvePath } from './urlHelpers'
 

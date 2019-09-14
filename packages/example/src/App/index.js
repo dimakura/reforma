@@ -9,7 +9,7 @@ import {
 } from '@reforma/ui'
 import presidentsDS from './presidentsDS'
 
-const initialParams = { _page: 1, _limit: 3 }
+const initialParams = { _page: 1, _limit: 10 }
 const id = { name: 'id', header: 'N', width: 50, cellStyle: { textAlign: 'right' } }
 const firstName = 'firstName'
 const lastName = 'lastName'

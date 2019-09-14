@@ -8,12 +8,8 @@ node_js:
 cache: npm
 
 script:
-  - cd core/
   - npm install
+  - npm run bootstrap
   - npm run build
-  - npm run lint
-  - npm test
-  - cd ../ui
-  - npm install
   - npm run lint
   - npm test

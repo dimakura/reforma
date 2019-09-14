@@ -1,0 +1,27 @@
+{
+  "name": "reforma-example",
+  "version": "0.2.0",
+  "private": true,
+  "dependencies": {
+    "@reforma/core": "^0.2.0",
+    "@reforma/ui": "^0.2.0"
+  },
+  "devDependencies": {
+    "react-scripts": "^3.1.1"
+  },
+  "scripts": {
+    "dev": "react-scripts start & json-server --watch db.json --port 3001"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

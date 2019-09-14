@@ -1,4 +1,4 @@
-import lodashSnakeCase from 'lodash.snakecase'
+import { snakeCase as lodashSnakeCase } from 'lodash'
 
 /**
  * This `snakeCase` preserves leading and trailing `_`s,

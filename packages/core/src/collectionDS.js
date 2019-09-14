@@ -2,7 +2,7 @@
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
-import merge from 'lodash.merge'
+import { merge } from 'lodash'
 import { snakeCase } from './helpers'
 
 const INITIAL = 'initial'

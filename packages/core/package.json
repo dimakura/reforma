@@ -1,0 +1,24 @@
+{
+  "name": "@reforma/core",
+  "version": "0.2.0",
+  "description": "Reforma (from React+Form) simplifies creation of data-heavy interfaces.",
+  "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
+  "scripts": {
+    "dev": "babel --watch -s inline -d lib src --ignore \"src/**/*.test.js\"",
+    "build": "babel -s inline -d lib src --ignore \"src/**/*.test.js\"",
+    "lint": "eslint 'src/**/*.js' --color",
+    "test": "jest --colors"
+  },
+  "keywords": [
+    "reforma",
+    "forms",
+    "admin panels",
+    "widget library",
+    "react"
+  ],
+  "author": "Dimitri Kurashvili <dimakura@gmail.com>",
+  "license": "MIT"
+}

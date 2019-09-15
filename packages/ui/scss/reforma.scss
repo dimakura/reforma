@@ -21,6 +21,7 @@ table.bp3-html-table.rt-table {
   display: flex;
   flex-direction: row;
   align-items: center;
+  min-height: $space-x4;
 
   &.rf-top-margin {
     margin-top: $space-x1;

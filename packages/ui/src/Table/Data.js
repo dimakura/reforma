@@ -24,7 +24,7 @@ function renderCell(col, model, idx) {
       {
         do {
           if (isPresent(value)) {
-            {value}
+            value
           } else {
             <span className="bp3-text-muted">
               (empty)

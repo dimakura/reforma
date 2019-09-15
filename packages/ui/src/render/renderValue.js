@@ -1,6 +1,7 @@
+import renderBool from './renderBool'
 import renderString from './renderString'
-import renderText from './renderText'
 import renderTag from './renderTag'
+import renderText from './renderText'
 
 export default function renderValue(value, hint) {
   const hints = do {
@@ -28,6 +29,8 @@ function renderValueInternal(value, hints) {
       renderText(value, hints)
     } else if (head === 'tag') {
       renderTag(value, hints)
+    } else if (head == 'bool') {
+      renderBool(value, hints)
     } else {
       renderString(value, hints)
     }

@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme'
-import renderString from '../renderString'
+import renderValue from '../renderString'
 
 describe('renderString', () => {
   test('string value', () => {
-    const comp = shallow(renderString('Tony Canzoneri'))
+    const comp = shallow(renderValue('Tony Canzoneri', 'string'))
 
     expect(comp.name()).toBe('span')
     expect(comp.prop('className')).toBe('rf-string')
@@ -12,7 +12,7 @@ describe('renderString', () => {
 
   test('non-string value', () => {
     const value = new Date()
-    const comp = shallow(renderString(value))
+    const comp = shallow(renderValue(value, 'string'))
 
     expect(comp.name()).toBe('span')
     expect(comp.prop('className')).toBe('rf-string')

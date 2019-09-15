@@ -3,7 +3,7 @@ import defaultHint from './defaultHint'
 import renderEmpty from './renderEmpty'
 import renderValue from './renderValue'
 
-export default function renderCell(cellSpecification, model) {
+export default function renderFunction(cellSpecification, model) {
   const hasObjectSpecification = (
     cellSpecification != null &&
     typeof cellSpecification === 'object'

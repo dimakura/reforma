@@ -3,7 +3,7 @@ import isPresent from '@reforma/ui/utils/isPresent'
 
 export default function renderBool(value, hints) {
   const [yes, no] = do {
-    if (hints.length == 2) {
+    if (hints.length === 2) {
       hints
     } else {
       ['Yes', 'No']

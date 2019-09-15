@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme'
-import renderValue from '../renderString'
+import renderValue from '../renderValue'
 
 describe('renderString', () => {
   test('string value', () => {

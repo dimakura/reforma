@@ -1,4 +1,5 @@
 import renderBool from './renderBool'
+import renderNumber from './renderNumber'
 import renderString from './renderString'
 import renderTag from './renderTag'
 import renderText from './renderText'
@@ -29,10 +30,12 @@ function renderValueInternal(value, hints) {
       renderText(value, hints)
     } else if (head === 'tag') {
       renderTag(value, hints)
-    } else if (head == 'bool') {
+    } else if (head === 'bool') {
       renderBool(value, hints)
+    } else if (head === 'number') {
+      renderNumber(value, hints)
     } else {
-      renderString(value, hints)
+      value.toString()
     }
   }
 }

@@ -1,3 +1,4 @@
+import renderArray from './renderArray'
 import renderBool from './renderBool'
 import renderDate from './renderDate'
 import renderNumber from './renderNumber'
@@ -37,6 +38,8 @@ function renderValueInternal(value, hints) {
       renderNumber(value, hints)
     } else if (head === 'date') {
       renderDate(value, hints)
+    } else if (head === 'array') {
+      renderArray(value, hints)
     } else {
       value.toString()
     }

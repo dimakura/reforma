@@ -6,6 +6,8 @@ $space-x4: 21px;
 
 $border-color: rgba(255, 255, 255, 0.15);
 
+// Table
+
 table.bp3-html-table.rt-table {
   border: 1px solid $border-color;
 
@@ -16,6 +18,8 @@ table.bp3-html-table.rt-table {
     padding-right: $space-x3;
   }
 }
+
+// Toolbar
 
 .rf-toolbar {
   display: flex;
@@ -36,6 +40,8 @@ table.bp3-html-table.rt-table {
   }
 }
 
+// Pagination
+
 .rf-pagination {
   align-items: center;
 
@@ -43,6 +49,8 @@ table.bp3-html-table.rt-table {
     padding: 0 $space-x1;
   }
 }
+
+// Error
 
 .rf-error {
   &.rf-top-margin {

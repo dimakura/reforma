@@ -88,7 +88,7 @@ One more option, not shown in the last example of the column specification, is t
 
 - `string`, renders as one-liner.
 - `text`, renders as a multi-line text.
-- `tag`, renders text as a tag.
+- `tag`, renders text as a tag. You can also specify intent e.g. `tag:primary`.
 - `number`, renders as a number (within `<code>` tag). You can also specify precision of the number, e.g. `number:2` will render number with `2` digits after the comma.
 - `date`, renders date in `MM/dd/yyyy HH:MM:SS` format. You can specify your own format, `date:MM/dd/yyyy` (see [date-fns](https://date-fns.org/)).
 - `array`, for rendering array values. You can specify element format, e.g. `array:number:2`.

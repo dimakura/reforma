@@ -61,3 +61,21 @@ table.bp3-html-table.rt-table {
     margin-bottom: $space-x1;
   }
 }
+
+// Cell rendering
+
+.rf-array,
+.rf-array-element,
+.rf-bool,
+.rf-date,
+.rf-empty,
+.rf-number,
+.rf-string,
+.rf-tag,
+.rf-text {
+  display: inline-block;
+}
+
+.rf-array-element {
+  margin-right: $space-x1;
+}

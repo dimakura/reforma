@@ -1,13 +1,23 @@
+import Reforma from '@reforma/core'
 import React from 'react'
 import { shallow } from 'enzyme'
 import Data from '../Data'
 
 test('<Data />', () => {
+  const type = Reforma.createType({
+    name: 'President',
+    fields: {
+      id: Reforma.integer.id,
+      firstName: Reforma.string,
+      lastName: Reforma.string
+    }
+  })
+
   const data = [
-    { id: 1, firstName: 'Charles', lastName: 'Lyell' },
-    { id: 2, firstName: 'James', lastName: 'Hutton' },
-    { id: 3, firstName: '', lastName: '' }
-  ]
+    { id: 1, first_name: 'Charles', last_name: 'Lyell' },
+    { id: 2, first_name: 'James', last_name: 'Hutton' },
+    { id: 3, first_name: '', last_name: '' }
+  ].map(type.create)
   const id = { name: 'id', header: 'id', className: 'first-column', style: { textAlign: 'right' } }
   const firstName = 'firstName'
   const lastName = { name: 'lastName', render: (profile) => `${profile.firstName} ${profile.lastName}` }
@@ -26,5 +36,5 @@ test('<Data />', () => {
   expect(cells.at(5).text()).toBe('James Hutton')
   expect(cells.at(6).text()).toBe('3')
   expect(cells.at(7).text()).toBe('(empty)')
-  expect(cells.at(8).text()).toBe('(empty)')
+  expect(cells.at(8).text()).toBe(' ')
 })

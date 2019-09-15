@@ -1,31 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isPresent from '../utils/isPresent'
+import render from '../render'
 
 function renderCell(col, model, idx) {
-  const value = do {
-    if (typeof col === 'string') {
-      model[col]
-    } else if ('render' in col) {
-      col.render(model)
-    } else if ('name' in col) {
-      model[col.name]
-    }
-  }
-
-  return do {
-    if (isPresent(value)) {
-      <td key={idx} style={col.cellStyle}>
-        {value}
-      </td>
-    } else {
-      <td key={idx} style={col.cellStyle}>
-        <span className="bp3-text-muted">
-          (empty)
-        </span>
-      </td>
-    }
-  }
+  return (
+    <td key={idx} style={col.style} className={col.className}>
+      {render(col, model)}
+    </td>
+  )
 }
 
 class Data extends React.PureComponent {

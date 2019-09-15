@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import isPresent from '../utils/isPresent'
 
-function renderCell(col, item, idx) {
+function renderCell(col, model, idx) {
   const value = do {
     if (typeof col === 'string') {
-      item[col]
+      model[col]
     } else if ('render' in col) {
-      col.render(item)
+      col.render(model)
     } else if ('name' in col) {
-      item[col.name]
+      model[col.name]
     }
   }
 

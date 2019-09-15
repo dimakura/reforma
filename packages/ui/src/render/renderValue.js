@@ -1,4 +1,5 @@
 import renderBool from './renderBool'
+import renderDate from './renderDate'
 import renderNumber from './renderNumber'
 import renderString from './renderString'
 import renderTag from './renderTag'
@@ -34,6 +35,8 @@ function renderValueInternal(value, hints) {
       renderBool(value, hints)
     } else if (head === 'number') {
       renderNumber(value, hints)
+    } else if (head === 'date') {
+      renderDate(value, hints)
     } else {
       value.toString()
     }

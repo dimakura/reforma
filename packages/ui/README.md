@@ -73,13 +73,25 @@ Table columns can be given as property names or as a full column specification:
 const column = {
   name: 'fullName',
   header: 'Painter Name',
-  render: (model) => (<span className="some-fancy-class">{model.fullName}</span>),
+  render: (model) => (<FancyComponent value={model.fullName} />),
   width: 100,
-  cellStyle: {
+  className: 'full-name-class'
+  style: {
     textAlign: 'center'
   }
 }
 ```
+
+#### `as` option
+
+One more option, not shown in the last example of the column specification, is the `as` option. The `as` option tells Reforma how we want to render the cell.
+
+- `string`, renders as one-liner.
+- `text`, renders as a multi-line text.
+- `tag`, renders text as a tag.
+- `number`, renders as a number (within `<code>` tag). You can also specify precision of the number, e.g. `number:2` will render number with `2` digits after the comma.
+- `date`, renders date in `MM/dd/yyyy HH:MM:SS` format. You can specify your own format, `date:MM/dd/yyyy` (see [date-fns](https://date-fns.org/)).
+- `array`, for rendering array values. You can specify element format, e.g. `array:number:2`.
 
 ### Other collection components
 

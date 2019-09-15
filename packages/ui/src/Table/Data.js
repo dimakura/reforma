@@ -13,19 +13,27 @@ function renderCell(col, model, idx) {
     }
   }
 
-  return do {
-    if (isPresent(value)) {
-      <td key={idx} style={col.cellStyle}>
-        {value}
-      </td>
-    } else {
-      <td key={idx} style={col.cellStyle}>
-        <span className="bp3-text-muted">
-          (empty)
-        </span>
-      </td>
-    }
+  const props = {
+    key: idx,
+    style: col.style,
+    className: col.className
   }
+
+  return (
+    <td {...props}>
+      {
+        do {
+          if (isPresent(value)) {
+            {value}
+          } else {
+            <span className="bp3-text-muted">
+              (empty)
+            </span>
+          }
+        }
+      }
+    </td>
+  )
 }
 
 class Data extends React.PureComponent {

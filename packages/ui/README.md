@@ -82,16 +82,16 @@ const column = {
 }
 ```
 
-#### `as` option
+#### Rendering (`as`) option
 
-One more option, not shown in the last example of the column specification, is the `as` option. The `as` option tells Reforma how we want to render the cell.
+One more option for the columns specification, not shown in the last example, is the rendering (`as`) option. The rendering option tells Reforma how we want to render the cell.
 
 - `string`, renders as one-liner.
 - `text`, renders as a multi-line text.
 - `tag`, renders text as a tag. You can also specify intent e.g. `tag:primary`.
 - `number`, renders as a number (within `<code>` tag). You can also specify precision of the number, e.g. `number:2` will render number with `2` digits after the comma.
-- `date`, renders date in `MM/dd/yyyy HH:MM:SS` format. You can specify your own format, `date:MM/dd/yyyy` (see [date-fns](https://date-fns.org/)).
-- `array`, for rendering array values. You can specify element format, e.g. `array:number:2`.
+- `date`, renders date in `MM/dd/yyyy HH:mm` format. You can also specify `date:short` (for `MM/dd/yyyy`) and `date:long` (for `MM/dd/yyyy HH:mm:ss`), or define your own format `date:format-string`.
+- `array`, for rendering array values. You can also specify element format, e.g. `array:number:2`.
 
 ### Other collection components
 

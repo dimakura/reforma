@@ -8,6 +8,7 @@ import {
 
 import config from './config'
 import createCollectionDS from './collectionDS'
+import createRecordDS from './recordDS'
 import http from './http'
 
 const Reforma = {}
@@ -44,6 +45,10 @@ Object.defineProperty(Reforma, 'http', {
 
 Object.defineProperty(Reforma, 'createCollectionDS', {
   value: createCollectionDS
+})
+
+Object.defineProperty(Reforma, 'createRecordDS', {
+  value: createRecordDS
 })
 
 export default Reforma

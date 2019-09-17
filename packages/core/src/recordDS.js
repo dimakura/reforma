@@ -2,7 +2,6 @@
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
-import { merge } from 'lodash'
 import { snakeCase } from './helpers'
 
 const INITIAL = 'initial'
@@ -13,12 +12,12 @@ const FAILED = 'failed'
 const STATUS_CHANGED = 'status-changed'
 class DataSourceEvents extends EventEmitter {}
 
-export default function createCollectionDS(opts) {
+export default function createRecordDS(opts) {
   if (opts == null || typeof opts !== 'object') {
-    throw new Error(`Wrong set of options for createCollectionDS: ${opts}`)
+    throw new Error(`Wrong set of options for createRecordDS: ${opts}`)
   }
 
-  const collectionDS = {}
+  const recordDS = {}
   const privateData = {
     status: INITIAL,
     params: null,
@@ -29,108 +28,106 @@ export default function createCollectionDS(opts) {
     emitter: new DataSourceEvents()
   }
 
-  defineType(collectionDS, opts)
-  defineSerialRoot(collectionDS, opts)
-  defineUrl(collectionDS, opts)
-  defineParams(collectionDS, opts, privateData)
-  defineStatus(collectionDS, privateData)
-  definedDataAndError(collectionDS, privateData)
-  defineStatusListener(collectionDS, privateData)
-  defineFetch(collectionDS, privateData)
+  defineType(recordDS, opts)
+  defineSerialRoot(recordDS, opts)
+  defineUrl(recordDS, opts)
+  defineParams(recordDS, privateData)
+  defineStatus(recordDS, privateData)
+  definedDataAndError(recordDS, privateData)
+  defineStatusListener(recordDS, privateData)
+  defineFetch(recordDS, privateData)
 
-  return collectionDS
+  return recordDS
 }
 
 // -- PRIVATE
 
-function defineType(collectionDS, opts) {
+function defineType(recordDS, opts) {
   const type = opts.type
   if (type == null || !type.__isUserDefinedType__) {
     throw new Error(`Wrong datasource type: ${type}`)
   }
 
-  Object.defineProperty(collectionDS, 'type', {
+  Object.defineProperty(recordDS, 'type', {
     value: opts.type
   })
 
-  Object.defineProperty(collectionDS, '__isCollectionDS__', {
+  Object.defineProperty(recordDS, '__isRecordDS__', {
     value: true
   })
 }
 
-function defineSerialRoot(collectionDS, opts) {
+function defineSerialRoot(recordDS, opts) {
   const serialRoot = do {
     if ('serialRoot' in opts) {
       opts.serialRoot
     } else {
-      snakeCase(collectionDS.type.name)
+      snakeCase(recordDS.type.name)
     }
   }
 
-  Object.defineProperty(collectionDS, 'serialRoot', {
+  Object.defineProperty(recordDS, 'serialRoot', {
     value: serialRoot
   })
 }
 
-function defineUrl(collectionDS, opts) {
+function defineUrl(recordDS, opts) {
   const url = do {
     if ('url' in opts) {
       opts.url
     } else {
-      `/${collectionDS.serialRoot}`
+      `/${recordDS.serialRoot}`
     }
   }
 
-  Object.defineProperty(collectionDS, 'url', {
+  Object.defineProperty(recordDS, 'url', {
     value: url
   })
 }
 
-function defineParams(collectionDS, opts, privateData) {
-  const originalParams = opts.params
-
-  Object.defineProperty(collectionDS, 'params', {
+function defineParams(recordDS, privateData) {
+  Object.defineProperty(recordDS, 'params', {
     get: function () {
-      return merge({}, originalParams, privateData.params)
+      return privateData.params
     }
   })
 }
 
-function defineStatus(collectionDS, privateData) {
-  Object.defineProperty(collectionDS, 'status', {
+function defineStatus(recordDS, privateData) {
+  Object.defineProperty(recordDS, 'status', {
     get: function () {
       return privateData.status
     }
   })
 }
 
-function definedDataAndError(collectionDS, privateData) {
-  Object.defineProperty(collectionDS, 'data', {
+function definedDataAndError(recordDS, privateData) {
+  Object.defineProperty(recordDS, 'data', {
     get: function () {
       return privateData.data
     }
   })
 
-  Object.defineProperty(collectionDS, 'body', {
+  Object.defineProperty(recordDS, 'body', {
     get: function () {
       return privateData.body
     }
   })
 
-  Object.defineProperty(collectionDS, 'headers', {
+  Object.defineProperty(recordDS, 'headers', {
     get: function () {
       return privateData.headers
     }
   })
 
-  Object.defineProperty(collectionDS, 'error', {
+  Object.defineProperty(recordDS, 'error', {
     get: function () {
       return privateData.error
     }
   })
 }
 
-function defineStatusListener(collectionDS, privateData) {
+function defineStatusListener(recordDS, privateData) {
   function addStatusListener(handler) {
     privateData.emitter.on(STATUS_CHANGED, handler)
 
@@ -139,12 +136,12 @@ function defineStatusListener(collectionDS, privateData) {
     }
   }
 
-  Object.defineProperty(collectionDS, 'addStatusListener', {
+  Object.defineProperty(recordDS, 'addStatusListener', {
     value: addStatusListener
   })
 }
 
-function defineFetch(collectionDS, privateData) {
+function defineFetch(recordDS, privateData) {
   function reportError(error, wasAborted = false) {
     // We have race condition here!
     // We should not do anything on abort: because this aborted call most likely
@@ -167,22 +164,41 @@ function defineFetch(collectionDS, privateData) {
 
   function extractData(body) {
     const data = do {
-      if (Array.isArray(body)) {
-        body
-      } else if (
+      if (
         body != null &&
-        collectionDS.serialRoot in body &&
-        Array.isArray(body[collectionDS.serialRoot])
+        recordDS.serialRoot in body
       ) {
-        body[collectionDS.serialRoot]
+        body[recordDS.serialRoot]
+      } else {
+        body
       }
     }
 
     return do {
       if (data != null) {
-        data.map(data => collectionDS.type.create(data))
+        recordDS.type.create(data)
       } else {
-        []
+        null
+      }
+    }
+  }
+
+  function normalizeParams(params) {
+    return do {
+      if (params != null) {
+        if (typeof params === 'object') {
+          params
+        } else if (
+          typeof params === 'number' ||
+          typeof params === 'string' ||
+          Array.isArray(params)
+        ) {
+          ({ id: params })
+        } else {
+          null
+        }
+      } else {
+        null
       }
     }
   }
@@ -195,13 +211,13 @@ function defineFetch(collectionDS, privateData) {
     const oldStatus = privateData.status
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    privateData.params = params
+    privateData.params = normalizeParams(params)
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
     try {
-      const resp = await Reforma.http.get(collectionDS.url, {
-        params: collectionDS.params,
+      const resp = await Reforma.http.get(recordDS.url, {
+        params: recordDS.params,
         signal: privateData.controller.signal
       })
 
@@ -222,11 +238,11 @@ function defineFetch(collectionDS, privateData) {
     }
   }
 
-  Object.defineProperty(collectionDS, 'fetch', { value: fetch })
+  Object.defineProperty(recordDS, 'fetch', { value: fetch })
 
-  Object.defineProperty(collectionDS, 'refetch', {
+  Object.defineProperty(recordDS, 'refetch', {
     value: function () {
-      return collectionDS.fetch(privateData.params)
+      return recordDS.fetch(privateData.params)
     }
   })
 }

@@ -1,4 +1,4 @@
-import CollectionComponent from './CollectionComponent'
+import DataSourceComponent from './DataSourceComponent'
 import Error from './Error'
 import LoadingIndicator from './LoadingIndicator'
 import Pagination from './Pagination'
@@ -7,7 +7,7 @@ import Table from './Table'
 import Toolbar from './Toolbar'
 
 export {
-  CollectionComponent,
+  DataSourceComponent,
   Error,
   LoadingIndicator,
   Pagination,

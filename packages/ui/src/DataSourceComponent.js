@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-class CollectionComponent extends React.PureComponent {
+class DataSourceComponent extends React.PureComponent {
   componentDidMount() {
     let counter = 0
     const { autofetch, cached, initialParams, dataSource } = this.props
@@ -14,7 +14,7 @@ class CollectionComponent extends React.PureComponent {
 
       this.setState({
         status: newStatus,
-        shakeTree: counter
+        shakeTree: counter // do we need this?
       })
     })
 
@@ -34,12 +34,12 @@ class CollectionComponent extends React.PureComponent {
   }
 }
 
-CollectionComponent.defaultProps = {
+DataSourceComponent.defaultProps = {
   autofetch: false,
   cached: true
 }
 
-CollectionComponent.propTypes = {
+DataSourceComponent.propTypes = {
   autofetch: PropTypes.bool.isRequired,
   cached: PropTypes.bool.isRequired,
   dataSource: PropTypes.object.isRequired,
@@ -47,4 +47,4 @@ CollectionComponent.propTypes = {
   initialParams: PropTypes.object
 }
 
-export default CollectionComponent
+export default DataSourceComponent

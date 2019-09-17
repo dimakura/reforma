@@ -7,7 +7,7 @@ export default {
   get: getFn,
   post: postFn,
   put: putFn,
-  delete: delteFn,
+  delete: deleteFn,
   exceptionError,
   failedError
 }
@@ -63,7 +63,7 @@ function putFn(path, opts) {
   })
 }
 
-function delteFn(path, opts) {
+function deleteFn(path, opts) {
   const params = getProp(opts, 'params')
   const signal = getProp(opts, 'signal')
   const timeout = getProp(opts, 'timeout', Reforma.config.http.timeout)

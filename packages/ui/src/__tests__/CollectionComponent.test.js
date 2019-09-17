@@ -9,7 +9,7 @@ test('<CollectionComponent />', async () => {
   const initialParams = { _page: 1, _limit: 10 }
   const comp = createComponent(ds, initialParams)
 
-  expect(comp.text()).toBe('Status: fetching')
+  expect(comp.text()).toBe('Status: busy')
   expect(Reforma.http.get).toHaveBeenCalledWith(
     '/presidents',
     expect.objectContaining({ params: initialParams })

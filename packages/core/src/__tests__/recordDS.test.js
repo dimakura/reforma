@@ -1,6 +1,6 @@
 import Reforma from '@reforma/core'
 
-describe('Collection data source', () => {
+describe('Record data source', () => {
   let type
 
   beforeEach(() => {
@@ -16,19 +16,17 @@ describe('Collection data source', () => {
 
   describe('creation', () => {
     test('normal scenario', () => {
-      const ds = Reforma.createCollectionDS({
+      const ds = Reforma.createRecordDS({
         type,
-        serialRoot: 'profiles',
-        params: {
-          firstName: 'Ben'
-        }
+        serialRoot: 'profile',
+        url: '/profiles/:id'
       })
 
-      expect(ds.__isCollectionDS__).toBe(true)
+      expect(ds.__isRecordDS__).toBe(true)
       expect(ds.type).toBe(type)
-      expect(ds.serialRoot).toBe('profiles')
-      expect(ds.url).toBe('/profiles')
-      expect(ds.params).toEqual({ firstName: 'Ben' })
+      expect(ds.serialRoot).toBe('profile')
+      expect(ds.url).toBe('/profiles/:id')
+      expect(ds.params).toBeNull()
       expect(ds.status).toBe('initial')
       expect(ds.body).toBeNull()
       expect(ds.data).toBeNull()
@@ -38,11 +36,11 @@ describe('Collection data source', () => {
 
     test('wrong scenarios', () => {
       expect(() => {
-        Reforma.createCollectionDS()
-      }).toThrow('Wrong set of options for createCollectionDS: undefined')
+        Reforma.createRecordDS()
+      }).toThrow('Wrong set of options for createRecordDS: undefined')
 
       expect(() => {
-        Reforma.createCollectionDS({
+        Reforma.createRecordDS({
           type: Reforma.integer
         })
       }).toThrow('Wrong datasource type: integer')
@@ -53,12 +51,10 @@ describe('Collection data source', () => {
     let ds
 
     beforeEach(() => {
-      ds = Reforma.createCollectionDS({
+      ds = Reforma.createRecordDS({
         type,
-        serialRoot: 'profiles',
-        params: {
-          firstName: 'John'
-        }
+        serialRoot: 'profile',
+        url: '/profiles/:id'
       })
     })
 
@@ -66,12 +62,11 @@ describe('Collection data source', () => {
       Reforma.http.get = jest.fn(() => ({
         ok: true,
         json: () => ({
-          profiles: [{
+          profile: {
             id: '1',
             first_name: 'John',
             last_name: 'Quincy Adams'
-          }],
-          totalCount: 10
+          }
         }),
         headers: { 'X-Total-Count': 10 }
       }))
@@ -79,36 +74,30 @@ describe('Collection data source', () => {
 
       expectInitialDS(ds)
       ds.addStatusListener(listener)
-      const promise = ds.fetch({
-        lastName: 'Quincy Adams'
-      })
+      const promise = ds.fetch(1)
       expectBusyDS(ds)
       await promise
       expectReadyDS(ds)
       expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
       expect(ds.body).toEqual({
-        profiles: [{
+        profile: {
           id: '1',
           first_name: 'John',
           last_name: 'Quincy Adams'
-        }],
-        totalCount: 10
+        }
       })
 
       expect(listener).toHaveBeenCalledWith('initial', 'busy')
       expect(listener).toHaveBeenCalledWith('busy', 'ready')
       expect(listener).toHaveBeenCalledTimes(2)
 
-      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
-        params: {
-          firstName: 'John',
-          lastName: 'Quincy Adams'
-        },
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
+        params: { id: 1 },
         signal: expect.anything()
       })
       expect(Reforma.http.get).toHaveBeenCalledTimes(1)
 
-      const profile = ds.data[0]
+      const profile = ds.data
       expect(profile.__type__).toBe(type)
       expect(profile.id).toBe(1)
       expect(profile.firstName).toBe('John')
@@ -118,11 +107,8 @@ describe('Collection data source', () => {
       Reforma.http.get.mockClear()
       listener.mockClear()
       await ds.refetch()
-      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
-        params: {
-          firstName: 'John',
-          lastName: 'Quincy Adams'
-        },
+      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
+        params: { id: 1 },
         signal: expect.anything()
       })
       expect(Reforma.http.get).toHaveBeenCalledTimes(1)
@@ -189,7 +175,7 @@ function expectBusyDS(ds) {
 
 function expectReadyDS(ds) {
   expect(ds.status).toBe('ready')
-  expect(ds.data).toBeInstanceOf(Array)
+  expect(ds.data.__type__.__isUserDefinedType__).toBe(true)
   expect(ds.error).toBeNull()
 }
 

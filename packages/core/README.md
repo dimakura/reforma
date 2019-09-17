@@ -6,7 +6,7 @@ In theory, Reforma can also be used in end-user facing applications, where data 
 
 ## About the core module
 
-The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides the official UI implementation `@reforma/blueprint`, which uses [Blueprint](https://blueprintjs.com) widget library. But Reforma can be implemented using other widget libraries as well.
+The core module (`@reforma/core`) defines the basic abstractions. The core module is not dependent on any UI-widgets library. Reforma provides the official UI implementation `@reforma/ui`, which uses [Blueprint](https://blueprintjs.com) widget library. But Reforma can be with other widget libraries as well.
 
 ## Reforma types
 
@@ -299,9 +299,74 @@ profilesDS.status
 Other possible values for the status of a collection data source are:
 
 - `initial` initial status.
-- `fetching` status during fetching.
+- `busy` status when HTTP request is active.
 - `ready` status after a successful fetch. You can get fetched data using `.data` property.
-- `failed` status after failed fetch. You can get error details using `.errors` property. Note, that `.data` will be still available from the previous fetch.
+- `failed` status after failed fetch. You can get error details using `.errors` property.
+
+You can listen for status changes:
+
+```js
+const unsubscribe = profilesDS.addStatusListener((profilesDS, prevStatus) => ...)
+```
+
+There are other useful props available for a collection data source:
+
+```js
+profilesDS.data
+// => Array[]
+
+profilesDS.headers
+// => Headers{}
+
+profilesDS.errors
+// => null
+
+profilesDS.params
+// => {countryName: "Italy", cityName: "Florence"}
+```
+
+### Record data source
+
+Record data source is a data source to operate on a single record (of a user defined type).
+
+```js
+const profileDS = Reforma.createRecordDataSource({
+  type: profileType,
+  serialRoot: 'profile',
+  url: '/profiles/:id'
+})
+```
+
+Now you can retrieve profile record from the server:
+
+```js
+const profile = await profileDS.fetch(1)
+// or, alternatively
+const profile = await profileDS.fetch({ id: 1 })
+// GET /api/profiles/1
+// => Profile{...}
+```
+
+Other operations are also supported:
+
+```js
+await profileDS.save(profile) // create/update
+await profileDS.delete(profile) // delete
+```
+
+Similar to collection data source, we have `status` property in record data source.
+
+```js
+profilesDS.status
+// => "ready"
+```
+
+Other possible values for the status of a record data source are:
+
+- `initial` initial status.
+- `busy` status when HTTP request is active.
+- `ready` status after a successful operation. You can get last operation data using `.data` property.
+- `failed` status after failed fetch. You can get error details using `.errors` property.
 
 You can listen for status changes:
 
@@ -309,7 +374,7 @@ You can listen for status changes:
 const unsubscribe = profileDS.addStatusListener((profileDS, prevStatus) => ...)
 ```
 
-There are other useful props available for a collection data source:
+There are other useful props available for a record data source:
 
 ```js
 profileDS.data
@@ -320,79 +385,11 @@ profileDS.headers
 
 profileDS.errors
 // => null
-
-profileDS.params
-// => {countryName: "Italy", cityName: "Florence"}
-
-const promise = profileDS.fetch({ cityName: 'Milan' })
-
-profileDS.status
-// => "fetching"
-
-profileDS.params
-// => {countryName: "Italy", cityName: "Milan"}
-
-await promise
-profileDS.params
-// => {countryName: "Italy", cityName: "Milan"}
-```
-
-### Record data source
-
-Record data source is a data source to operate on a single record (Reforma type).
-
-```js
-const profileDS = Reforma.createRecordDataSource({
-  type: profileType,
-  serialRoot: 'profile',
-  url: '/profiles'
-})
-```
-
-Now you can retrieve profile record from the server:
-
-```js
-const profile = await profileDS.fetch(1)
-// GET /api/profiles/1
-// => Profile{...}
-```
-
-Other CRUD operations are also supported:
-
-```js
-await profileDS.save(profileInstance) // create/update
-await profileDS.delete(profileInstance) // delete
-```
-
-### Shared properties
-
-Both
-
-```js
-datasource.isBusy
-// => true/false
-
-datasource.status
-// => idle/fetching/creating/updating/deleting/performing-actionName
-
-datasource.isFetched
-// => true/false
-```
-
-TODO: listeners
-
-### Actions
-
-You can define custom actions on datasources:
-
-```js
-datasource.defineAction('enable', async (ds) => {
-  const resp = ds.httpPut('/enable-url')
-  return ds.createRecord(resp)
-})
 ```
 
 ## HTTP methods
+
+HTTP/JSON are the basis for Reforma interactions with a server. Not surprisingly, Reforma offers ability to configure HTTP and use bare minimum HTTP verbs if needed.
 
 You can set `baseUrl` and add headers for all HTTP calls in Reforma (this includes HTTP requests from datasources):
 
@@ -411,7 +408,7 @@ resp.json()
 // => [{id: 1, ...}]
 ```
 
-All requests in Reforma are cancelable:
+You can cancel Reforma request by passing signals:
 
 ```js
 import AbortController from 'abort-controller'

@@ -7,7 +7,7 @@ class CollectionComponent extends React.PureComponent {
     const { autofetch, cached, initialParams, dataSource } = this.props
     const status = dataSource.status
     const isInitial = status === 'initial'
-    const isBusy = status === 'fetching'
+    const isBusy = status === 'busy'
 
     this.unsubscribe = dataSource.addStatusListener((oldStatus, newStatus) => {
       counter += 1

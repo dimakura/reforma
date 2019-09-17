@@ -30,7 +30,7 @@ class Table extends React.PureComponent {
           const data = dataSource.data
           const status = dataSource.status
           const hasData = data != null && data.length > 0
-          const isInitialLoad = status === 'initial' || (status === 'fetching' && !hasData)
+          const isInitialLoad = status === 'initial' || (status === 'busy' && !hasData)
 
           return (
             <HTMLTable

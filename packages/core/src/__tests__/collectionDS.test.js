@@ -82,7 +82,7 @@ describe('Collection data source', () => {
       const promise = ds.fetch({
         lastName: 'Quincy Adams'
       })
-      expectFetchingDS(ds)
+      expectBusyDS(ds)
       await promise
       expectReadyDS(ds)
       expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
@@ -95,8 +95,8 @@ describe('Collection data source', () => {
         totalCount: 10
       })
 
-      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
-      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledWith('initial', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'ready')
       expect(listener).toHaveBeenCalledTimes(2)
 
       expect(Reforma.http.get).toHaveBeenCalledWith('/profiles', {
@@ -126,8 +126,8 @@ describe('Collection data source', () => {
         signal: expect.anything()
       })
       expect(Reforma.http.get).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith('ready', 'fetching')
-      expect(listener).toHaveBeenCalledWith('fetching', 'ready')
+      expect(listener).toHaveBeenCalledWith('ready', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'ready')
       expect(listener).toHaveBeenCalledTimes(2)
     })
 
@@ -145,7 +145,7 @@ describe('Collection data source', () => {
       expectInitialDS(ds)
       ds.addStatusListener(listener)
       const promise = ds.fetch()
-      expectFetchingDS(ds)
+      expectBusyDS(ds)
       await promise
       expectFailedDS(ds)
       expect(ds.body).toEqual({
@@ -153,8 +153,8 @@ describe('Collection data source', () => {
       })
 
       expect(listener).toHaveBeenCalledTimes(2)
-      expect(listener).toHaveBeenCalledWith('initial', 'fetching')
-      expect(listener).toHaveBeenCalledWith('fetching', 'failed')
+      expect(listener).toHaveBeenCalledWith('initial', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'failed')
     })
 
     test('exception request', async () => {
@@ -165,7 +165,7 @@ describe('Collection data source', () => {
 
       expectInitialDS(ds)
       const promise = ds.fetch()
-      expectFetchingDS(ds)
+      expectBusyDS(ds)
       await promise
       expectFailedDS(ds)
       expect(ds.body).toBeNull()
@@ -180,8 +180,8 @@ function expectInitialDS(ds) {
   expect(ds.error).toBeNull()
 }
 
-function expectFetchingDS(ds) {
-  expect(ds.status).toBe('fetching')
+function expectBusyDS(ds) {
+  expect(ds.status).toBe('busy')
   expect(ds.data).toBeNull()
   expect(ds.headers).toBeNull()
   expect(ds.error).toBeNull()

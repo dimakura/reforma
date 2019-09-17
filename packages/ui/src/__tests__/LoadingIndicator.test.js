@@ -5,9 +5,9 @@ import CollectionComponent from '../CollectionComponent'
 import LoadingIndicator from '../LoadingIndicator'
 
 describe('<LoadingIndicator />', () => {
-  test('fetching dataSource', () => {
+  test('busy dataSource', () => {
     const dataSource = {
-      status: 'fetching'
+      status: 'busy'
     }
 
     const comp = shallow(<LoadingIndicator dataSource={dataSource} />)

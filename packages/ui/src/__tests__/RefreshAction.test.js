@@ -33,7 +33,7 @@ describe('<RefreshAction />', () => {
 
     test('busy dataSource', () => {
       const dataSource = {
-        status: 'fetching',
+        status: 'busy',
         fetch: jest.fn(),
         refetch: jest.fn()
       }

@@ -4,7 +4,7 @@ import { Button } from '@blueprintjs/core'
 import CollectionComponent from './CollectionComponent'
 
 function isBusy(dataSource) {
-  return dataSource.status === 'fetching'
+  return dataSource.status === 'busy'
 }
 
 class RefreshAction extends React.PureComponent {

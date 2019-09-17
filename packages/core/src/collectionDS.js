@@ -6,7 +6,7 @@ import { merge } from 'lodash'
 import { snakeCase } from './helpers'
 
 const INITIAL = 'initial'
-const FETCHING = 'fetching'
+const BUSY = 'busy'
 const READY = 'ready'
 const FAILED = 'failed'
 
@@ -193,11 +193,11 @@ function defineFetch(collectionDS, opts, privateData) {
     }
 
     const oldStatus = privateData.status
-    privateData.status = FETCHING
+    privateData.status = BUSY
     privateData.controller = new AbortController()
     privateData.params = params
     privateData.error = null
-    privateData.emitter.emit(STATUS_CHANGED, oldStatus, FETCHING)
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
     try {
       const resp = await Reforma.http.get(collectionDS.url, {
@@ -212,7 +212,7 @@ function defineFetch(collectionDS, opts, privateData) {
         privateData.status = READY
         privateData.controller = null
         privateData.data = extractData(privateData.body)
-        privateData.emitter.emit(STATUS_CHANGED, FETCHING, READY)
+        privateData.emitter.emit(STATUS_CHANGED, BUSY, READY)
       } else {
         reportError(Reforma.http.failedError(resp.status, resp.statusText, privateData.body))
       }

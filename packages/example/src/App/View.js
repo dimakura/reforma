@@ -1,8 +1,9 @@
 import React from 'react'
-import { Toolbar } from '@reforma/ui'
+import { RefreshAction, Toolbar, View } from '@reforma/ui'
 import { Button } from '@blueprintjs/core'
+import presidentDS from './presidentDS'
 
-class View extends React.PureComponent {
+class PresidentView extends React.PureComponent {
   render() {
     return (
       <div style={{ padding: 16 }}>
@@ -13,10 +14,13 @@ class View extends React.PureComponent {
           >
             Back to List
           </Button>
+          <RefreshAction dataSource={presidentDS} />
         </Toolbar>
-        <p>
-          TODO: view component <code>{this.props.match.url}</code>
-        </p>
+        <View
+          id={this.props.match.params.id}
+          dataSource={presidentDS}
+          fields={[{name: 'id', label: 'ID'}, 'firstName', 'lastName']}
+        />
       </div>
     )
   }
@@ -26,4 +30,4 @@ class View extends React.PureComponent {
   }
 }
 
-export default View
+export default PresidentView

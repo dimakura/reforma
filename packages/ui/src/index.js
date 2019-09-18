@@ -5,6 +5,7 @@ import Pagination from './Pagination'
 import RefreshAction from './RefreshAction'
 import Table from './Table'
 import Toolbar from './Toolbar'
+import View from './View'
 
 export {
   DataSourceComponent,
@@ -13,5 +14,6 @@ export {
   Pagination,
   RefreshAction,
   Table,
-  Toolbar
+  Toolbar,
+  View
 }

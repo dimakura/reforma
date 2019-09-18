@@ -11,7 +11,14 @@ import { Link } from 'react-router-dom'
 import presidentsDS from './presidentsDS'
 
 const initialParams = { _page: 1, _limit: 5 }
-const id = { name: 'id', header: 'N', width: 50, style: { textAlign: 'right' } }
+
+const id = {
+  name: 'id',
+  header: 'ID',
+  width: 50,
+  style: { textAlign: 'right' }
+}
+
 const fullName = {
   header: 'Full Name',
   render: (model) => (
@@ -28,10 +35,9 @@ class List extends React.PureComponent {
         </Toolbar>
         <Error dataSource={presidentsDS} bottomMargin />
         <Table
+          params={initialParams}
           dataSource={presidentsDS}
           columns={[id, fullName]}
-          style={{ width: '100%' }}
-          initialParams={initialParams}
         />
         <Toolbar topMargin>
           <Pagination dataSource={presidentsDS} />

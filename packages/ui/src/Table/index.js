@@ -12,7 +12,7 @@ class Table extends React.PureComponent {
       autofetch,
       cached,
       dataSource,
-      initialParams,
+      params,
       header,
       columns,
       condensed,
@@ -25,7 +25,7 @@ class Table extends React.PureComponent {
         autofetch={autofetch}
         cached={cached}
         dataSource={dataSource}
-        initialParams={initialParams}
+        params={params}
         render={() => {
           const data = dataSource.data
           const status = dataSource.status
@@ -38,7 +38,7 @@ class Table extends React.PureComponent {
               condensed={condensed}
               interactive={hasData && interactive}
               style={style}
-              className="rt-table"
+              className="rf-table"
             >
               {
                 do {
@@ -88,7 +88,7 @@ Table.propTypes = {
   autofetch: PropTypes.bool.isRequired,
   cached: PropTypes.bool.isRequired,
   dataSource: PropTypes.object.isRequired,
-  initialParams: PropTypes.object,
+  params: PropTypes.object,
   header: PropTypes.bool.isRequired,
   columns: PropTypes.array.isRequired,
   condensed: PropTypes.bool.isRequired,

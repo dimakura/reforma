@@ -1,6 +1,6 @@
 # Reforma UI
 
-Reforma UI is a widget library based on [Reforma Core](https://github.com/dimakura/reforma/tree/master/core). Widgets are built on top of the popular [Blueprint](https://blueprintjs.com) library.
+Reforma UI is a widget library based on [Reforma Core](https://github.com/dimakura/reforma/tree/master/packages/core). Widgets are built on top of the popular [Blueprint](https://blueprintjs.com) library.
 
 ## Installation
 
@@ -46,7 +46,7 @@ import { CollectionComponent } from '@reforma/ui'
 | `autofetch` | `false` | When `true`, this component will try to fetch the `dataSource` initial state. |
 | `cached` | `true` | When `true`, this component will try to reuse existing data in the `dataSource`. |
 | `dataSource` | `null` | Collection data source for this component. This property is required. |
-| `initialParams` | `null` | Initial parameters for `fetch` function. Initial parameters will be used only when `autofetch=true`. |
+| `params` | `null` | Initial parameters for `fetch` function. Initial parameters will be used only when `autofetch=true`. |
 | `render` | `null` | Function which renders the component. This property is required.
 
 ### `Table`

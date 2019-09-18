@@ -47,7 +47,7 @@ describe('Record data source', () => {
     })
   })
 
-  describe('fetch', () => {
+  describe('fetch and reset', () => {
     let ds
 
     beforeEach(() => {
@@ -115,6 +115,10 @@ describe('Record data source', () => {
       expect(listener).toHaveBeenCalledWith('ready', 'busy')
       expect(listener).toHaveBeenCalledWith('busy', 'ready')
       expect(listener).toHaveBeenCalledTimes(2)
+
+      // try reset
+      ds.reset()
+      expectInitialDS(ds)
     })
 
     test('failed request', async () => {
@@ -141,6 +145,10 @@ describe('Record data source', () => {
       expect(listener).toHaveBeenCalledTimes(2)
       expect(listener).toHaveBeenCalledWith('initial', 'busy')
       expect(listener).toHaveBeenCalledWith('busy', 'failed')
+
+      // try reset
+      ds.reset()
+      expectInitialDS(ds)
     })
 
     test('exception request', async () => {

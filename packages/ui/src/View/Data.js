@@ -4,22 +4,6 @@ import { startCase } from 'lodash'
 import render from '../render'
 import RandomSkeleton from './RandomSkeleton'
 
-function renderCell(fld, model, skeleton) {
-  return (
-    <td style={fld.style} className={fld.className}>
-      {
-        do {
-          if (model == null || skeleton) {
-            <RandomSkeleton />
-          } else {
-            render(fld, model)
-          }
-        }
-      }
-    </td>
-  )
-}
-
 function labelFor(fld) {
   return do {
     if (typeof fld === 'string') {
@@ -36,13 +20,23 @@ class Data extends React.PureComponent {
   render() {
     const { fields, data, skeleton, labelWidth } = this.props
 
-    return fields.map((field, i) => {
+    return fields.map((fld, i) => {
       return (
         <tr key={i}>
           <td width={labelWidth} className="rf-label">
-            {labelFor(field)}
+            {labelFor(fld)}
           </td>
-          {renderCell(field, data, skeleton)}
+          <td style={fld.style} className={fld.className}>
+            {
+              do {
+                if (data == null || skeleton) {
+                  <RandomSkeleton />
+                } else {
+                  render(fld, data)
+                }
+              }
+            }
+          </td>
         </tr>
       )
     })

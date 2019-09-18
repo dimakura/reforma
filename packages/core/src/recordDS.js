@@ -142,21 +142,10 @@ function defineStatusListener(recordDS, privateData) {
 }
 
 function defineFetch(recordDS, privateData) {
-  function reportError(error, wasAborted = false) {
-    // We have race condition here!
-    // We should not do anything on abort: because this aborted call most likely
-    // comes late and another request is under the way.
-
-    if (wasAborted) {
-      return
-    }
-
-    if (privateData.controller != null) {
-      privateData.controller.abort()
-      privateData.controller = null
-    }
-
+  function reportError(error) {
     const oldStatus = privateData.status
+
+    abortAnyPendingRequest()
     privateData.status = FAILED
     privateData.error = error
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, FAILED)
@@ -203,14 +192,20 @@ function defineFetch(recordDS, privateData) {
     }
   }
 
-  async function fetch(params) {
+  function abortAnyPendingRequest() {
     if (privateData.controller != null) {
       privateData.controller.abort()
+      privateData.controller = null
     }
+  }
 
+  async function fetch(params) {
     const oldStatus = privateData.status
+
+    abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
+    // XXX: we should probably RESET if new params are different from previous params!!
     privateData.params = normalizeParams(params)
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
@@ -230,15 +225,38 @@ function defineFetch(recordDS, privateData) {
         privateData.data = extractData(privateData.body)
         privateData.emitter.emit(STATUS_CHANGED, BUSY, READY)
       } else {
-        reportError(Reforma.http.failedError(resp.status, resp.statusText, privateData.body))
+        const err = Reforma.http.failedError(resp.status, resp.statusText, privateData.body)
+        reportError(err)
       }
     } catch (e) {
+      // We have race condition here!
+      // We should not do anything on abort: because this aborted call most likely
+      // comes late and another request is under the way.
       const abortError = e instanceof DOMException && (e.code === 20 || e.name === 'AbortError')
-      reportError(Reforma.http.exceptionError(e), abortError)
+      if (!abortError) {
+        const err = Reforma.http.exceptionError(e)
+        reportError(err)
+      }
+    }
+  }
+
+  function reset() {
+    const oldStatus = privateData.status
+
+    if (oldStatus !== INITIAL) {
+      abortAnyPendingRequest()
+      privateData.status = INITIAL
+      privateData.params = null
+      privateData.data = null
+      privateData.body = null
+      privateData.headers = null
+      privateData.error = null
+      privateData.emitter.emit(STATUS_CHANGED, oldStatus, INITIAL)
     }
   }
 
   Object.defineProperty(recordDS, 'fetch', { value: fetch })
+  Object.defineProperty(recordDS, 'reset', { value: reset })
 
   Object.defineProperty(recordDS, 'refetch', {
     value: function () {

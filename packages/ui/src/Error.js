@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Callout } from '@blueprintjs/core'
-import CollectionComponent from './CollectionComponent'
+import DataSourceComponent from './DataSourceComponent'
 
 class Error extends React.PureComponent {
   render() {
@@ -19,7 +19,7 @@ class Error extends React.PureComponent {
     }
 
     return (
-      <CollectionComponent
+      <DataSourceComponent
         autofetch={false}
         cached={true}
         dataSource={dataSource}

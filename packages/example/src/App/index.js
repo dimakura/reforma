@@ -1,38 +1,17 @@
 import React from 'react'
-import {
-  Error,
-  LoadingIndicator,
-  Pagination,
-  RefreshAction,
-  Table,
-  Toolbar
-} from '@reforma/ui'
-import presidentsDS from './presidentsDS'
-
-const initialParams = { _page: 1, _limit: 10 }
-const id = { name: 'id', header: 'N', width: 50, style: { textAlign: 'right' } }
-const firstName = 'firstName'
-const lastName = 'lastName'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import List from './List'
+import View from './View'
 
 class App extends React.PureComponent {
   render() {
     return (
-      <div style={{ padding: 16 }}>
-        <Toolbar bottomMargin>
-          <RefreshAction dataSource={presidentsDS} />
-        </Toolbar>
-        <Error dataSource={presidentsDS} bottomMargin />
-        <Table
-          dataSource={presidentsDS}
-          columns={[id, firstName, lastName]}
-          style={{ width: '100%' }}
-          initialParams={initialParams}
-        />
-        <Toolbar topMargin>
-          <Pagination dataSource={presidentsDS} />
-          <LoadingIndicator dataSource={presidentsDS} />
-        </Toolbar>
-      </div>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={List} />
+          <Route path="/presidents/:id" component={View} />
+        </Switch>
+      </Router>
     )
   }
 }

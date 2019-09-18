@@ -1,18 +1,18 @@
 import Reforma from '@reforma/core'
 import React from 'react'
 import { shallow } from 'enzyme'
-import CollectionComponent from '../CollectionComponent'
+import DataSourceComponent from '../DataSourceComponent'
 
-test('<CollectionComponent />', async () => {
+test('<DataSourceComponent />', async () => {
   mockHttp()
   const ds = createDataSource()
-  const initialParams = { _page: 1, _limit: 10 }
-  const comp = createComponent(ds, initialParams)
+  const params = { _page: 1, _limit: 10 }
+  const comp = createComponent(ds, params)
 
   expect(comp.text()).toBe('Status: busy')
   expect(Reforma.http.get).toHaveBeenCalledWith(
     '/presidents',
-    expect.objectContaining({ params: initialParams })
+    expect.objectContaining({ params })
   )
 
   await new Promise(resolve => setTimeout(resolve, 0))
@@ -49,11 +49,11 @@ function mockHttp() {
   }))
 }
 
-function createComponent(ds, initialParams) {
+function createComponent(ds, params) {
   return shallow(
-    <CollectionComponent
+    <DataSourceComponent
       autofetch
-      initialParams={initialParams}
+      params={params}
       dataSource={ds}
       render={() => {
         return (

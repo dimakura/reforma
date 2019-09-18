@@ -5,17 +5,41 @@ $space-x3: 16px;
 $space-x4: 21px;
 
 $border-color: rgba(255, 255, 255, 0.15);
+$table-header-background: rgba(0, 0, 0, 0.1);
 
 // Table
 
-table.bp3-html-table.rt-table {
-  border: 1px solid $border-color;
+table.bp3-html-table,
+table.bp3-html-table.bp3-interactive {
+  &.rf-table {
+    border: 1px solid $border-color;
+    width: 100%;
 
-  .rf-placeholder {
-    padding-top: $space-x4;
-    padding-bottom: $space-x4;
-    padding-left: $space-x3;
-    padding-right: $space-x3;
+    .rf-placeholder {
+      padding-top: $space-x4;
+      padding-bottom: $space-x4;
+      padding-left: $space-x3;
+      padding-right: $space-x3;
+    }
+
+    th {
+      background-color: $table-header-background;
+    }
+  }
+
+  &.rf-view {
+    border: 1px solid $border-color;
+    border-top: none;
+    width: 100%;
+
+    tr,
+    tr:hover {
+      .rf-label {
+        font-weight: 600;
+        text-align: right;
+        background-color: $table-header-background;
+      }
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Button } from '@blueprintjs/core'
-import CollectionComponent from '../CollectionComponent'
+import DataSourceComponent from '../DataSourceComponent'
 import RefreshAction from '../RefreshAction'
 
 describe('<RefreshAction />', () => {
@@ -23,7 +23,7 @@ describe('<RefreshAction />', () => {
       expect(dataSource.fetch).not.toHaveBeenCalled()
       expect(dataSource.refetch).not.toHaveBeenCalled()
 
-      expect(comp.is(CollectionComponent)).toBe(true)
+      expect(comp.is(DataSourceComponent)).toBe(true)
       expect(button.is(Button)).toBe(true)
       expect(button.prop('disabled')).toBe(false)
 
@@ -43,7 +43,7 @@ describe('<RefreshAction />', () => {
       expect(dataSource.fetch).not.toHaveBeenCalled()
       expect(dataSource.refetch).not.toHaveBeenCalled()
 
-      expect(comp.is(CollectionComponent)).toBe(true)
+      expect(comp.is(DataSourceComponent)).toBe(true)
       expect(button.is(Button)).toBe(true)
       expect(button.prop('disabled')).toBe(true)
 

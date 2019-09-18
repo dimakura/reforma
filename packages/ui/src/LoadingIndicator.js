@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Spinner } from '@blueprintjs/core'
-import CollectionComponent from './CollectionComponent'
+import DataSourceComponent from './DataSourceComponent'
 
 function isBusy(dataSource) {
   return dataSource.status === 'busy' || dataSource.status === 'initial'
@@ -15,7 +15,7 @@ class LoadingIndicator extends React.PureComponent {
     } = this.props
 
     return (
-      <CollectionComponent
+      <DataSourceComponent
         autofetch={false}
         cached={true}
         dataSource={dataSource}

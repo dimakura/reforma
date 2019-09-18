@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Spinner } from '@blueprintjs/core'
-import CollectionComponent from '../CollectionComponent'
+import DataSourceComponent from '../DataSourceComponent'
 import LoadingIndicator from '../LoadingIndicator'
 
 describe('<LoadingIndicator />', () => {
@@ -13,7 +13,7 @@ describe('<LoadingIndicator />', () => {
     const comp = shallow(<LoadingIndicator dataSource={dataSource} />)
     const spinner = comp.renderProp('render')()
 
-    expect(comp.is(CollectionComponent)).toBe(true)
+    expect(comp.is(DataSourceComponent)).toBe(true)
     expect(spinner.is(Spinner)).toBe(true)
     expect(spinner.prop('size')).toBe(16)
   })
@@ -25,7 +25,7 @@ describe('<LoadingIndicator />', () => {
     const comp = shallow(<LoadingIndicator dataSource={dataSource} />)
     const spinner = comp.renderProp('render')()
 
-    expect(comp.is(CollectionComponent)).toBe(true)
+    expect(comp.is(DataSourceComponent)).toBe(true)
     expect(spinner.type()).toBeNull()
   })
 })

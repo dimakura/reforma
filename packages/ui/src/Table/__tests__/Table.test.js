@@ -7,13 +7,13 @@ describe('<Table />', () => {
   test('normal scenario', async () => {
     mockHttp()
     const ds = createDataSource()
-    const initialParams = { _page: 1, _limit: 10 }
-    const table = createComponent(ds, initialParams)
+    const params = { _page: 1, _limit: 10 }
+    const table = createComponent(ds, params)
 
     expect(table.find('Placeholder').prop('children')).toBe('Loading...')
     expect(Reforma.http.get).toHaveBeenCalledWith(
       '/presidents',
-      expect.objectContaining({ params: initialParams })
+      expect.objectContaining({ params })
     )
     await new Promise(resolve => setTimeout(resolve, 0))
     table.update()
@@ -62,10 +62,10 @@ function createDataSource() {
   })
 }
 
-function createComponent(ds, initialParams) {
+function createComponent(ds, params) {
   return mount(
     <Table
-      initialParams={initialParams}
+      params={params}
       dataSource={ds}
       columns={['id', 'firstName', 'lastName']}
     />

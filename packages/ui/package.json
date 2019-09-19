@@ -21,6 +21,6 @@
   "author": "Dimitri Kurashvili <dimakura@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@reforma/core": "^0.2.0"
+    "@reforma/core": "file:../core"
   }
 }

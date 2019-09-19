@@ -2,7 +2,6 @@
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
-import { snakeCase } from './helpers'
 
 const INITIAL = 'initial'
 const BUSY = 'busy'
@@ -61,8 +60,6 @@ function defineSerialRoot(recordDS, opts) {
   const serialRoot = do {
     if ('serialRoot' in opts) {
       opts.serialRoot
-    } else {
-      snakeCase(recordDS.type.name)
     }
   }
 
@@ -75,8 +72,6 @@ function defineUrl(recordDS, opts) {
   const url = do {
     if ('url' in opts) {
       opts.url
-    } else {
-      `/${recordDS.serialRoot}`
     }
   }
 
@@ -155,6 +150,7 @@ function defineFetch(recordDS, privateData) {
     const data = do {
       if (
         body != null &&
+        recordDS.serialRoot != null &&
         recordDS.serialRoot in body
       ) {
         body[recordDS.serialRoot]

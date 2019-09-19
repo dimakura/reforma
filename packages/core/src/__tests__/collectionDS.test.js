@@ -19,6 +19,7 @@ describe('Collection data source', () => {
       const ds = Reforma.createCollectionDS({
         type,
         serialRoot: 'profiles',
+        url: '/profiles',
         params: {
           firstName: 'Ben'
         }
@@ -56,6 +57,7 @@ describe('Collection data source', () => {
       ds = Reforma.createCollectionDS({
         type,
         serialRoot: 'profiles',
+        url: '/profiles',
         params: {
           firstName: 'John'
         }

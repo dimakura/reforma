@@ -1,6 +1,24 @@
+// TODO: split record/collection components!
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { isEqual } from 'lodash'
+
+function fetchDS(dataSource, params) {
+  if (dataSource.__isCollectionDS__) {
+    dataSource.fetch(params)
+  } else {
+    const id = do {
+      if (params != null && typeof params === 'object' && 'id' in params) {
+        params.id
+      } else {
+        params
+      }
+    }
+
+    dataSource.fetch(id)
+  }
+}
 
 class DataSourceComponent extends React.PureComponent {
   componentDidMount() {
@@ -20,7 +38,7 @@ class DataSourceComponent extends React.PureComponent {
     })
 
     if (isInitial && autofetch) {
-      dataSource.fetch(params)
+      fetchDS(dataSource, params)
     } else if (dataSource.__isCollectionDS__ && !isBusy && !cached) {
       // collection datasource is usually used for the same table
       // we just need to refetch with existing parameters
@@ -32,7 +50,7 @@ class DataSourceComponent extends React.PureComponent {
       ) {
         // just refetching is not enough here
         // as we might require different record
-        dataSource.fetch(params)
+        fetchDS(dataSource, params)
       }
     }
   }

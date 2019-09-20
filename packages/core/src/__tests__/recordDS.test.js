@@ -1,21 +1,10 @@
 import Reforma from '@reforma/core'
+import { createType, createRecordDS } from 'Test/factories'
 
 describe('Record data source', () => {
-  let type
-
-  beforeEach(() => {
-    type = Reforma.createType({
-      name: 'Profile',
-      fields: {
-        id: Reforma.integer.id,
-        firstName: Reforma.string,
-        lastName: Reforma.string
-      }
-    })
-  })
-
-  describe('creation', () => {
+  describe('createRecordDS', () => {
     test('normal scenario', () => {
+      const type = createType()
       const ds = Reforma.createRecordDS({
         type,
         serialRoot: 'profile',
@@ -51,11 +40,7 @@ describe('Record data source', () => {
     let ds
 
     beforeEach(() => {
-      ds = Reforma.createRecordDS({
-        type,
-        serialRoot: 'profile',
-        url: '/profiles/:id'
-      })
+      ds = createRecordDS()
     })
 
     test('normal scenario', async () => {
@@ -98,7 +83,7 @@ describe('Record data source', () => {
       expect(Reforma.http.get).toHaveBeenCalledTimes(1)
 
       const profile = ds.data
-      expect(profile.__type__).toBe(type)
+      expect(profile.__type__).toBe(ds.type)
       expect(profile.id).toBe(1)
       expect(profile.firstName).toBe('John')
       expect(profile.lastName).toBe('Quincy Adams')

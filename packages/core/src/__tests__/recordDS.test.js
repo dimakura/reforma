@@ -8,14 +8,15 @@ describe('Record data source', () => {
       const ds = Reforma.createRecordDS({
         type,
         serialRoot: 'profile',
-        url: '/profiles/:id'
+        url: '/profiles'
       })
 
       expect(ds.__isRecordDS__).toBe(true)
       expect(ds.type).toBe(type)
       expect(ds.serialRoot).toBe('profile')
-      expect(ds.url).toBe('/profiles/:id')
-      expect(ds.params).toBeNull()
+      expect(ds.url).toBe('/profiles')
+      expect(ds.recordUrl).toBe('/profiles/:id')
+      expect(ds.id).toBeNull()
       expect(ds.status).toBe('initial')
       expect(ds.body).toBeNull()
       expect(ds.data).toBeNull()
@@ -29,7 +30,12 @@ describe('Record data source', () => {
       }).toThrow('Wrong set of options for createRecordDS: undefined')
 
       expect(() => {
+        Reforma.createRecordDS({})
+      }).toThrow('Specify url when creating record data source')
+
+      expect(() => {
         Reforma.createRecordDS({
+          url: '/profiles',
           type: Reforma.integer
         })
       }).toThrow('Wrong datasource type: integer')

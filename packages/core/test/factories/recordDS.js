@@ -6,7 +6,7 @@ export function createRecordDS(params) {
   const createParams = {
     type: createType(),
     serialRoot: 'profile',
-    url: '/profiles/:id'
+    url: '/profiles'
   }
 
   merge(createParams, params)

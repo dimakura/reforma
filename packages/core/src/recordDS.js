@@ -2,6 +2,7 @@
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
+import serializeType from './serialize'
 
 const INITIAL = 'initial'
 const BUSY = 'busy'
@@ -16,10 +17,14 @@ export default function createRecordDS(opts) {
     throw new Error(`Wrong set of options for createRecordDS: ${opts}`)
   }
 
+  if (opts.url == null) {
+    throw new Error('Specify url when creating record data source')
+  }
+
   const recordDS = {}
   const privateData = {
     status: INITIAL,
-    params: null,
+    id: null,
     data: null,
     body: null,
     headers: null,
@@ -30,11 +35,11 @@ export default function createRecordDS(opts) {
   defineType(recordDS, opts)
   defineSerialRoot(recordDS, opts)
   defineUrl(recordDS, opts)
-  defineParams(recordDS, privateData)
+  defineId(recordDS, privateData)
   defineStatus(recordDS, privateData)
   definedDataAndError(recordDS, privateData)
   defineStatusListener(recordDS, privateData)
-  defineFetch(recordDS, privateData)
+  defineRequestMethods(recordDS, privateData)
 
   return recordDS
 }
@@ -69,21 +74,23 @@ function defineSerialRoot(recordDS, opts) {
 }
 
 function defineUrl(recordDS, opts) {
-  const url = do {
-    if ('url' in opts) {
-      opts.url
+  const url = opts.url
+  const recordUrl = do {
+    if ('recordUrl' in opts) {
+      opts.recordUrl
+    } else {
+      `${url}/:id`
     }
   }
 
-  Object.defineProperty(recordDS, 'url', {
-    value: url
-  })
+  Object.defineProperty(recordDS, 'url', { value: url })
+  Object.defineProperty(recordDS, 'recordUrl', { value: recordUrl })
 }
 
-function defineParams(recordDS, privateData) {
-  Object.defineProperty(recordDS, 'params', {
+function defineId(recordDS, privateData) {
+  Object.defineProperty(recordDS, 'id', {
     get: function () {
-      return privateData.params
+      return privateData.id
     }
   })
 }
@@ -136,7 +143,7 @@ function defineStatusListener(recordDS, privateData) {
   })
 }
 
-function defineFetch(recordDS, privateData) {
+function defineRequestMethods(recordDS, privateData) {
   function reportError(error) {
     const oldStatus = privateData.status
 
@@ -144,6 +151,17 @@ function defineFetch(recordDS, privateData) {
     privateData.status = FAILED
     privateData.error = error
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, FAILED)
+  }
+
+  function reportException(ex) {
+    // We have race condition here!
+    // We should not do anything on abort: because this aborted call most likely
+    // comes late and another request is under the way.
+    const abortError = ex instanceof DOMException && (ex.code === 20 || ex.name === 'AbortError')
+    if (!abortError) {
+      const err = Reforma.http.exceptionError(ex)
+      reportError(err)
+    }
   }
 
   function extractData(body) {
@@ -168,26 +186,6 @@ function defineFetch(recordDS, privateData) {
     }
   }
 
-  function normalizeParams(params) {
-    return do {
-      if (params != null) {
-        if (typeof params === 'object') {
-          params
-        } else if (
-          typeof params === 'number' ||
-          typeof params === 'string' ||
-          Array.isArray(params)
-        ) {
-          ({ id: params })
-        } else {
-          null
-        }
-      } else {
-        null
-      }
-    }
-  }
-
   function abortAnyPendingRequest() {
     if (privateData.controller != null) {
       privateData.controller.abort()
@@ -195,20 +193,29 @@ function defineFetch(recordDS, privateData) {
     }
   }
 
-  async function fetch(params) {
+  function resetPrivateData() {
+    privateData.status = INITIAL
+    privateData.id = null
+    privateData.data = null
+    privateData.body = null
+    privateData.headers = null
+    privateData.error = null
+  }
+
+  async function fetch(id) {
     const oldStatus = privateData.status
 
     abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    // XXX: we should probably RESET if new params are different from previous params!!
-    privateData.params = normalizeParams(params)
+    // XXX: we should probably RESET if new IDis different from previous ID?
+    privateData.id = id
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
     try {
-      const resp = await Reforma.http.get(recordDS.url, {
-        params: recordDS.params,
+      const resp = await Reforma.http.get(recordDS.recordUrl, {
+        params: { id: recordDS.id },
         signal: privateData.controller.signal
       })
 
@@ -224,15 +231,8 @@ function defineFetch(recordDS, privateData) {
         const err = Reforma.http.failedError(resp.status, resp.statusText, privateData.body)
         reportError(err)
       }
-    } catch (e) {
-      // We have race condition here!
-      // We should not do anything on abort: because this aborted call most likely
-      // comes late and another request is under the way.
-      const abortError = e instanceof DOMException && (e.code === 20 || e.name === 'AbortError')
-      if (!abortError) {
-        const err = Reforma.http.exceptionError(e)
-        reportError(err)
-      }
+    } catch (ex) {
+      reportException(ex)
     }
   }
 
@@ -241,22 +241,34 @@ function defineFetch(recordDS, privateData) {
 
     if (oldStatus !== INITIAL) {
       abortAnyPendingRequest()
-      privateData.status = INITIAL
-      privateData.params = null
-      privateData.data = null
-      privateData.body = null
-      privateData.headers = null
-      privateData.error = null
+      resetPrivateData()
       privateData.emitter.emit(STATUS_CHANGED, oldStatus, INITIAL)
     }
   }
 
+  // function create(data) {
+  //   const oldStatus = privateData.status
+  //
+  //   abortAnyPendingRequest()
+  //   resetPrivateData()
+  //   privateData.status = BUSY
+  //   privateData.controller = new AbortController()
+  //   privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
+  //
+  //   const serializedData = serializeType()
+  //
+  //   try {
+  //     // TODO:
+  //   } catch (ex) {
+  //     reportException(ex)
+  //   }
+  // }
+
   Object.defineProperty(recordDS, 'fetch', { value: fetch })
   Object.defineProperty(recordDS, 'reset', { value: reset })
-
   Object.defineProperty(recordDS, 'refetch', {
     value: function () {
-      return recordDS.fetch(privateData.params)
+      return recordDS.fetch(privateData.id)
     }
   })
 }

@@ -313,7 +313,8 @@ Record data source is a data source to operate on a single record (of a user def
 const profileDS = Reforma.createRecordDataSource({
   type: profileType,
   serialRoot: 'profile',
-  url: '/profiles'
+  url: '/profiles',
+  recordUrl: '/profiles/:id' // this is optional
 })
 ```
 
@@ -321,13 +322,11 @@ Now you can retrieve profile record from the server:
 
 ```js
 const profile = await profileDS.fetch(1)
-// or, alternatively
-const profile = await profileDS.fetch({ id: 1 })
 // GET /api/profiles/1
 // => Profile{...}
 ```
 
-Programmer can also use record data source to create or update records:
+You can also use record data source to create or update records:
 
 ```js
 const profile = await profileDS.create({
@@ -337,17 +336,17 @@ const profile = await profileDS.create({
 // POST /api/profiles
 // => Profile{id: 100, firstName: 'Leif', lastName: 'Andsnes'}
 
-const updatedProfile = await profileDS.update({
+const updatedProfile = await profileDS.update(100, {
   lastName: 'Ove Andsnes'
 })
 // PUT /api/profiles/100
 // => Profile{id: 100, firstName: 'Leif', lastName: 'Ove Andsnes'}
 ```
 
-And he can delete given record:
+And you can delete a record:
 
 ```js
-await profileDS.delete()
+await profileDS.delete(100)
 // DELETE /api/profiles/100
 ```
 
@@ -380,13 +379,13 @@ Possible values for the status of a data source are:
 - `ready` status after a successful request.
 - `failed` status after failed request.
 
-You can listen for status changes:
+You can listen for the status changes:
 
 ```js
 const unsubscribe = dataSource.addStatusListener((oldStatus, newStatus) => ...)
 ```
 
-To unsubscribe this listener, simply call `unsubscribe()` function.
+To unsubscribe, call `unsubscribe()`.
 
 ## HTTP methods
 

@@ -43,23 +43,24 @@ describe('Record data source', () => {
   })
 
   describe('requests', () => {
+    let ds
+    const data = {
+      profile: {
+        id: '1',
+        first_name: 'John',
+        last_name: 'Quincy Adams'
+      }
+    }
+
+    beforeEach(() => {
+      ds = createRecordDS()
+    })
+
     describe('fetch', () => {
-      let ds
-
-      beforeEach(() => {
-        ds = createRecordDS()
-      })
-
       test('normal scenario', async () => {
         Reforma.http.get = jest.fn(() => ({
           ok: true,
-          json: () => ({
-            profile: {
-              id: '1',
-              first_name: 'John',
-              last_name: 'Quincy Adams'
-            }
-          }),
+          json: () => data,
           headers: { 'X-Total-Count': 10 }
         }))
         const listener = jest.fn()
@@ -71,13 +72,7 @@ describe('Record data source', () => {
         await promise
         expectReadyDS(ds)
         expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
-        expect(ds.body).toEqual({
-          profile: {
-            id: '1',
-            first_name: 'John',
-            last_name: 'Quincy Adams'
-          }
-        })
+        expect(ds.body).toEqual(data)
 
         expect(listener).toHaveBeenCalledWith('initial', 'busy')
         expect(listener).toHaveBeenCalledWith('busy', 'ready')
@@ -158,8 +153,123 @@ describe('Record data source', () => {
       })
     })
 
-    describe('create', () => {
-      // TODO:
+    test('create', async () => {
+      Reforma.http.post = jest.fn(() => ({
+        ok: true,
+        json: () => data,
+        headers: { 'X-Expires-At': 'soon' }
+      }))
+      const listener = jest.fn()
+      ds.addStatusListener(listener)
+
+      await ds.create({
+        firstName: 'John',
+        lastName: 'Quincy Adams'
+      }, ['firstName', 'lastName'])
+
+      expectReadyDS(ds)
+      expect(ds.body).toEqual(data)
+      expect(ds.headers).toEqual({ 'X-Expires-At': 'soon' })
+
+      expect(listener).toHaveBeenCalledWith('initial', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
+
+      expect(Reforma.http.post).toHaveBeenCalledWith('/profiles', {
+        data: {
+          first_name: 'John',
+          last_name: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.post).toHaveBeenCalledTimes(1)
+
+      const profile = ds.data
+      expect(profile.__type__).toBe(ds.type)
+      expect(profile.id).toBe(1)
+      expect(profile.firstName).toBe('John')
+      expect(profile.lastName).toBe('Quincy Adams')
+
+      // try reset
+      ds.reset()
+      expectInitialDS(ds)
+    })
+
+    test('update', async () => {
+      Reforma.http.put = jest.fn(() => ({
+        ok: true,
+        json: () => data,
+        headers: { 'X-Expires-At': 'soon' }
+      }))
+      const listener = jest.fn()
+      ds.addStatusListener(listener)
+
+      await ds.update(10, {
+        firstName: 'John',
+        lastName: 'Quincy Adams'
+      }, ['firstName', 'lastName'])
+
+      expectReadyDS(ds)
+      expect(ds.body).toEqual(data)
+      expect(ds.headers).toEqual({ 'X-Expires-At': 'soon' })
+
+      expect(listener).toHaveBeenCalledWith('initial', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
+
+      expect(Reforma.http.put).toHaveBeenCalledWith('/profiles/:id', {
+        params: {
+          id: 10
+        },
+        data: {
+          first_name: 'John',
+          last_name: 'Quincy Adams'
+        },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.put).toHaveBeenCalledTimes(1)
+
+      const profile = ds.data
+      expect(profile.__type__).toBe(ds.type)
+      expect(profile.id).toBe(1)
+      expect(profile.firstName).toBe('John')
+      expect(profile.lastName).toBe('Quincy Adams')
+
+      // try reset
+      ds.reset()
+      expectInitialDS(ds)
+    })
+
+    test('delete', async () => {
+      Reforma.http.delete = jest.fn(() => ({
+        ok: true,
+        json: () => ({ status: 'ok' }),
+        headers: { 'X-Record-Id': 10 }
+      }))
+      const listener = jest.fn()
+      ds.addStatusListener(listener)
+
+      await ds.delete(10)
+
+      expectReadyDS(ds)
+      expect(ds.body).toEqual({ status: 'ok' })
+      expect(ds.headers).toEqual({ 'X-Record-Id': 10 })
+
+      expect(listener).toHaveBeenCalledWith('initial', 'busy')
+      expect(listener).toHaveBeenCalledWith('busy', 'ready')
+      expect(listener).toHaveBeenCalledTimes(2)
+
+      expect(Reforma.http.delete).toHaveBeenCalledWith('/profiles/:id', {
+        params: { id: 10 },
+        signal: expect.anything()
+      })
+      expect(Reforma.http.delete).toHaveBeenCalledTimes(1)
+
+      expect(ds.data).toBeNull()
+
+      // try reset
+      ds.reset()
+      expectInitialDS(ds)
     })
   })
 })
@@ -180,7 +290,9 @@ function expectBusyDS(ds) {
 
 function expectReadyDS(ds) {
   expect(ds.status).toBe('ready')
-  expect(ds.data.__type__.__isUserDefinedType__).toBe(true)
+  if (ds.data != null) {
+    expect(ds.data.__type__.__isUserDefinedType__).toBe(true)
+  }
   expect(ds.error).toBeNull()
 }
 

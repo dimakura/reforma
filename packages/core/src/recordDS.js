@@ -2,7 +2,7 @@
 import Reforma from '@reforma/core'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
-import serializeType from './serialize'
+import { serializeType } from './serialize'
 
 const INITIAL = 'initial'
 const BUSY = 'busy'
@@ -202,14 +202,20 @@ function defineRequestMethods(recordDS, privateData) {
     privateData.error = null
   }
 
-  async function processResponse(resp) {
+  async function processResponse(resp, parseData = true) {
     privateData.body = await resp.json()
     privateData.headers = resp.headers
 
     if (resp.ok) {
       privateData.status = READY
       privateData.controller = null
-      privateData.data = extractData(privateData.body)
+      privateData.data = do {
+        if (parseData) {
+          extractData(privateData.body)
+        } else {
+          null
+        }
+      }
       privateData.emitter.emit(STATUS_CHANGED, BUSY, READY)
     } else {
       const err = Reforma.http.failedError(resp.status, resp.statusText, privateData.body)
@@ -304,12 +310,12 @@ function defineRequestMethods(recordDS, privateData) {
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
     try {
-      const resp = await Reforma.http.put(recordDS.recordUrl, {
+      const resp = await Reforma.http.delete(recordDS.recordUrl, {
         params: { id: recordDS.id },
         signal: privateData.controller.signal
       })
 
-      await processResponse(resp)
+      await processResponse(resp, false)
     } catch (ex) {
       reportException(ex)
     }

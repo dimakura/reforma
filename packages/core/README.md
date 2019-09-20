@@ -259,7 +259,7 @@ A data source is a mechanism to send and receive data from backend service. Refo
 
 ### Collection data source
 
-A collection data source is a data source to operate on a collection of data (of Reforma types).
+A collection data source is a data source to operate on a collection of data (of user defined types).
 
 ```js
 const profilesDS = Reforma.createCollectionDS({
@@ -281,7 +281,7 @@ await profilesDS.fetch({
 // GET /api/profiles?country_name=Italy&city_name=Florence
 
 profilesDS.data
-// => Array[]
+// => Array[...]
 
 profilesDS.headers.get('X-Total-Count')
 // => 100
@@ -289,34 +289,14 @@ profilesDS.headers.get('X-Total-Count')
 
 Note that the params defined during data source creation (`countryName`) are present in the request, along with the params specified in the call to `fetch` (`cityName`).
 
-An important property of data source is its status.
-
-```js
-profilesDS.status
-// => "ready"
-```
-
-Other possible values for the status of a collection data source are:
-
-- `initial` initial status.
-- `busy` status when HTTP request is active.
-- `ready` status after a successful fetch. You can get fetched data using `.data` property.
-- `failed` status after failed fetch. You can get error details using `.errors` property.
-
-You can listen for status changes:
-
-```js
-const unsubscribe = profilesDS.addStatusListener((profilesDS, prevStatus) => ...)
-```
-
 There are other useful props available for a collection data source:
 
 ```js
 profilesDS.data
-// => Array[]
+// => Array[...]
 
 profilesDS.headers
-// => Headers{}
+// => Headers{...}
 
 profilesDS.errors
 // => null
@@ -333,7 +313,7 @@ Record data source is a data source to operate on a single record (of a user def
 const profileDS = Reforma.createRecordDataSource({
   type: profileType,
   serialRoot: 'profile',
-  url: '/profiles/:id'
+  url: '/profiles'
 })
 ```
 
@@ -347,38 +327,35 @@ const profile = await profileDS.fetch({ id: 1 })
 // => Profile{...}
 ```
 
-Other operations are also supported:
+Programmer can also use record data source to create or update records:
 
 ```js
-await profileDS.save(profile) // create/update
-await profileDS.delete(profile) // delete
+const profile = await profileDS.create({
+  firstName: 'Leif',
+  lastName: 'Andsnes'
+})
+// POST /api/profiles
+// => Profile{id: 100, firstName: 'Leif', lastName: 'Andsnes'}
+
+const updatedProfile = await profileDS.update({
+  lastName: 'Ove Andsnes'
+})
+// PUT /api/profiles/100
+// => Profile{id: 100, firstName: 'Leif', lastName: 'Ove Andsnes'}
 ```
 
-Similar to collection data source, we have `status` property in record data source.
+And he can delete given record:
 
 ```js
-profilesDS.status
-// => "ready"
-```
-
-Other possible values for the status of a record data source are:
-
-- `initial` initial status.
-- `busy` status when HTTP request is active.
-- `ready` status after a successful operation. You can get last operation data using `.data` property.
-- `failed` status after failed fetch. You can get error details using `.errors` property.
-
-You can listen for status changes:
-
-```js
-const unsubscribe = profileDS.addStatusListener((profileDS, prevStatus) => ...)
+await profileDS.delete()
+// DELETE /api/profiles/100
 ```
 
 There are other useful props available for a record data source:
 
 ```js
 profileDS.data
-// => Array[]
+// => Profile{...}
 
 profileDS.headers
 // => Headers{}
@@ -386,6 +363,30 @@ profileDS.headers
 profileDS.errors
 // => null
 ```
+
+### Status updates
+
+An important property of data source (both collection and record) is its status.
+
+```js
+dataSource.status
+// => "ready"
+```
+
+Possible values for the status of a data source are:
+
+- `initial` initial status.
+- `busy` status when HTTP request is active (fetching, saving, etc.).
+- `ready` status after a successful request.
+- `failed` status after failed request.
+
+You can listen for status changes:
+
+```js
+const unsubscribe = dataSource.addStatusListener((oldStatus, newStatus) => ...)
+```
+
+To unsubscribe this listener, simply call `unsubscribe()` function.
 
 ## HTTP methods
 

@@ -202,6 +202,21 @@ function defineRequestMethods(recordDS, privateData) {
     privateData.error = null
   }
 
+  async function processResponse(resp) {
+    privateData.body = await resp.json()
+    privateData.headers = resp.headers
+
+    if (resp.ok) {
+      privateData.status = READY
+      privateData.controller = null
+      privateData.data = extractData(privateData.body)
+      privateData.emitter.emit(STATUS_CHANGED, BUSY, READY)
+    } else {
+      const err = Reforma.http.failedError(resp.status, resp.statusText, privateData.body)
+      reportError(err)
+    }
+  }
+
   async function fetch(id) {
     const oldStatus = privateData.status
 
@@ -219,18 +234,7 @@ function defineRequestMethods(recordDS, privateData) {
         signal: privateData.controller.signal
       })
 
-      privateData.body = await resp.json()
-      privateData.headers = resp.headers
-
-      if (resp.ok) {
-        privateData.status = READY
-        privateData.controller = null
-        privateData.data = extractData(privateData.body)
-        privateData.emitter.emit(STATUS_CHANGED, BUSY, READY)
-      } else {
-        const err = Reforma.http.failedError(resp.status, resp.statusText, privateData.body)
-        reportError(err)
-      }
+      await processResponse(resp)
     } catch (ex) {
       reportException(ex)
     }
@@ -246,23 +250,26 @@ function defineRequestMethods(recordDS, privateData) {
     }
   }
 
-  // function create(data) {
-  //   const oldStatus = privateData.status
-  //
-  //   abortAnyPendingRequest()
-  //   resetPrivateData()
-  //   privateData.status = BUSY
-  //   privateData.controller = new AbortController()
-  //   privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
-  //
-  //   const serializedData = serializeType()
-  //
-  //   try {
-  //     // TODO:
-  //   } catch (ex) {
-  //     reportException(ex)
-  //   }
-  // }
+  async function create(data, fields) {
+    const oldStatus = privateData.status
+
+    abortAnyPendingRequest()
+    resetPrivateData()
+    privateData.status = BUSY
+    privateData.controller = new AbortController()
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
+
+    try {
+      const resp = await Reforma.http.post(recordDS.url, {
+        data: serializeType(recordDS.type, data, fields),
+        signal: privateData.controller.signal
+      })
+
+      await processResponse(resp)
+    } catch (ex) {
+      reportException(ex)
+    }
+  }
 
   Object.defineProperty(recordDS, 'fetch', { value: fetch })
   Object.defineProperty(recordDS, 'reset', { value: reset })

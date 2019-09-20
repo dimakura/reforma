@@ -42,118 +42,124 @@ describe('Record data source', () => {
     })
   })
 
-  describe('fetch and reset', () => {
-    let ds
+  describe('requests', () => {
+    describe('fetch', () => {
+      let ds
 
-    beforeEach(() => {
-      ds = createRecordDS()
-    })
+      beforeEach(() => {
+        ds = createRecordDS()
+      })
 
-    test('normal scenario', async () => {
-      Reforma.http.get = jest.fn(() => ({
-        ok: true,
-        json: () => ({
+      test('normal scenario', async () => {
+        Reforma.http.get = jest.fn(() => ({
+          ok: true,
+          json: () => ({
+            profile: {
+              id: '1',
+              first_name: 'John',
+              last_name: 'Quincy Adams'
+            }
+          }),
+          headers: { 'X-Total-Count': 10 }
+        }))
+        const listener = jest.fn()
+
+        expectInitialDS(ds)
+        ds.addStatusListener(listener)
+        const promise = ds.fetch(1)
+        expectBusyDS(ds)
+        await promise
+        expectReadyDS(ds)
+        expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
+        expect(ds.body).toEqual({
           profile: {
             id: '1',
             first_name: 'John',
             last_name: 'Quincy Adams'
           }
-        }),
-        headers: { 'X-Total-Count': 10 }
-      }))
-      const listener = jest.fn()
+        })
 
-      expectInitialDS(ds)
-      ds.addStatusListener(listener)
-      const promise = ds.fetch(1)
-      expectBusyDS(ds)
-      await promise
-      expectReadyDS(ds)
-      expect(ds.headers).toEqual({ 'X-Total-Count': 10 })
-      expect(ds.body).toEqual({
-        profile: {
-          id: '1',
-          first_name: 'John',
-          last_name: 'Quincy Adams'
-        }
+        expect(listener).toHaveBeenCalledWith('initial', 'busy')
+        expect(listener).toHaveBeenCalledWith('busy', 'ready')
+        expect(listener).toHaveBeenCalledTimes(2)
+
+        expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
+          params: { id: 1 },
+          signal: expect.anything()
+        })
+        expect(Reforma.http.get).toHaveBeenCalledTimes(1)
+
+        const profile = ds.data
+        expect(profile.__type__).toBe(ds.type)
+        expect(profile.id).toBe(1)
+        expect(profile.firstName).toBe('John')
+        expect(profile.lastName).toBe('Quincy Adams')
+
+        // re-fetch
+        Reforma.http.get.mockClear()
+        listener.mockClear()
+        await ds.refetch()
+        expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
+          params: { id: 1 },
+          signal: expect.anything()
+        })
+        expect(Reforma.http.get).toHaveBeenCalledTimes(1)
+        expect(listener).toHaveBeenCalledWith('ready', 'busy')
+        expect(listener).toHaveBeenCalledWith('busy', 'ready')
+        expect(listener).toHaveBeenCalledTimes(2)
+
+        // try reset
+        ds.reset()
+        expectInitialDS(ds)
       })
 
-      expect(listener).toHaveBeenCalledWith('initial', 'busy')
-      expect(listener).toHaveBeenCalledWith('busy', 'ready')
-      expect(listener).toHaveBeenCalledTimes(2)
+      test('failed request', async () => {
+        Reforma.http.get = jest.fn(() => ({
+          ok: false,
+          status: 404,
+          statusText: 'Not found',
+          json: () => ({
+            error: 'Unknown resource'
+          })
+        }))
+        const listener = jest.fn()
 
-      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
-        params: { id: 1 },
-        signal: expect.anything()
-      })
-      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
-
-      const profile = ds.data
-      expect(profile.__type__).toBe(ds.type)
-      expect(profile.id).toBe(1)
-      expect(profile.firstName).toBe('John')
-      expect(profile.lastName).toBe('Quincy Adams')
-
-      // re-fetch
-      Reforma.http.get.mockClear()
-      listener.mockClear()
-      await ds.refetch()
-      expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
-        params: { id: 1 },
-        signal: expect.anything()
-      })
-      expect(Reforma.http.get).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith('ready', 'busy')
-      expect(listener).toHaveBeenCalledWith('busy', 'ready')
-      expect(listener).toHaveBeenCalledTimes(2)
-
-      // try reset
-      ds.reset()
-      expectInitialDS(ds)
-    })
-
-    test('failed request', async () => {
-      Reforma.http.get = jest.fn(() => ({
-        ok: false,
-        status: 404,
-        statusText: 'Not found',
-        json: () => ({
+        expectInitialDS(ds)
+        ds.addStatusListener(listener)
+        const promise = ds.fetch()
+        expectBusyDS(ds)
+        await promise
+        expectFailedDS(ds)
+        expect(ds.body).toEqual({
           error: 'Unknown resource'
         })
-      }))
-      const listener = jest.fn()
 
-      expectInitialDS(ds)
-      ds.addStatusListener(listener)
-      const promise = ds.fetch()
-      expectBusyDS(ds)
-      await promise
-      expectFailedDS(ds)
-      expect(ds.body).toEqual({
-        error: 'Unknown resource'
+        expect(listener).toHaveBeenCalledTimes(2)
+        expect(listener).toHaveBeenCalledWith('initial', 'busy')
+        expect(listener).toHaveBeenCalledWith('busy', 'failed')
+
+        // try reset
+        ds.reset()
+        expectInitialDS(ds)
       })
 
-      expect(listener).toHaveBeenCalledTimes(2)
-      expect(listener).toHaveBeenCalledWith('initial', 'busy')
-      expect(listener).toHaveBeenCalledWith('busy', 'failed')
+      test('exception request', async () => {
+        const ex = new Error()
+        Reforma.http.get = jest.fn(() => {
+          return new Promise(() => { throw ex })
+        })
 
-      // try reset
-      ds.reset()
-      expectInitialDS(ds)
+        expectInitialDS(ds)
+        const promise = ds.fetch()
+        expectBusyDS(ds)
+        await promise
+        expectFailedDS(ds)
+        expect(ds.body).toBeNull()
+      })
     })
 
-    test('exception request', async () => {
-      const ex = new Error()
-      Reforma.http.get = jest.fn(() => {
-        return new Promise(() => { throw ex })
-      })
-
-      expectInitialDS(ds)
-      const promise = ds.fetch()
-      expectBusyDS(ds)
-      await promise
-      expectFailedDS(ds)
-      expect(ds.body).toBeNull()
+    describe('create', () => {
+      // TODO:
     })
   })
 })

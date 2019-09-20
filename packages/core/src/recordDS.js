@@ -223,7 +223,6 @@ function defineRequestMethods(recordDS, privateData) {
     abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    // XXX: we should probably RESET if new IDis different from previous ID?
     privateData.id = id
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
@@ -271,8 +270,56 @@ function defineRequestMethods(recordDS, privateData) {
     }
   }
 
+  async function update(id, data, fields) {
+    const oldStatus = privateData.status
+
+    abortAnyPendingRequest()
+    privateData.status = BUSY
+    privateData.controller = new AbortController()
+    privateData.id = id
+    privateData.error = null
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
+
+    try {
+      const resp = await Reforma.http.put(recordDS.recordUrl, {
+        params: { id: recordDS.id },
+        data: serializeType(recordDS.type, data, fields),
+        signal: privateData.controller.signal
+      })
+
+      await processResponse(resp)
+    } catch (ex) {
+      reportException(ex)
+    }
+  }
+
+  async function deleteFn(id) {
+    const oldStatus = privateData.status
+
+    abortAnyPendingRequest()
+    privateData.status = BUSY
+    privateData.controller = new AbortController()
+    privateData.id = id
+    privateData.error = null
+    privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
+
+    try {
+      const resp = await Reforma.http.put(recordDS.recordUrl, {
+        params: { id: recordDS.id },
+        signal: privateData.controller.signal
+      })
+
+      await processResponse(resp)
+    } catch (ex) {
+      reportException(ex)
+    }
+  }
+
   Object.defineProperty(recordDS, 'fetch', { value: fetch })
   Object.defineProperty(recordDS, 'reset', { value: reset })
+  Object.defineProperty(recordDS, 'create', { value: create })
+  Object.defineProperty(recordDS, 'update', { value: update })
+  Object.defineProperty(recordDS, 'delete', { value: deleteFn })
   Object.defineProperty(recordDS, 'refetch', {
     value: function () {
       return recordDS.fetch(privateData.id)

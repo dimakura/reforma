@@ -200,10 +200,15 @@ function setKeyType(type, keyType) {
 }
 
 function setDefineFieldsMethod(type) {
+  const idFields = []
   let fields = null
 
   function getFields() {
     return fields
+  }
+
+  function getIdFields() {
+    return idFields
   }
 
   function defineFields(newFields) {
@@ -217,6 +222,7 @@ function setDefineFieldsMethod(type) {
     }
 
     const extractedFields = {}
+    const idFieldsArray = []
     for (let i = 0; i < names.length; i++) {
       const name = names[i]
       const data = newFields[name]
@@ -238,13 +244,21 @@ function setDefineFieldsMethod(type) {
         value: field,
         enumerable: true
       })
+
+      if (field.getId()) {
+        idFieldsArray.push(field)
+      }
     }
 
     fields = extractedFields
+    for (let i = 0; i < idFieldsArray.length; i++) {
+      Object.defineProperty(idFields, i, { value: idFieldsArray[i] })
+    }
   }
 
   Object.defineProperty(type, 'defineFields', { value: defineFields })
   Object.defineProperty(type, 'getFields', { value: getFields })
+  Object.defineProperty(type, 'getIdFields', { value: getIdFields })
 }
 
 function setIdGetter(type) {

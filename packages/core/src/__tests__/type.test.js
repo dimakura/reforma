@@ -106,8 +106,11 @@ describe('User defined types', () => {
     hasFieldOfNameAndType(profileType, 'fullName', Reforma.string)
 
     const fields = profileType.getFields()
+    const idFields = profileType.getIdFields()
     expect(fields.id.getId()).toBe(true)
     expect(fields.fullName.getCalc()).toBe(calc)
+    expect(idFields).toHaveLength(1)
+    expect(idFields[0].getName()).toBe('id')
   })
 
   test('define fields separately', () => {

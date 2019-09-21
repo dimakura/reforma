@@ -6,7 +6,8 @@
     ["module-resolver", {
       "root": ["./src"],
       "alias": {
-        "@reforma/ui": "./src"
+        "@reforma/ui": "./src",
+        "Test": "./test"
       }
     }]
   ]

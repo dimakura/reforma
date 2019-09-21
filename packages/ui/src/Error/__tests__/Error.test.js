@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { Callout } from '@blueprintjs/core'
-import Error from '../Error'
+import Error from '../index'
 
 describe('<Error />', () => {
   test('displays error', () => {
@@ -20,6 +20,7 @@ describe('<Error />', () => {
 
 function getDataSource(error) {
   return {
+    __isCollectionDS__: true,
     status: 'failed',
     error,
     addStatusListener: () => () => {}

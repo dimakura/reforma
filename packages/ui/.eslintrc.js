@@ -28,6 +28,7 @@ module.exports = {
     // https://github.com/babel/eslint-plugin-babel/pull/131
     'babel/no-unused-expressions': 'error',
     'no-unused-expressions': 'off',
-    'no-new': 'off'
+    'no-new': 'off',
+    'react/display-name': 'off'
   }
 }

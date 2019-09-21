@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
-import DataSourceComponent from '../DataSourceComponent'
+import CollectionComponent from '../CollectionComponent'
 import Header from './Header'
 import Placeholder from './Placeholder'
 import Data from './Data'
@@ -21,7 +21,7 @@ class Table extends React.PureComponent {
     } = this.props
 
     return (
-      <DataSourceComponent
+      <CollectionComponent
         autofetch={autofetch}
         cached={cached}
         dataSource={dataSource}

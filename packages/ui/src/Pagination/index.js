@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, ButtonGroup } from '@blueprintjs/core'
-import DataSourceComponent from '../DataSourceComponent'
+import CollectionComponent from '../CollectionComponent'
 import defaultPageExtractor from './defaultPageExtractor'
 import defaultPageMover from './defaultPageMover'
 
@@ -10,7 +10,7 @@ class Pagination extends React.PureComponent {
     const { dataSource, pageExtractor, pageMover } = this.props
 
     return (
-      <DataSourceComponent
+      <CollectionComponent
         autofetch={false}
         cached={true}
         dataSource={dataSource}

@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
-import DataSourceComponent from '../DataSourceComponent'
+import { isEqual } from 'lodash'
+import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
 class View extends React.PureComponent {
@@ -19,14 +20,22 @@ class View extends React.PureComponent {
     } = this.props
 
     return (
-      <DataSourceComponent
+      <RecordComponent
         autofetch={autofetch}
         cached={cached}
         dataSource={dataSource}
-        params={{ id }}
+        id={id}
         render={() => {
           const data = dataSource.data
-          const sameRecord = data != null && data.id == id // eslint-disable-line eqeqeq
+          const sameRecord = do {
+            if (data == null) {
+              false
+            } else {
+              // TODO: we should use idFields instead!
+              const id = dataSource.normalizeId(data.id)
+              isEqual(id, dataSource.id)
+            }
+          }
 
           return (
             <HTMLTable

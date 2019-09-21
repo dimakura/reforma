@@ -24,8 +24,6 @@ Collection components render data which they get from a collection data source.
 
 ### `CollectionComponent`
 
-TODO: this became a generic `DataSourceComponent`
-
 `CollectionComponent` is a generic collection component. All other collection components in Reforma UI are based on `CollectionComponent`. You can use `CollectionComponent` to implement your own components.
 
 ```js

@@ -326,9 +326,4 @@ function defineRequestMethods(recordDS, privateData) {
   Object.defineProperty(recordDS, 'create', { value: create })
   Object.defineProperty(recordDS, 'update', { value: update })
   Object.defineProperty(recordDS, 'delete', { value: deleteFn })
-  Object.defineProperty(recordDS, 'refetch', {
-    value: function () {
-      return recordDS.fetch(privateData.id)
-    }
-  })
 }

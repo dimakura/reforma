@@ -90,19 +90,6 @@ describe('Record data source', () => {
         expect(profile.firstName).toBe('John')
         expect(profile.lastName).toBe('Quincy Adams')
 
-        // re-fetch
-        Reforma.http.get.mockClear()
-        listener.mockClear()
-        await ds.refetch()
-        expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
-          params: { id: 1 },
-          signal: expect.anything()
-        })
-        expect(Reforma.http.get).toHaveBeenCalledTimes(1)
-        expect(listener).toHaveBeenCalledWith('ready', 'busy')
-        expect(listener).toHaveBeenCalledWith('busy', 'ready')
-        expect(listener).toHaveBeenCalledTimes(2)
-
         // try reset
         ds.reset()
         expectInitialDS(ds)

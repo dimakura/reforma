@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
-import DataSourceComponent from '../DataSourceComponent'
+import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
 class View extends React.PureComponent {
@@ -19,20 +19,21 @@ class View extends React.PureComponent {
     } = this.props
 
     return (
-      <DataSourceComponent
+      <RecordComponent
         autofetch={autofetch}
         cached={cached}
         dataSource={dataSource}
-        params={{ id }}
+        id={id}
         render={() => {
           const data = dataSource.data
-          const sameRecord = data != null && data.id == id // eslint-disable-line eqeqeq
+          // XXX: review this!!!!
+          const hasData = data != null
 
           return (
             <HTMLTable
               bordered
               condensed={condensed}
-              interactive={sameRecord && interactive}
+              interactive={hasData && interactive}
               style={style}
               className="rf-view"
             >
@@ -40,7 +41,7 @@ class View extends React.PureComponent {
                 <Data
                   data={data}
                   fields={fields}
-                  skeleton={!sameRecord}
+                  skeleton={!hasData}
                   labelWidth={labelWidth}
                 />
               </tbody>

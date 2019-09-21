@@ -1,14 +1,15 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Button } from '@blueprintjs/core'
-import DataSourceComponent from '../DataSourceComponent'
-import RefreshAction from '../RefreshAction'
+import CollectionComponent from '../../CollectionComponent'
+import RefreshAction from '../index'
 
 describe('<RefreshAction />', () => {
   let dataSource
 
   beforeEach(() => {
     dataSource = {
+      __isCollectionDS__: true,
       status: 'ready',
       fetch: jest.fn(),
       refetch: jest.fn()
@@ -23,7 +24,7 @@ describe('<RefreshAction />', () => {
       expect(dataSource.fetch).not.toHaveBeenCalled()
       expect(dataSource.refetch).not.toHaveBeenCalled()
 
-      expect(comp.is(DataSourceComponent)).toBe(true)
+      expect(comp.is(CollectionComponent)).toBe(true)
       expect(button.is(Button)).toBe(true)
       expect(button.prop('disabled')).toBe(false)
 
@@ -32,18 +33,14 @@ describe('<RefreshAction />', () => {
     })
 
     test('busy dataSource', () => {
-      const dataSource = {
-        status: 'busy',
-        fetch: jest.fn(),
-        refetch: jest.fn()
-      }
+      dataSource.status = 'busy'
       const comp = shallow(<RefreshAction dataSource={dataSource} />)
       const button = comp.renderProp('render')()
 
       expect(dataSource.fetch).not.toHaveBeenCalled()
       expect(dataSource.refetch).not.toHaveBeenCalled()
 
-      expect(comp.is(DataSourceComponent)).toBe(true)
+      expect(comp.is(CollectionComponent)).toBe(true)
       expect(button.is(Button)).toBe(true)
       expect(button.prop('disabled')).toBe(true)
 

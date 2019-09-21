@@ -32,6 +32,8 @@ describe('url', () => {
   test('resolvePath', () => {
     expect(resolvePath('/profiles')).toBe('/profiles')
     expect(resolvePath('/profiles/:id', { id: 1 })).toBe('/profiles/1')
+    expect(resolvePath('/profiles/:id', { id: [1] })).toBe('/profiles/1')
+    expect(resolvePath('/profiles/:id', { id: [1, 2] })).toBe('/profiles/1/2')
 
     Reforma.config.http.baseUrl = 'https://move4.app/api'
     expect(resolvePath('/profiles')).toBe('https://move4.app/api/profiles')

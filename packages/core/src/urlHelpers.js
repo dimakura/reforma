@@ -71,7 +71,14 @@ export function resolvePath(path, params) {
       const value = params[name]
 
       if (url.pathname.indexOf(`:${paramName}`) !== -1) {
-        url.pathname = url.pathname.replace(`:${paramName}`, value)
+        const pathValue = do {
+          if (Array.isArray(value)) {
+            value.join('/') // e.g. [1, 2, 3] => 1/2/3
+          } else {
+            value
+          }
+        }
+        url.pathname = url.pathname.replace(`:${paramName}`, pathValue)
       } else if (Array.isArray(value)) {
         for (let j = 0; j < value.length; j++) {
           url.searchParams.append(paramName, value[j])

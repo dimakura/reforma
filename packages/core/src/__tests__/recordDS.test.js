@@ -42,6 +42,14 @@ describe('Record data source', () => {
     })
   })
 
+  test('id normalization', () => {
+    const ds = createRecordDS()
+
+    expect(ds.normalizeId(1)).toEqual([1])
+    expect(ds.normalizeId('1')).toEqual([1])
+    expect(ds.normalizeId(null)).toBeNull()
+  })
+
   describe('requests', () => {
     let ds
     const data = {
@@ -79,7 +87,7 @@ describe('Record data source', () => {
         expect(listener).toHaveBeenCalledTimes(2)
 
         expect(Reforma.http.get).toHaveBeenCalledWith('/profiles/:id', {
-          params: { id: 1 },
+          params: { id: [1] },
           signal: expect.anything()
         })
         expect(Reforma.http.get).toHaveBeenCalledTimes(1)
@@ -206,7 +214,7 @@ describe('Record data source', () => {
 
       expect(Reforma.http.put).toHaveBeenCalledWith('/profiles/:id', {
         params: {
-          id: 10
+          id: [10]
         },
         data: {
           first_name: 'John',
@@ -247,7 +255,7 @@ describe('Record data source', () => {
       expect(listener).toHaveBeenCalledTimes(2)
 
       expect(Reforma.http.delete).toHaveBeenCalledWith('/profiles/:id', {
-        params: { id: 10 },
+        params: { id: [10] },
         signal: expect.anything()
       })
       expect(Reforma.http.delete).toHaveBeenCalledTimes(1)

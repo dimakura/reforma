@@ -33,6 +33,7 @@ export default function createRecordDS(opts) {
   }
 
   defineType(recordDS, opts)
+  defineIdNormalization(recordDS)
   defineSerialRoot(recordDS, opts)
   defineUrl(recordDS, opts)
   defineId(recordDS, privateData)
@@ -59,6 +60,40 @@ function defineType(recordDS, opts) {
   Object.defineProperty(recordDS, '__isRecordDS__', {
     value: true
   })
+}
+
+function defineIdNormalization(recordDS) {
+  function normalizeId(id) {
+    const ids = do {
+      if (Array.isArray(id)) {
+        id
+      } else if (id != null) {
+        [id]
+      } else {
+        null
+      }
+    }
+
+    return do {
+      if (ids == null) {
+        null
+      } else {
+        const fields = recordDS.type.getIdFields()
+        ids.map((id, i) => {
+          const field = fields[i]
+          return do {
+            if (field != null) {
+              field.getType().create(id)
+            } else {
+              id
+            }
+          }
+        })
+      }
+    }
+  }
+
+  Object.defineProperty(recordDS, 'normalizeId', { value: normalizeId })
 }
 
 function defineSerialRoot(recordDS, opts) {
@@ -229,7 +264,7 @@ function defineRequestMethods(recordDS, privateData) {
     abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    privateData.id = id
+    privateData.id = recordDS.normalizeId(id)
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
@@ -282,7 +317,7 @@ function defineRequestMethods(recordDS, privateData) {
     abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    privateData.id = id
+    privateData.id = recordDS.normalizeId(id)
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 
@@ -305,7 +340,7 @@ function defineRequestMethods(recordDS, privateData) {
     abortAnyPendingRequest()
     privateData.status = BUSY
     privateData.controller = new AbortController()
-    privateData.id = id
+    privateData.id = recordDS.normalizeId(id)
     privateData.error = null
     privateData.emitter.emit(STATUS_CHANGED, oldStatus, BUSY)
 

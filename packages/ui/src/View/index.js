@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
+import { isEqual } from 'lodash'
 import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
@@ -26,14 +27,21 @@ class View extends React.PureComponent {
         id={id}
         render={() => {
           const data = dataSource.data
-          // XXX: review this!!!!
-          const hasData = data != null
+          const sameRecord = do {
+            if (data == null) {
+              false
+            } else {
+              // TODO: we should use idFields instead!
+              const id = dataSource.normalizeId(data.id)
+              isEqual(id, dataSource.id)
+            }
+          }
 
           return (
             <HTMLTable
               bordered
               condensed={condensed}
-              interactive={hasData && interactive}
+              interactive={sameRecord && interactive}
               style={style}
               className="rf-view"
             >
@@ -41,7 +49,7 @@ class View extends React.PureComponent {
                 <Data
                   data={data}
                   fields={fields}
-                  skeleton={!hasData}
+                  skeleton={!sameRecord}
                   labelWidth={labelWidth}
                 />
               </tbody>

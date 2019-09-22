@@ -1,5 +1,17 @@
 import React from 'react'
 
+class CellSkeleton extends React.PureComponent {
+  render() {
+    return (
+      <span className="bp3-skeleton">{randomLengthString()}</span>
+    )
+  }
+}
+
+export default CellSkeleton
+
+// -- PRIVATE
+
 function randomNumber(from, to) {
   return from + Math.floor((to - from + 1) * Math.random())
 }
@@ -13,13 +25,3 @@ function randomLengthString() {
 
   return text
 }
-
-class RandomSkeleton extends React.PureComponent {
-  render() {
-    return (
-      <span className="bp3-skeleton">{randomLengthString()}</span>
-    )
-  }
-}
-
-export default RandomSkeleton

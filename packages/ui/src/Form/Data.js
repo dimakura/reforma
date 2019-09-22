@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import labelForField from '../utils/labelForField'
-import renderViewCell from '../renderCell/view'
+import renderView from '../renderCell/view'
 import CellSkeleton from '../CellSkeleton'
 
 class Data extends React.PureComponent {
@@ -19,8 +19,10 @@ class Data extends React.PureComponent {
               do {
                 if (data == null || skeleton) {
                   <CellSkeleton />
+                } else if (fld.readOnly) {
+                  renderView(fld, data)
                 } else {
-                  renderViewCell(fld, data)
+                  'TODO: render editor'
                 }
               }
             }

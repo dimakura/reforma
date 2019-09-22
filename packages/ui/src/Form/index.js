@@ -1,17 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
-import { isEqual } from 'lodash'
+import { isEqual, merge } from 'lodash'
 import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
-class View extends React.PureComponent {
+class Form extends React.PureComponent {
   render() {
     const {
       id,
       autofetch,
       cached,
       dataSource,
+      defaults,
       fields,
       condensed,
       interactive,
@@ -19,6 +20,7 @@ class View extends React.PureComponent {
       labelWidth
     } = this.props
     const normalizedId = dataSource.normalizeId(id)
+    const isNew = normalizedId == null
 
     return (
       <RecordComponent
@@ -27,9 +29,17 @@ class View extends React.PureComponent {
         dataSource={dataSource}
         id={normalizedId}
         render={() => {
-          const data = dataSource.data
+          const data = do {
+            if (isNew) {
+              merge(defaults, dataSource.create())
+            } else {
+              dataSource.data
+            }
+          }
           const sameRecord = do {
-            if (data == null) {
+            if (isNew) {
+              true
+            } else if (data == null) {
               false
             } else {
               isEqual(normalizedId, data.getId())
@@ -42,13 +52,14 @@ class View extends React.PureComponent {
               condensed={condensed}
               interactive={sameRecord && interactive}
               style={style}
-              className="rf-view"
+              className="rf-form"
             >
               <tbody>
                 <Data
                   data={data}
                   fields={fields}
                   skeleton={!sameRecord}
+                  isNew={isNew}
                   labelWidth={labelWidth}
                 />
               </tbody>
@@ -60,7 +71,7 @@ class View extends React.PureComponent {
   }
 }
 
-View.defaultProps = {
+Form.defaultProps = {
   autofetch: true,
   cached: true,
   condensed: true,
@@ -68,16 +79,17 @@ View.defaultProps = {
   labelWidth: 140
 }
 
-View.propTypes = {
-  id: PropTypes.any.isRequired,
+Form.propTypes = {
+  id: PropTypes.any,
   autofetch: PropTypes.bool.isRequired,
   cached: PropTypes.bool.isRequired,
   dataSource: PropTypes.object.isRequired,
   fields: PropTypes.array.isRequired,
+  defaults: PropTypes.object,
   condensed: PropTypes.bool.isRequired,
   interactive: PropTypes.bool.isRequired,
   style: PropTypes.object,
   labelWidth: PropTypes.number.isRequired
 }
 
-export default View
+export default Form

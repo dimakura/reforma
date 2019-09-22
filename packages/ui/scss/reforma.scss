@@ -27,7 +27,8 @@ table.bp3-html-table.bp3-interactive {
     }
   }
 
-  &.rf-view {
+  &.rf-view,
+  &.rf-form {
     border: 1px solid $border-color;
     border-top: none;
     width: 100%;

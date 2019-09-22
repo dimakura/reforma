@@ -1,5 +1,6 @@
 import CollectionComponent from './CollectionComponent'
 import Error from './Error'
+import Form from './Form'
 import LoadingIndicator from './LoadingIndicator'
 import Pagination from './Pagination'
 import RecordComponent from './RecordComponent'
@@ -11,6 +12,7 @@ import View from './View'
 export {
   CollectionComponent,
   Error,
+  Form,
   LoadingIndicator,
   Pagination,
   RecordComponent,

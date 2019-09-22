@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import render from '../render'
+import renderView from '../renderCell/view'
 
 function renderCell(col, model, idx) {
   return (
     <td key={idx} style={col.style} className={col.className}>
-      {render(col, model)}
+      {renderView(col, model)}
     </td>
   )
 }

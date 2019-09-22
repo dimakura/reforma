@@ -192,10 +192,14 @@ function createUserDefinedType(type, data) {
       definePlainProp(field)
 
       const name = field.getName()
-      instance.__data__[name] = instantiateType(
-        field.getType(),
-        data[snakeCase(name)]
-      )
+      const rawValue = do {
+        if (name in data) {
+          data[name]
+        } else {
+          data[snakeCase(name)]
+        }
+      }
+      instance.__data__[name] = instantiateType(field.getType(), rawValue)
     }
   }
 

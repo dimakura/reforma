@@ -65,7 +65,7 @@ describe('instantiateType', () => {
     const type = Reforma.createType({
       name: 'Profile',
       fields: {
-        id: Reforma.integer,
+        id: Reforma.integer.id,
         firstName: Reforma.string,
         lastName: Reforma.string,
         fullName: Reforma.string.calc((self) => `${self.firstName} ${self.lastName}`)
@@ -92,5 +92,6 @@ describe('instantiateType', () => {
     expect(instance.firstName).toBe('Wernher')
     expect(instance.lastName).toBe('von Braun')
     expect(instance.fullName).toBe('Wernher von Braun')
+    expect(instance.getId()).toEqual([100])
   })
 })

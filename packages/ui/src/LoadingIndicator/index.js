@@ -7,12 +7,12 @@ import RecordComponent from '../RecordComponent'
 class LoadingIndicator extends React.PureComponent {
   render() {
     const { dataSource, size } = this.props
-    const isBusy = dataSource.status === 'busy' || dataSource.status === 'initial'
     const props = {
       autofetch: false,
       cached: true,
       dataSource: dataSource,
       render: () => {
+        const isBusy = dataSource.status === 'busy'
         return do {
           if (isBusy) {
             <Spinner size={size} />

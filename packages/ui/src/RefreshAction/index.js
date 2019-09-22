@@ -15,12 +15,12 @@ class RefreshAction extends React.PureComponent {
       small,
       minimal
     } = this.props
-    const isBusy = dataSource.status === 'busy'
     const props = {
       autofetch: false,
       cached: true,
       dataSource: dataSource,
       render: () => {
+        const isBusy = dataSource.status === 'busy'
         return (
           <Button
             disabled={isBusy}

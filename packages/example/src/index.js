@@ -11,6 +11,7 @@ import '@reforma/ui/lib/css/reforma.css'
 import App from './App'
 
 Reforma.config.http.baseUrl = 'http://localhost:3001'
+Reforma.config.http.setHeader('content-type', 'application/json; charset=UTF-8')
 FocusStyleManager.onlyShowFocusOnTabs()
 
 ReactDOM.render(<App />, document.getElementById('root'))

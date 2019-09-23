@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { HTMLTable } from '@blueprintjs/core'
+import { Button, HTMLTable } from '@blueprintjs/core'
 import { isEqual } from 'lodash'
+import normalizeCellSpec from '../renderCell/normalizeCellSpec'
 import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
@@ -21,6 +22,7 @@ class Form extends React.PureComponent {
     } = this.props
     const normalizedId = dataSource.normalizeId(id)
     const isNew = normalizedId == null
+    const flds = fields.map(normalizeCellSpec)
 
     return (
       <RecordComponent
@@ -46,7 +48,7 @@ class Form extends React.PureComponent {
           }
 
           return (
-            <form onSubmit={this.onSubmit.bind(this)}>
+            <form onSubmit={this.onSubmit.bind(this, data)}>
               <HTMLTable
                 bordered
                 condensed={condensed}
@@ -57,11 +59,21 @@ class Form extends React.PureComponent {
                 <tbody>
                   <Data
                     data={data}
-                    fields={fields}
+                    fields={flds}
                     skeleton={!isNew && !sameRecord}
                     isNew={isNew}
                     labelWidth={labelWidth}
                   />
+                  <tr>
+                    <td className="rf-label">&nbsp;</td>
+                    <td>
+                      <Button
+                        intent="primary"
+                        type="submit"
+                        text="Submit"
+                      />
+                    </td>
+                  </tr>
                 </tbody>
               </HTMLTable>
             </form>
@@ -71,8 +83,24 @@ class Form extends React.PureComponent {
     )
   }
 
-  onSubmit() {
-    console.log('submitting...')
+  onSubmit(model, evt) {
+    evt.preventDefault()
+
+    const { id, fields, dataSource } = this.props
+    const fieldNames = getFieldNames(fields)
+    // const data = extractData(model, fieldNames)
+
+    // TODO: validations
+    // console.log(model.__type__.getError())
+
+    const normalizedId = dataSource.normalizeId(id)
+    const isNew = normalizedId == null
+
+    if (isNew) {
+      dataSource.create(model, fieldNames)
+    } else {
+      dataSource.update(id, model, fieldNames)
+    }
   }
 }
 
@@ -98,3 +126,21 @@ Form.propTypes = {
 }
 
 export default Form
+
+// -- PRIVATE
+
+function getFieldNames(fields) {
+  return fields.map(normalizeCellSpec)
+    .filter(f => f.readOnly !== true)
+    .map(f => f.name)
+}
+
+function extractData(model, fieldNames) {
+  const data = {}
+  for (let i = 0; i < fieldNames.length; i++) {
+    const name = fieldNames[i]
+    data[name] = model[name]
+  }
+
+  return data
+}

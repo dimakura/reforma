@@ -2,7 +2,7 @@ import React from 'react'
 import Reforma from '@reforma/core'
 import { shallow } from 'enzyme'
 import Data from '../Data'
-import RandomSkeleton from '../RandomSkeleton'
+import CellSkeleton from '../../CellSkeleton'
 
 describe('<View.Data />', () => {
   let type
@@ -52,8 +52,8 @@ describe('<View.Data />', () => {
     const cells = comp.find('td')
     expect(cells).toHaveLength(4)
     expect(cells.at(0).text()).toBe('First Name')
-    expect(cells.at(1).exists(RandomSkeleton)).toBe(true)
+    expect(cells.at(1).exists(CellSkeleton)).toBe(true)
     expect(cells.at(2).text()).toBe('Last Name')
-    expect(cells.at(3).exists(RandomSkeleton)).toBe(true)
+    expect(cells.at(3).exists(CellSkeleton)).toBe(true)
   })
 })

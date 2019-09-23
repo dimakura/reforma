@@ -1,3 +1,4 @@
+import normalizeHint from '../normalizeHint'
 import renderArray from './renderArray'
 import renderBool from './renderBool'
 import renderDate from './renderDate'
@@ -7,16 +8,7 @@ import renderTag from './renderTag'
 import renderText from './renderText'
 
 export default function renderValue(value, hint) {
-  const hints = do {
-    if (hint == null) {
-      []
-    } else if (Array.isArray(hint)) {
-      [...hint]
-    } else {
-      hint.split(':')
-    }
-  }
-
+  const hints = normalizeHint(hint)
   return renderValueInternal(value, hints)
 }
 

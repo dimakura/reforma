@@ -124,9 +124,24 @@ function createUserDefinedType(type, data) {
   const instance = {}
   const fields = type.getFields()
   const fieldNames = Object.getOwnPropertyNames(fields)
+  function getId() {
+    const idFields = type.getIdFields()
+
+    return do {
+      if (
+        idFields == null ||
+        idFields.length === 0
+      ) {
+        null
+      } else {
+        idFields.map(fld => instance[fld.getName()])
+      }
+    }
+  }
 
   Object.defineProperty(instance, '__data__', { value: {} })
   Object.defineProperty(instance, '__type__', { value: type })
+  Object.defineProperty(instance, 'getId', { value: getId })
 
   function definePlainProp(field) {
     const name = field.getName()
@@ -177,10 +192,14 @@ function createUserDefinedType(type, data) {
       definePlainProp(field)
 
       const name = field.getName()
-      instance.__data__[name] = instantiateType(
-        field.getType(),
-        data[snakeCase(name)]
-      )
+      const rawValue = do {
+        if (name in data) {
+          data[name]
+        } else {
+          data[snakeCase(name)]
+        }
+      }
+      instance.__data__[name] = instantiateType(field.getType(), rawValue)
     }
   }
 

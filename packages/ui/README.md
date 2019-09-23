@@ -72,7 +72,7 @@ Table columns can be given as property names or as a full column specification:
 ```js
 const column = {
   name: 'fullName',
-  header: 'Painter Name',
+  label: 'Painter Name',
   render: (model) => (<FancyComponent value={model.fullName} />),
   width: 100,
   className: 'full-name-class'

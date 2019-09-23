@@ -1,17 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { HTMLTable } from '@blueprintjs/core'
 import { isEqual } from 'lodash'
+import normalizeCellSpec from '../renderCell/normalizeCellSpec'
 import RecordComponent from '../RecordComponent'
-import Data from './Data'
+import Form from './Form'
 
-class View extends React.PureComponent {
+class EditorForm extends React.PureComponent {
   render() {
     const {
       id,
       autofetch,
       cached,
       dataSource,
+      defaults,
       fields,
       condensed,
       interactive,
@@ -19,6 +20,8 @@ class View extends React.PureComponent {
       labelWidth
     } = this.props
     const normalizedId = dataSource.normalizeId(id)
+    const isNew = normalizedId == null
+    const normalizedFields = fields.map(normalizeCellSpec)
 
     return (
       <RecordComponent
@@ -27,32 +30,38 @@ class View extends React.PureComponent {
         dataSource={dataSource}
         id={normalizedId}
         render={() => {
-          const data = dataSource.data
-          const sameRecord = do {
+          const data = do {
+            if (isNew) {
+              dataSource.type.create(defaults)
+            } else {
+              dataSource.type.create(dataSource.data)
+            }
+          }
+
+          // while loading record
+          const isLoading = do {
             if (data == null) {
+              true
+            } else if (isNew) {
               false
             } else {
-              isEqual(normalizedId, data.getId())
+              !isEqual(normalizedId, data.getId())
             }
           }
 
           return (
-            <HTMLTable
-              bordered
+            <Form
+              id={normalizedId}
+              dataSource={dataSource}
+              fields={normalizedFields}
               condensed={condensed}
-              interactive={sameRecord && interactive}
+              interactive={interactive}
+              isLoading={isLoading}
               style={style}
-              className="rf-view"
-            >
-              <tbody>
-                <Data
-                  data={data}
-                  fields={fields}
-                  skeleton={!sameRecord}
-                  labelWidth={labelWidth}
-                />
-              </tbody>
-            </HTMLTable>
+              labelWidth={labelWidth}
+              isNew={isNew}
+              data={data}
+            />
           )
         }}
       />
@@ -60,7 +69,7 @@ class View extends React.PureComponent {
   }
 }
 
-View.defaultProps = {
+EditorForm.defaultProps = {
   autofetch: true,
   cached: true,
   condensed: true,
@@ -68,16 +77,17 @@ View.defaultProps = {
   labelWidth: 140
 }
 
-View.propTypes = {
-  id: PropTypes.any.isRequired,
+EditorForm.propTypes = {
+  id: PropTypes.any,
   autofetch: PropTypes.bool.isRequired,
   cached: PropTypes.bool.isRequired,
   dataSource: PropTypes.object.isRequired,
   fields: PropTypes.array.isRequired,
+  defaults: PropTypes.object,
   condensed: PropTypes.bool.isRequired,
   interactive: PropTypes.bool.isRequired,
   style: PropTypes.object,
   labelWidth: PropTypes.number.isRequired
 }
 
-export default View
+export default EditorForm

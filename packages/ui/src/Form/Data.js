@@ -1,26 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import normalizeCellSpec from '../renderCell/normalizeCellSpec'
-import renderViewCell from '../renderCell/view'
+import renderView from '../renderCell/view'
+import renderEditor from '../renderCell/editor'
 import CellSkeleton from '../CellSkeleton'
 
 class Data extends React.PureComponent {
   render() {
-    const { fields, data, skeleton, labelWidth } = this.props
+    const {
+      fields,
+      data,
+      skeleton,
+      labelWidth
+    } = this.props
 
     return fields.map((fld, i) => {
-      fld = normalizeCellSpec(fld)
-
       return (
         <tr key={i}>
-          <td width={labelWidth} className="rf-label">{fld.label}</td>
+          <td width={labelWidth} className="rf-label">
+            <label htmlFor={fld.htmlName}>{fld.label}</label>
+          </td>
           <td style={fld.style} className={fld.className}>
             {
               do {
-                if (data == null || skeleton) {
+                if (skeleton || data == null) {
                   <CellSkeleton />
+                } else if (fld.readOnly) {
+                  renderView(fld, data)
                 } else {
-                  renderViewCell(fld, data)
+                  renderEditor(fld, data)
                 }
               }
             }
@@ -33,6 +40,7 @@ class Data extends React.PureComponent {
 
 Data.propTypes = {
   data: PropTypes.object,
+  isNew: PropTypes.bool.isRequired,
   fields: PropTypes.array.isRequired,
   skeleton: PropTypes.bool.isRequired,
   labelWidth: PropTypes.number.isRequired

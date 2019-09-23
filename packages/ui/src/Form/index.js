@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, HTMLTable } from '@blueprintjs/core'
 import { isEqual } from 'lodash'
 import normalizeCellSpec from '../renderCell/normalizeCellSpec'
 import RecordComponent from '../RecordComponent'
-import Data from './Data'
+import Form from './Form'
 
-class Form extends React.PureComponent {
+class EditorForm extends React.PureComponent {
   render() {
     const {
       id,
@@ -22,7 +21,7 @@ class Form extends React.PureComponent {
     } = this.props
     const normalizedId = dataSource.normalizeId(id)
     const isNew = normalizedId == null
-    const flds = fields.map(normalizeCellSpec)
+    const normalizedFields = fields.map(normalizeCellSpec)
 
     return (
       <RecordComponent
@@ -39,72 +38,38 @@ class Form extends React.PureComponent {
             }
           }
 
-          const sameRecord = do {
+          // while loading record
+          const isLoading = do {
             if (data == null) {
+              true
+            } else if (isNew) {
               false
             } else {
-              isEqual(normalizedId, data.getId())
+              !isEqual(normalizedId, data.getId())
             }
           }
 
           return (
-            <form onSubmit={this.onSubmit.bind(this, data)}>
-              <HTMLTable
-                bordered
-                condensed={condensed}
-                interactive={sameRecord && interactive}
-                style={style}
-                className="rf-form"
-              >
-                <tbody>
-                  <Data
-                    data={data}
-                    fields={flds}
-                    skeleton={!isNew && !sameRecord}
-                    isNew={isNew}
-                    labelWidth={labelWidth}
-                  />
-                  <tr>
-                    <td className="rf-label">&nbsp;</td>
-                    <td>
-                      <Button
-                        intent="primary"
-                        type="submit"
-                        text="Submit"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </HTMLTable>
-            </form>
+            <Form
+              id={normalizedId}
+              dataSource={dataSource}
+              fields={normalizedFields}
+              condensed={condensed}
+              interactive={interactive}
+              isLoading={isLoading}
+              style={style}
+              labelWidth={labelWidth}
+              isNew={isNew}
+              data={data}
+            />
           )
         }}
       />
     )
   }
-
-  onSubmit(model, evt) {
-    evt.preventDefault()
-
-    const { id, fields, dataSource } = this.props
-    const fieldNames = getFieldNames(fields)
-    // const data = extractData(model, fieldNames)
-
-    // TODO: validations
-    // console.log(model.__type__.getError())
-
-    const normalizedId = dataSource.normalizeId(id)
-    const isNew = normalizedId == null
-
-    if (isNew) {
-      dataSource.create(model, fieldNames)
-    } else {
-      dataSource.update(id, model, fieldNames)
-    }
-  }
 }
 
-Form.defaultProps = {
+EditorForm.defaultProps = {
   autofetch: true,
   cached: true,
   condensed: true,
@@ -112,7 +77,7 @@ Form.defaultProps = {
   labelWidth: 140
 }
 
-Form.propTypes = {
+EditorForm.propTypes = {
   id: PropTypes.any,
   autofetch: PropTypes.bool.isRequired,
   cached: PropTypes.bool.isRequired,
@@ -125,22 +90,4 @@ Form.propTypes = {
   labelWidth: PropTypes.number.isRequired
 }
 
-export default Form
-
-// -- PRIVATE
-
-function getFieldNames(fields) {
-  return fields.map(normalizeCellSpec)
-    .filter(f => f.readOnly !== true)
-    .map(f => f.name)
-}
-
-function extractData(model, fieldNames) {
-  const data = {}
-  for (let i = 0; i < fieldNames.length; i++) {
-    const name = fieldNames[i]
-    data[name] = model[name]
-  }
-
-  return data
-}
+export default EditorForm

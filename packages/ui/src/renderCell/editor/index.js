@@ -1,26 +1,16 @@
-import isBlank from '@reforma/ui/utils/isBlank'
 import normalizeCellSpec from '../normalizeCellSpec'
 import defaultHint from '../defaultHint'
-import renderEmpty from './renderEmpty'
-import renderValue from './renderValue'
+import renderEditor from './renderEditor'
 
 export default function renderFunction(spec, model) {
   spec = normalizeCellSpec(spec)
-
-  if ('render' in spec) {
-    // when we have "render" and we just use it
-    return spec.render(model)
-  }
-
   const fieldName = spec.name
-
   const field = do {
     if (fieldName != null) {
       model.__type__.getFields()[fieldName]
     }
   }
-
-  const cellValue = do {
+  const value = do {
     if (fieldName != null) {
       model[fieldName]
     }
@@ -34,11 +24,15 @@ export default function renderFunction(spec, model) {
     }
   }
 
-  return do {
-    if (isBlank(cellValue) && cellValue !== false) {
-      renderEmpty()
-    } else {
-      renderValue(cellValue, hint)
-    }
+  function onChange(newValue) {
+    model[fieldName] = newValue
   }
+
+  return renderEditor({
+    value,
+    hint,
+    onChange,
+    fieldName,
+    spec
+  })
 }

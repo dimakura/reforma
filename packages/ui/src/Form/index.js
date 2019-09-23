@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
-import { isEqual, merge } from 'lodash'
+import { isEqual } from 'lodash'
 import RecordComponent from '../RecordComponent'
 import Data from './Data'
 
@@ -31,15 +31,14 @@ class Form extends React.PureComponent {
         render={() => {
           const data = do {
             if (isNew) {
-              merge(defaults, dataSource.create())
+              dataSource.type.create(defaults)
             } else {
-              dataSource.data
+              dataSource.type.create(dataSource.data)
             }
           }
+
           const sameRecord = do {
-            if (isNew) {
-              true
-            } else if (data == null) {
+            if (data == null) {
               false
             } else {
               isEqual(normalizedId, data.getId())
@@ -47,27 +46,33 @@ class Form extends React.PureComponent {
           }
 
           return (
-            <HTMLTable
-              bordered
-              condensed={condensed}
-              interactive={sameRecord && interactive}
-              style={style}
-              className="rf-form"
-            >
-              <tbody>
-                <Data
-                  data={data}
-                  fields={fields}
-                  skeleton={!sameRecord}
-                  isNew={isNew}
-                  labelWidth={labelWidth}
-                />
-              </tbody>
-            </HTMLTable>
+            <form onSubmit={this.onSubmit.bind(this)}>
+              <HTMLTable
+                bordered
+                condensed={condensed}
+                interactive={sameRecord && interactive}
+                style={style}
+                className="rf-form"
+              >
+                <tbody>
+                  <Data
+                    data={data}
+                    fields={fields}
+                    skeleton={!isNew && !sameRecord}
+                    isNew={isNew}
+                    labelWidth={labelWidth}
+                  />
+                </tbody>
+              </HTMLTable>
+            </form>
           )
         }}
       />
     )
+  }
+
+  onSubmit() {
+    console.log('submitting...')
   }
 }
 

@@ -11,7 +11,18 @@ class Edit extends React.PureComponent {
         <Form
           id={id}
           dataSource={presidentDS}
-          fields={[{name: 'id', label: 'ID', readOnly: true}, 'firstName', 'lastName']}
+          fields={[{
+            name: 'id',
+            label: 'ID',
+            readOnly: true
+          }, {
+            name: 'firstName',
+            placeholder: 'First name',
+            autoFocus: true
+          }, {
+            name: 'lastName',
+            placeholder: 'Last name'
+          }]}
         />
       </div>
     )

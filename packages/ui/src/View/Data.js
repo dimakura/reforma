@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import labelForField from '../utils/labelForField'
+import labelForField from '../renderCell/labelForField'
 import renderViewCell from '../renderCell/view'
 import CellSkeleton from '../CellSkeleton'
 

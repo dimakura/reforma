@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { InputGroup } from '@blueprintjs/core'
 
 export default function stringEditor(props) {
-  const { value, onChange, fieldName, spec } = props
+  const { value, onChange, spec } = props
 
   return (
     <InputGroup
-      id={fieldName}
+      id={spec.htmlName}
       defaultValue={value}
       onChange={(evt) => onChange(evt.target.value)}
       placeholder={spec.placeholder}
@@ -19,6 +19,5 @@ export default function stringEditor(props) {
 stringEditor.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  fieldName: PropTypes.string.isRequired,
   spec: PropTypes.object.isRequired
 }

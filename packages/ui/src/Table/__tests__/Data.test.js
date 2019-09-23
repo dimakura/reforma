@@ -1,6 +1,7 @@
 import Reforma from '@reforma/core'
 import React from 'react'
 import { shallow } from 'enzyme'
+import normalizeCellSpec from '../../renderCell/normalizeCellSpec'
 import Data from '../Data'
 
 test('<Data />', () => {
@@ -18,10 +19,10 @@ test('<Data />', () => {
     { id: 2, first_name: 'James', last_name: 'Hutton' },
     { id: 3, first_name: '', last_name: '' }
   ].map(type.create)
-  const id = { name: 'id', header: 'id', className: 'first-column', style: { textAlign: 'right' } }
+  const id = { name: 'id', label: 'id', className: 'first-column', style: { textAlign: 'right' } }
   const firstName = 'firstName'
   const lastName = { name: 'lastName', render: (profile) => `${profile.firstName} ${profile.lastName}` }
-  const columns = [id, firstName, lastName]
+  const columns = [id, firstName, lastName].map(normalizeCellSpec)
 
   const comp = shallow(<Data columns={columns} data={data} />)
   const cells = comp.find('td')

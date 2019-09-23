@@ -1,12 +1,13 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import normalizeCellSpec from '../../renderCell/normalizeCellSpec'
 import Header from '../Header'
 
 test('<Header />', () => {
-  const id = { header: 'id', width: 50 }
+  const id = { label: 'id', width: 50 }
   const firstName = 'firstName'
   const lastName = { name: 'lastName' }
-  const columns = [id, firstName, lastName]
+  const columns = [id, firstName, lastName].map(normalizeCellSpec)
   const comp = shallow(<Header columns={columns} />)
   const headers = comp.find('th')
 

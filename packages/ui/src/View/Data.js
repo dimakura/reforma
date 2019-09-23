@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import labelForField from '../renderCell/labelForField'
+import normalizeCellSpec from '../renderCell/normalizeCellSpec'
 import renderViewCell from '../renderCell/view'
 import CellSkeleton from '../CellSkeleton'
 
@@ -9,11 +9,11 @@ class Data extends React.PureComponent {
     const { fields, data, skeleton, labelWidth } = this.props
 
     return fields.map((fld, i) => {
+      fld = normalizeCellSpec(fld)
+
       return (
         <tr key={i}>
-          <td width={labelWidth} className="rf-label">
-            {labelForField(fld)}
-          </td>
+          <td width={labelWidth} className="rf-label">{fld.label}</td>
           <td style={fld.style} className={fld.className}>
             {
               do {

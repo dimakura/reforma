@@ -1,28 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { startCase } from 'lodash'
-
-function styleFor(col, idx) {
-  const style = do {
-    if (typeof col === 'object' && 'width' in col) {
-      ({ width: col.width })
-    }
-  }
-
-  return style
-}
-
-function headerFor(col) {
-  return do {
-    if (typeof col === 'string') {
-      startCase(col)
-    } else if ('header' in col) {
-      col.header
-    } else {
-      startCase(col.name)
-    }
-  }
-}
 
 class Header extends React.PureComponent {
   render() {
@@ -32,12 +9,11 @@ class Header extends React.PureComponent {
       <thead>
         <tr>
           {columns.map((col, idx) => {
-            const style = styleFor(col, idx)
-            const header = headerFor(col)
+            const style = styleFor(col)
 
             return (
               <th key={idx} style={style}>
-                {header}
+                {col.label}
               </th>
             )
           })}
@@ -52,3 +28,13 @@ Header.propTypes = {
 }
 
 export default Header
+
+// -- PRIVATE
+
+function styleFor(col) {
+  return do {
+    if ('width' in col) {
+      ({ width: col.width })
+    }
+  }
+}

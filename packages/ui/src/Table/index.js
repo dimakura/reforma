@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { HTMLTable } from '@blueprintjs/core'
 import CollectionComponent from '../CollectionComponent'
+import normalizeCellSpec from '../renderCell/normalizeCellSpec'
 import Header from './Header'
 import Placeholder from './Placeholder'
 import Data from './Data'
@@ -19,6 +20,8 @@ class Table extends React.PureComponent {
       interactive,
       style
     } = this.props
+
+    const cols = columns.map(normalizeCellSpec)
 
     return (
       <CollectionComponent
@@ -43,7 +46,7 @@ class Table extends React.PureComponent {
               {
                 do {
                   if (header) {
-                    <Header columns={columns} />
+                    <Header columns={cols} />
                   }
                 }
               }
@@ -51,17 +54,17 @@ class Table extends React.PureComponent {
                 {
                   do {
                     if (isInitialLoad) {
-                      <Placeholder columns={columns}>
+                      <Placeholder columns={cols}>
                         Loading...
                       </Placeholder>
                     } else if (!hasData) {
-                      <Placeholder columns={columns}>
+                      <Placeholder columns={cols}>
                         No data
                       </Placeholder>
                     } else {
                       <Data
                         data={data}
-                        columns={columns}
+                        columns={cols}
                       />
                     }
                   }

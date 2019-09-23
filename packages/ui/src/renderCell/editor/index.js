@@ -1,15 +1,9 @@
-import normalizeCellSpec from '../normalizeCellSpec'
 import defaultHint from '../defaultHint'
 import renderEditor from './renderEditor'
 
 export default function renderFunction(spec, model) {
-  spec = normalizeCellSpec(spec)
   const fieldName = spec.name
-  const field = do {
-    if (fieldName != null) {
-      model.__type__.getFields()[fieldName]
-    }
-  }
+
   const value = do {
     if (fieldName != null) {
       model[fieldName]
@@ -19,7 +13,8 @@ export default function renderFunction(spec, model) {
   const hint = do {
     if ('as' in spec) {
       spec.as
-    } else if (field != null) {
+    } else if (fieldName != null) {
+      const field = model.__type__.getFields()[fieldName]
       defaultHint(field.getType())
     }
   }
@@ -32,7 +27,6 @@ export default function renderFunction(spec, model) {
     value,
     hint,
     onChange,
-    fieldName,
     spec
   })
 }

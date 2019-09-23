@@ -14,13 +14,13 @@ const initialParams = { _page: 1, _limit: 5 }
 
 const id = {
   name: 'id',
-  header: 'ID',
+  label: 'ID',
   width: 50,
   style: { textAlign: 'right' }
 }
 
 const fullName = {
-  header: 'Full Name',
+  label: 'Full Name',
   render: (model) => (
     <Link to={`/presidents/${model.id}`}>{model.fullName}</Link>
   )
